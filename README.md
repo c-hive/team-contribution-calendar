@@ -1,6 +1,6 @@
 # Team contribution calendar
 
-#### GitHub-like contribution calendar for your whole team. Supports GitHub and GitLab.
+#### GitHub-like contribution calendar for the whole team. Supports GitHub and GitLab.
 
 ![](etc/preview.gif)
 
