@@ -1,0 +1,15 @@
+# Dependencies
+/node_modules
+
+# Test coveragement
+.nyc_output
+/coverage
+
+# npm package lock
+/package-lock.json
+
+# Project related files
+/src
+.eslintrc
+.babelrc
+.gitignore
