@@ -1,0 +1,24 @@
+{
+  "name": "team-contribution-calendar",
+  "version": "1.0.0",
+  "description": "GitHub-like contribution calendar for the whole team. Supports GitHub and GitLab.",
+  "main": "lib/index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/c-hive/team-contribution-calendar.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/c-hive/team-contribution-calendar/issues"
+  },
+  "homepage": "https://github.com/c-hive/team-contribution-calendar#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
