@@ -4,9 +4,12 @@
   "description": "GitHub-like contribution calendar for the whole team. Supports GitHub and GitLab.",
   "main": "./lib/index.js",
   "scripts": {
+    "build": "BABEL_ENV=production babel src --out-dir lib",
+    "clean": "rimraf lib",
     "lint": "eslint src",
     "test": "nyc mocha src/ --require @babel/register --require @babel/polyfill --recursive",
-    "test:only": "mocha src/ --require @babel/register --require @babel/polyfill --recursive"
+    "test:only": "mocha src/ --require @babel/register --require @babel/polyfill --recursive",
+    "prepublishOnly": "npm run clean && npm run lint && npm run test && npm run build"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,8 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/register": "^7.4.0",
     "babel-eslint": "^10.0.1",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-preset-minify": "^0.5.0",
     "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -34,7 +39,8 @@
     "mocha": "^6.1.2",
     "npm": "^6.9.0",
     "nyc": "^13.3.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "rimraf": "^2.6.3"
   },
   "pre-commit": [
     "lint",
