@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sum from './index';
 
 describe('sum', () => {
-  it('adds the given numbers', () => {
+  it('adds up the given numbers', () => {
     const expectedSumValue = 10;
 
     const actualSumValue = sum(5, 5);
