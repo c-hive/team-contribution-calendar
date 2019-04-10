@@ -6,6 +6,9 @@ install:
 cache:
   directories:
     - "node_modules"
-script:
-  - npm run lint
-  - npm run test:only
+jobs:
+  include:
+    - stage: test
+    script:
+      - npm run lint
+      - npm run test:only
