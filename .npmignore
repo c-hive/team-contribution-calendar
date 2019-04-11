@@ -8,6 +8,9 @@
 # npm package lock
 /package-lock.json
 
+# Bash scripts
+/scripts
+
 # Project related files
 /src
 /etc
