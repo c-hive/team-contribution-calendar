@@ -6,9 +6,11 @@ install:
 cache:
   directories:
     - "node_modules"
-states:
+stages:
     - lint
     - test
+    - name: distify
+      if: branch = master
 jobs:
   include:
     - stage: lint
@@ -16,4 +18,8 @@ jobs:
         - npm run lint
     - stage: test
       script:
-        - npm run test:only
+        - npm run test
+    - stage: distify
+      script:
+        - npm run build
+        - bash ./scripts/distify.sh
