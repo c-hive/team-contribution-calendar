@@ -20,6 +20,8 @@ upload_minified_version() {
     chmod 600 id_rsa_ci
     ssh-add id_rsa_ci
 
+    git remote set-url origin git@github.com:c-hive/team-contribution-calendar.git
+
     git add dist/*
     git commit -m "[skip travis] Update distified version"
     git push --set-upstream origin master 
