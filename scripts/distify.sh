@@ -3,7 +3,7 @@
 generate_distified_file() {
     NODE_MODULES_BIN_PATH=`pwd`/node_modules/.bin
 
-    mkdir dist
+    mkdir -p dist
 
     $NODE_MODULES_BIN_PATH/babel lib/index.js -o dist/index.min.js
 
