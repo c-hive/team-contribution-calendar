@@ -22,15 +22,11 @@ upload_minified_version() {
 
     git remote set-url origin git@github.com:c-hive/team-contribution-calendar.git
 
-    git checkout -b tmp
+    git checkout master
     git add dist/*
     git commit -m "[skip travis] Update distified version"
 
-    git checkout master
-    git merge tmp
-    git branch -d tmp
-
-    git push --set-upstream origin master 
+    git push --set-upstream origin master
 }
 
 generate_distified_file
