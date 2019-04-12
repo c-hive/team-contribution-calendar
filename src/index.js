@@ -1,3 +1,3 @@
-const sum = (a, b) => a + b;
+const sum = (c, d) => c + d;
 
 export default sum;

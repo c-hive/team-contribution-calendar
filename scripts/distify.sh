@@ -25,8 +25,6 @@ upload_minified_version() {
 
     generate_distified_file
 
-    git status
-
     git add dist/*
     git commit -m "[skip travis] Update distified version"
 
