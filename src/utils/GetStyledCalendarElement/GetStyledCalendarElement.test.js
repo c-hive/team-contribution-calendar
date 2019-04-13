@@ -30,10 +30,16 @@ describe('GetStyledCalendarElement', () => {
       expect(calendarHeader.nodeName).to.equal('DIV');
     });
 
-    it('appends two child nodes to the header', () => {
+    it('appends a paragraph to the header', () => {
       const calendarHeader = GetStyledCalendarElement.header();
 
-      expect(calendarHeader.childNodes.length).to.equal(2);
+      expect(calendarHeader.childNodes[0].nodeName).to.equal('P');
+    });
+
+    it('appends the colors list to the header', () => {
+      const calendarHeader = GetStyledCalendarElement.header();
+
+      expect(calendarHeader.childNodes[1].nodeName).to.equal('UL');
     });
   });
 });
