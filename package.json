@@ -4,7 +4,7 @@
   "description": "GitHub-like contribution calendar for the whole team. Supports GitHub and GitLab.",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=production babel src --out-dir lib",
+    "build": "BABEL_ENV=production babel src --out-dir lib --copy-files",
     "clean:lib": "rimraf lib",
     "lint": "eslint src",
     "test": "nyc mocha src/ --require @babel/register --require @babel/polyfill --recursive",
@@ -38,9 +38,11 @@
     "eslint-plugin-import": "^2.16.0",
     "install": "^0.12.2",
     "mocha": "^6.1.2",
+    "mocha-jsdom": "^2.0.0",
     "npm": "^6.9.0",
     "nyc": "^13.3.0",
     "pre-commit": "^1.2.2",
+    "proxyquire": "^2.1.0",
     "rimraf": "^2.6.3",
     "sinon": "^7.3.1",
     "uglify-js": "^3.5.4"
@@ -48,5 +50,9 @@
   "pre-commit": [
     "lint",
     "test"
-  ]
+  ],
+  "dependencies": {
+    "elly": "^1.1.10",
+    "svgson": "^3.1.0"
+  }
 }
