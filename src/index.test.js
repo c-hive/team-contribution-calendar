@@ -31,10 +31,10 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('when the required params exist', () => {
-    let processDataStub;
+    let processParamsStub;
 
     beforeEach(() => {
-      processDataStub = sandbox.stub(Main, 'processData');
+      processParamsStub = sandbox.stub(Main, 'processParams');
       requiredParamsExistStub.callsFake(() => true);
     });
 
@@ -44,7 +44,7 @@ describe('TeamContributionCalendar', () => {
 
       TeamContributionCalendar(container, gitHubUsers);
 
-      expect(processDataStub
+      expect(processParamsStub
         .calledWith(container, gitHubUsers, [], Proxy.defaultProxyServerUrl)).to.equal(true);
     });
   });

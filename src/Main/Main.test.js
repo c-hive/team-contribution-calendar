@@ -5,7 +5,7 @@ import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
 import BasicCalendar from '../resources/BasicCalendar/BasicCalendar.json';
 
 describe('Main', () => {
-  describe('processData', () => {
+  describe('processParams', () => {
     let renderCalendarWithContributionsSpy;
 
     beforeEach(() => {
@@ -19,7 +19,7 @@ describe('Main', () => {
     it('renders the basic calendar with 0 contributions by default', () => {
       const container = '.container';
 
-      Main.processData(container);
+      Main.processParams(container);
 
       expect(renderCalendarWithContributionsSpy.calledWith(container, BasicCalendar, 0))
         .to.equal(true);
