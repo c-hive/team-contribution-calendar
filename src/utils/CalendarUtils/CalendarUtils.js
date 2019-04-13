@@ -9,9 +9,5 @@ export const RequiredParamsExist = (container, gitHubUsers) => {
     return false;
   }
 
-  if (!Array.isArray(gitHubUsers)) {
-    return false;
-  }
-
   return true;
 };
