@@ -60,7 +60,6 @@ describe('CalendarUtils', () => {
 
     let containerStub;
     let headerStub;
-    let colorsListStub;
 
     let appendChildSpy;
     let prependSpy;
@@ -76,30 +75,22 @@ describe('CalendarUtils', () => {
       headerStub = sandbox.stub(CreateCalendarElement, 'header').returns({
         appendChild: appendChildSpy,
       });
-
-      colorsListStub = sandbox.stub(CreateCalendarElement, 'colorsList');
     });
 
     afterEach(() => {
       sandbox.restore();
     });
 
-    it('creates a container based on the passed param', () => {
+    it('renders a container based on the passed param', () => {
       CalendarUtils.RenderCalendarWithContributions(container);
 
       expect(containerStub.calledWith(container)).to.equal(true);
     });
 
-    it('creates the calendar header', () => {
+    it('renders the calendar header', () => {
       CalendarUtils.RenderCalendarWithContributions(container);
 
       expect(headerStub.calledOnce).to.equal(true);
-    });
-
-    it('creates the colors list', () => {
-      CalendarUtils.RenderCalendarWithContributions(container);
-
-      expect(colorsListStub.calledOnce).to.equal(true);
     });
   });
 });

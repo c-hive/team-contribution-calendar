@@ -14,16 +14,9 @@ export const RequiredParamsExist = (container, gitHubUsers) => {
   return true;
 };
 
-export const RenderCalendarWithContributions = (container, calendar, contributionsValue) => {
+export const RenderCalendarWithContributions = (container, calendar, totalContributions) => {
   const calendarContainer = CreateCalendarElement.container(container);
-  const calendarHeader = CreateCalendarElement.header();
-  const calendarColorsList = CreateCalendarElement.colorsList();
-
-  const contributionsValueDisplayer = document.createElement('P');
-  contributionsValueDisplayer.innerText = `${contributionsValue} contributions in the last year`;
-
-  calendarHeader.appendChild(contributionsValueDisplayer);
-  calendarHeader.appendChild(calendarColorsList);
+  const calendarHeader = CreateCalendarElement.header(totalContributions);
 
   const stringifiedHTMLContent = stringify(calendar);
 

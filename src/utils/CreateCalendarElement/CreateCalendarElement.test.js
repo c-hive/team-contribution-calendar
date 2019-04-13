@@ -29,13 +29,11 @@ describe('CreateCalendarElement', () => {
 
       expect(calendarHeader.nodeName).to.equal('DIV');
     });
-  });
 
-  describe('colorsList', () => {
-    it('returns an `ul` element', () => {
-      const calendarColorsList = CreateCalendarElement.colorsList();
+    it('appends two child nodes to the header', () => {
+      const calendarHeader = CreateCalendarElement.header();
 
-      expect(calendarColorsList.nodeName).to.equal('UL');
+      expect(calendarHeader.childNodes.length).to.equal(2);
     });
   });
 });

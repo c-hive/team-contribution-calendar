@@ -15,17 +15,6 @@ export const container = (htmlContainerElement) => {
   return selectedDOMElement;
 };
 
-export const header = () => {
-  const calendarHeader = document.createElement('DIV');
-
-  calendarHeader.style.display = 'flex';
-  calendarHeader.style.justifyContent = 'space-between';
-  calendarHeader.style.alignItems = 'center';
-  calendarHeader.style.width = '670px';
-
-  return calendarHeader;
-};
-
 const createColorElement = (color) => {
   const colorELement = document.createElement('LI');
 
@@ -38,7 +27,7 @@ const createColorElement = (color) => {
   return colorELement;
 };
 
-export const colorsList = () => {
+const createColorsList = () => {
   const calendarColorsList = document.createElement('UL');
 
   calendarColorsList.style.listStyle = 'none';
@@ -62,4 +51,22 @@ export const colorsList = () => {
   calendarColorsList.insertBefore(moreText, calendarColorsList.nextSibling);
 
   return calendarColorsList;
+};
+
+export const header = (totalContributions) => {
+  const calendarHeader = document.createElement('DIV');
+  const calendarColorsList = createColorsList();
+
+  const contributionsValueDisplayer = document.createElement('P');
+  contributionsValueDisplayer.innerText = `${totalContributions} contributions in the last year`;
+
+  calendarHeader.appendChild(contributionsValueDisplayer);
+  calendarHeader.appendChild(calendarColorsList);
+
+  calendarHeader.style.display = 'flex';
+  calendarHeader.style.justifyContent = 'space-between';
+  calendarHeader.style.alignItems = 'center';
+  calendarHeader.style.width = '670px';
+
+  return calendarHeader;
 };
