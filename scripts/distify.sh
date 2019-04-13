@@ -5,9 +5,7 @@ generate_distified_file() {
 
     mkdir -p dist
 
-    mv lib/index.js dist/index.min.js
-
-    $NODE_MODULES_BIN_PATH/browserify dist/index.min.js -o dist/index.min.js
+    $NODE_MODULES_BIN_PATH/browserify lib/index.js -o dist/index.min.js
 
     $NODE_MODULES_BIN_PATH/uglifyjs dist/index.min.js -o dist/index.min.js
 
@@ -26,6 +24,7 @@ upload_minified_version() {
     generate_distified_file
 
     git add dist/*
+
     git commit -m "[skip travis] Update distified version"
 
     git push --set-upstream origin master
