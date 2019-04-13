@@ -1,4 +1,4 @@
-import * as Main from './main/main';
+import * as Main from './Main/Main';
 import * as CalendarUtils from './utils/CalendarUtils/CalendarUtils';
 import * as Proxy from './utils/Proxy/Proxy';
 

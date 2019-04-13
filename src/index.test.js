@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import TeamContributionCalendar from './index';
-import * as Main from './main/main';
+import * as Main from './Main/Main';
 import * as CalendarUtils from './utils/CalendarUtils/CalendarUtils';
 import * as Proxy from './utils/Proxy/Proxy';
 
@@ -38,7 +38,7 @@ describe('TeamContributionCalendar', () => {
       requiredParamsExistStub.callsFake(() => true);
     });
 
-    it('processes the given data', () => {
+    it('processes the given parameters', () => {
       const container = 'div';
       const gitHubUsers = ['userName'];
 

@@ -1,5 +1,14 @@
 import { expect } from 'chai';
-import * as CalendarUtils from './CalendarUtils';
+import sinon from 'sinon';
+import jsdom from 'mocha-jsdom';
+import proxyquire from 'proxyquire';
+import * as CreateCalendarElement from '../CreateCalendarElement/CreateCalendarElement';
+
+const svgsonStub = {};
+
+const CalendarUtils = proxyquire('./CalendarUtils.js', {
+  svgson: svgsonStub,
+});
 
 describe('CalendarUtils', () => {
   describe('RequiredParamsExist', () => {
@@ -31,6 +40,66 @@ describe('CalendarUtils', () => {
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
+    });
+  });
+
+  describe('RenderCalendarWithContributions', () => {
+    // https://github.com/rstacruz/mocha-jsdom/issues/36
+    // https://github.com/jsdom/jsdom/issues/2383
+    jsdom({
+      url: 'https://example.org/',
+    });
+
+    const sandbox = sinon.createSandbox();
+
+    svgsonStub.stringify = () => ({
+      innerHTML: null,
+    });
+
+    const container = '.container';
+
+    let containerStub;
+    let headerStub;
+    let colorsListStub;
+
+    let appendChildSpy;
+    let prependSpy;
+
+    beforeEach(() => {
+      appendChildSpy = sandbox.spy();
+      prependSpy = sandbox.spy();
+
+      containerStub = sandbox.stub(CreateCalendarElement, 'container').returns({
+        prepend: prependSpy,
+      });
+
+      headerStub = sandbox.stub(CreateCalendarElement, 'header').returns({
+        appendChild: appendChildSpy,
+      });
+
+      colorsListStub = sandbox.stub(CreateCalendarElement, 'colorsList');
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it('creates a container based on the passed param', () => {
+      CalendarUtils.RenderCalendarWithContributions(container);
+
+      expect(containerStub.calledWith(container)).to.equal(true);
+    });
+
+    it('creates the calendar header', () => {
+      CalendarUtils.RenderCalendarWithContributions(container);
+
+      expect(headerStub.calledOnce).to.equal(true);
+    });
+
+    it('creates the colors list', () => {
+      CalendarUtils.RenderCalendarWithContributions(container);
+
+      expect(colorsListStub.calledOnce).to.equal(true);
     });
   });
 });
