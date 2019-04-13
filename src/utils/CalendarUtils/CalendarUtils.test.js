@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
 import proxyquire from 'proxyquire';
-import * as CreateCalendarElement from '../CreateCalendarElement/CreateCalendarElement';
+import * as GetCalendarElement from '../GetCalendarElement/GetCalendarElement';
 
 const svgsonStub = {};
 
@@ -68,11 +68,11 @@ describe('CalendarUtils', () => {
       appendChildSpy = sandbox.spy();
       prependSpy = sandbox.spy();
 
-      containerStub = sandbox.stub(CreateCalendarElement, 'container').returns({
+      containerStub = sandbox.stub(GetCalendarElement, 'container').returns({
         prepend: prependSpy,
       });
 
-      headerStub = sandbox.stub(CreateCalendarElement, 'header').returns({
+      headerStub = sandbox.stub(GetCalendarElement, 'header').returns({
         appendChild: appendChildSpy,
       });
     });

@@ -1,5 +1,5 @@
 import { stringify } from 'svgson';
-import * as CreateCalendarElement from '../CreateCalendarElement/CreateCalendarElement';
+import * as GetCalendarElement from '../GetCalendarElement/GetCalendarElement';
 import * as JavaScriptUtils from '../JavaScriptUtils/JavaScriptUtils';
 
 export const RequiredParamsExist = (container, gitHubUsers) => {
@@ -15,8 +15,8 @@ export const RequiredParamsExist = (container, gitHubUsers) => {
 };
 
 export const RenderCalendarWithContributions = (container, calendar, totalContributions) => {
-  const calendarContainer = CreateCalendarElement.container(container);
-  const calendarHeader = CreateCalendarElement.header(totalContributions);
+  const calendarContainer = GetCalendarElement.container(container);
+  const calendarHeader = GetCalendarElement.header(totalContributions);
 
   const stringifiedHTMLContent = stringify(calendar);
 
