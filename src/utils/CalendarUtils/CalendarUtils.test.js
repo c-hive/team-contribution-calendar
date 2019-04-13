@@ -23,17 +23,7 @@ describe('CalendarUtils', () => {
       });
     });
 
-    describe('when `gitHubUsers` is not an array', () => {
-      it('returns false', () => {
-        const expectedReturnedValue = false;
-
-        const actualReturnedValue = CalendarUtils.RequiredParamsExist('div', 'users');
-
-        expect(actualReturnedValue).to.equal(expectedReturnedValue);
-      });
-    });
-
-    describe('when the parameters are in the appropriate format', () => {
+    describe('when the parameters are defined', () => {
       it('returns true', () => {
         const expectedReturnedValue = true;
 
