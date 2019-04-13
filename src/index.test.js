@@ -16,32 +16,30 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('when the required params do not exist', () => {
-    let consoleErrorSpy;
-
     beforeEach(() => {
-      consoleErrorSpy = sandbox.stub(console, 'error');
       requiredParamsExistStub.callsFake(() => false);
     });
 
-    it('logs the error message to the console', () => {
-      TeamContributionCalendar();
+    it('throws an error', () => {
+      const expectedErrorMessage = 'Please provide the required parameters in the appropriate format.';
 
-      expect(consoleErrorSpy.calledOnce).to.equal(true);
+      expect(() => TeamContributionCalendar())
+        .to.throw(expectedErrorMessage);
     });
   });
 
   describe('when the required params exist', () => {
-    let consoleLogSpy;
+    let consoleInfoSpy;
 
     beforeEach(() => {
-      consoleLogSpy = sandbox.stub(console, 'info');
+      consoleInfoSpy = sandbox.stub(console, 'info');
       requiredParamsExistStub.callsFake(() => true);
     });
 
     it('logs the information message to the console', () => {
       TeamContributionCalendar();
 
-      expect(consoleLogSpy.calledOnce).to.equal(true);
+      expect(consoleInfoSpy.calledOnce).to.equal(true);
     });
   });
 });
