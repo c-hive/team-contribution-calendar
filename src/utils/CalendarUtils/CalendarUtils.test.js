@@ -87,10 +87,12 @@ describe('CalendarUtils', () => {
       expect(containerStub.calledWith(container)).to.equal(true);
     });
 
-    it('renders the calendar header', () => {
-      CalendarUtils.RenderCalendarWithContributions(container);
+    it('renders the calendar header with the total contributions', () => {
+      const totalContributions = 1024;
 
-      expect(headerStub.calledOnce).to.equal(true);
+      CalendarUtils.RenderCalendarWithContributions(container, null, totalContributions);
+
+      expect(headerStub.calledWith(totalContributions)).to.equal(true);
     });
   });
 });
