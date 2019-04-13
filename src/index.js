@@ -9,7 +9,7 @@ const TeamContributionCalendar = (
   proxyUrl = Proxy.defaultProxyServerUrl,
 ) => {
   if (CalendarUtils.RequiredParamsExist(container, gitHubUsers)) {
-    Main.main(container, gitHubUsers, gitLabUsers, proxyUrl);
+    Main.processData(container, gitHubUsers, gitLabUsers, proxyUrl);
   } else {
     throw new Error('Please provide the required parameters in the appropriate format.');
   }
