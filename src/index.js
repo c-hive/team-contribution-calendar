@@ -12,7 +12,7 @@ const TeamContributionCalendar = (
   if (CalendarUtils.RequiredParamsExist(container, gitHubUsers)) {
     console.info('Params are OK.');
   } else {
-    throw new Error('Please provide the required parameters in the appropriate format.')
+    throw new Error('Please provide the required parameters in the appropriate format.');
   }
 };
 
