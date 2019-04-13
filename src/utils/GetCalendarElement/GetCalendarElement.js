@@ -15,7 +15,7 @@ export const container = (htmlContainerElement) => {
   return selectedDOMElement;
 };
 
-const createColorElement = (color) => {
+const getColorElement = (color) => {
   const colorELement = document.createElement('LI');
 
   colorELement.style.width = '10px';
@@ -27,14 +27,14 @@ const createColorElement = (color) => {
   return colorELement;
 };
 
-const createColorsList = () => {
+const getColorsList = () => {
   const calendarColorsList = document.createElement('UL');
 
   calendarColorsList.style.listStyle = 'none';
   calendarColorsList.style.fontSize = '12px';
 
   ColorSchemas.GitHub.forEach((color) => {
-    const colorElement = createColorElement(color);
+    const colorElement = getColorElement(color);
 
     calendarColorsList.appendChild(colorElement);
   });
@@ -55,7 +55,7 @@ const createColorsList = () => {
 
 export const header = (totalContributions) => {
   const calendarHeader = document.createElement('DIV');
-  const calendarColorsList = createColorsList();
+  const calendarColorsList = getColorsList();
 
   const contributionsValueDisplayer = document.createElement('P');
   contributionsValueDisplayer.innerText = `${totalContributions} contributions in the last year`;

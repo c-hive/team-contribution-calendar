@@ -6,14 +6,14 @@ import BasicCalendar from '../resources/BasicCalendar/BasicCalendar.json';
 
 describe('Main', () => {
   describe('processParams', () => {
-    let renderCalendarWithContributionsSpy;
+    let renderCalendarWithContributionsStub;
 
     beforeEach(() => {
-      renderCalendarWithContributionsSpy = sinon.stub(CalendarUtils, 'RenderCalendarWithContributions').returns({});
+      renderCalendarWithContributionsStub = sinon.stub(CalendarUtils, 'RenderCalendarWithContributions').returns({});
     });
 
     afterEach(() => {
-      renderCalendarWithContributionsSpy.restore();
+      renderCalendarWithContributionsStub.restore();
     });
 
     it('renders the basic calendar with 0 contributions by default', () => {
@@ -21,7 +21,7 @@ describe('Main', () => {
 
       Main.processParams(container);
 
-      expect(renderCalendarWithContributionsSpy.calledWith(container, BasicCalendar, 0))
+      expect(renderCalendarWithContributionsStub.calledWith(container, BasicCalendar, 0))
         .to.equal(true);
     });
   });
