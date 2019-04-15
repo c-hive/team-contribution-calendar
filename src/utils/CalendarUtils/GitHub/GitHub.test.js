@@ -6,7 +6,7 @@ describe('GitHub', () => {
   describe('restoreCalendarValues', () => {
     const calendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
 
-    it('restores the contributions to zero', () => {
+    it('restores the daily contributions to zero', () => {
       const expectedContributionsValue = '0';
 
       const restoredCalendar = GitHub.restoreCalendarValues(calendar);
