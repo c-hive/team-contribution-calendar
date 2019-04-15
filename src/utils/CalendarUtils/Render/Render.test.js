@@ -52,7 +52,7 @@ describe('Render', () => {
     it('renders a container based on the passed param', () => {
       Render.calendarWithContributions(container);
 
-      expect(containerStub.calledWith(container)).to.equal(true);
+      expect(containerStub.calledWithExactly(container)).to.equal(true);
     });
 
     it('renders the calendar header with the total contributions', () => {
@@ -60,7 +60,7 @@ describe('Render', () => {
 
       Render.calendarWithContributions(container, null, totalContributions);
 
-      expect(headerStub.calledWith(totalContributions)).to.equal(true);
+      expect(headerStub.calledWithExactly(totalContributions)).to.equal(true);
     });
   });
 });

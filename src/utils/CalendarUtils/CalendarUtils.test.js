@@ -5,6 +5,7 @@ import * as Render from './Render/Render';
 import * as GitHub from './GitHub/GitHub';
 import * as TestUtils from '../TestUtils/TestUtils';
 import * as DefaultUsers from '../../resources/DefaultUsers/DefaultUsers';
+import BasicCalendar from '../../resources/BasicCalendar/BasicCalendar.json';
 import { State } from '../../resources/State/State';
 
 describe('CalendarUtils', () => {
@@ -70,20 +71,21 @@ describe('CalendarUtils', () => {
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
       expect(calendarWithContributionsStub
-        .calledWith(container, state.actualCalendar, expectedTotalContributions)).to.equal(true);
+        .calledWithExactly(container, BasicCalendar, expectedTotalContributions)).to.equal(true);
     });
 
     it('fetches the default user`s calendar synchronously', async () => {
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
-      expect(getJsonFormattedCalendarSyncStub.calledWith(proxyServerUrl, DefaultUsers.GitHub))
+      expect(getJsonFormattedCalendarSyncStub
+        .calledWithExactly(proxyServerUrl, DefaultUsers.GitHub))
         .to.equal(true);
     });
 
     it('restores the user`s values to the default ones', async () => {
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
-      expect(restoreCalendarValuesStub.calledWith(defaultUserJsonCalendar)).to.equal(true);
+      expect(restoreCalendarValuesStub.calledWithExactly(defaultUserJsonCalendar)).to.equal(true);
     });
 
     it('sets the restored user calendar to the state and increments the total contributions by 0', async () => {
@@ -96,7 +98,7 @@ describe('CalendarUtils', () => {
 
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
-      expect(setStateSpy.calledWith(expectedCalledData)).to.equal(true);
+      expect(setStateSpy.calledWithExactly(expectedCalledData)).to.equal(true);
     });
 
     it('renders the restored user calendar with 0 total contributions', async () => {
@@ -105,7 +107,7 @@ describe('CalendarUtils', () => {
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
       expect(calendarWithContributionsStub
-        .calledWith(container, restoredDefaultUserCalendar, expectedTotalContributions))
+        .calledWithExactly(container, restoredDefaultUserCalendar, expectedTotalContributions))
         .to.equal(true);
     });
   });

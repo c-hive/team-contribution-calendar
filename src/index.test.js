@@ -45,7 +45,7 @@ describe('TeamContributionCalendar', () => {
       TeamContributionCalendar(container, gitHubUsers);
 
       expect(processParamsStub
-        .calledWith(container, Proxy.defaultProxyServerUrl)).to.equal(true);
+        .calledWithExactly(container, Proxy.defaultProxyServerUrl)).to.equal(true);
     });
   });
 });
