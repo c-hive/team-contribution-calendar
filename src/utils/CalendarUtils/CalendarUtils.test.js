@@ -62,7 +62,7 @@ describe('CalendarUtils', () => {
       sandbox.restore();
     });
 
-    it('renders `BasicCalendar` with zero contributions', async () => {
+    it('renders `BasicCalendar` with 0 total contributions', async () => {
       await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
 
       expect(calendarWithContributionsStub.calledWith(container, BasicCalendar, 0)).to.equal(true);
@@ -81,7 +81,7 @@ describe('CalendarUtils', () => {
       expect(restoreCalendarValuesStub.calledWith(defaultUserJsonCalendar)).to.equal(true);
     });
 
-    it('renders the restored user calendar with zero contributions', async () => {
+    it('renders the restored user calendar with 0 total contributions', async () => {
       await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
 
       expect(calendarWithContributionsStub.calledWith(container, restoredDefaultUserCalendar, 0))

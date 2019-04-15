@@ -40,8 +40,9 @@ describe('TeamContributionCalendar', () => {
 
     it('processes the given parameters', () => {
       const container = 'div';
+      const gitHubUsers = ['userName'];
 
-      TeamContributionCalendar(container);
+      TeamContributionCalendar(container, gitHubUsers);
 
       expect(processParamsStub
         .calledWith(container, Proxy.defaultProxyServerUrl)).to.equal(true);
