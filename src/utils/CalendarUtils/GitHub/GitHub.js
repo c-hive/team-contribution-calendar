@@ -4,7 +4,7 @@ import { parseSync } from 'svgson';
 import * as Proxy from '../../Proxy/Proxy';
 import * as JavaScriptUtils from '../../JavaScriptUtils/JavaScriptUtils';
 
-const getCurrentUserSvg = async (proxyServerUrl, gitHubUsername) => {
+const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
   const userUrl = Proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
   const responseData = await fetch(userUrl);
 
@@ -35,7 +35,7 @@ export const restoreCalendarValues = (calendar) => {
 };
 
 export const getJsonFormattedCalendarSync = async (proxyServerUrl, gitHubUsername) => {
-  const userCalendar = await getCurrentUserSvg(proxyServerUrl, gitHubUsername);
+  const userSvg = await getUserSvg(proxyServerUrl, gitHubUsername);
 
-  return parseSync(userCalendar.outerHTML);
+  return parseSync(userSvg.outerHTML);
 };
