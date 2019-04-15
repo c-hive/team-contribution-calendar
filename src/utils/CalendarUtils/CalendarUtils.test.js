@@ -6,7 +6,7 @@ import * as GitHub from './GitHub/GitHub';
 import * as TestUtils from '../TestUtils/TestUtils';
 import * as DefaultUsers from '../../resources/DefaultUsers/DefaultUsers';
 import BasicCalendar from '../../resources/BasicCalendar/BasicCalendar.json';
-import { State } from '../../resources/State/State';
+import State from '../../resources/State/State';
 
 describe('CalendarUtils', () => {
   describe('requiredParamsExist', () => {
@@ -65,7 +65,7 @@ describe('CalendarUtils', () => {
       sandbox.restore();
     });
 
-    it('renders `BasicCalendar` with 0 total contributions', async () => {
+    it('renders the state`s actual calendar(BasicCalendar) with 0 total contributions', async () => {
       const expectedTotalContributions = 0;
 
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
@@ -101,7 +101,7 @@ describe('CalendarUtils', () => {
       expect(setStateSpy.calledWithExactly(expectedCalledData)).to.equal(true);
     });
 
-    it('renders the restored user calendar with 0 total contributions', async () => {
+    it('renders the state`s actual calendar(restored user calendar) with 0 total contributions', async () => {
       const expectedTotalContributions = 0;
 
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as Main from './Main';
 import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
-import { State } from '../resources/State/State';
+import State from '../resources/State/State';
 
 describe('Main', () => {
   describe('processParams', () => {
