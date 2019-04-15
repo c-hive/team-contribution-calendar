@@ -3,13 +3,14 @@
       "development": {
         "presets": ["@babel/preset-env"],
         "plugins": [
-          "add-module-exports"
+          "add-module-exports",
         ]
       },
       "production": {
         "presets": ["@babel/preset-env", "minify"],
         "plugins": [
-          "add-module-exports"
+          "add-module-exports",
+          "@babel/plugin-transform-runtime"
         ]
       }
     }

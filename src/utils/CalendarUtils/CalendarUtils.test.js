@@ -1,22 +1,19 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
-import proxyquire from 'proxyquire';
-import * as GetStyledCalendarElement from '../GetStyledCalendarElement/GetStyledCalendarElement';
-
-const svgsonStub = {};
-
-const CalendarUtils = proxyquire('./CalendarUtils.js', {
-  svgson: svgsonStub,
-});
+import * as CalendarUtils from './CalendarUtils';
+import * as Render from './Render/Render';
+import * as GitHub from './GitHub/GitHub';
+import * as TestUtils from '../TestUtils/TestUtils';
+import * as DefaultUsers from '../../resources/DefaultUsers/DefaultUsers';
+import BasicCalendar from '../../resources/BasicCalendar/BasicCalendar.json';
 
 describe('CalendarUtils', () => {
-  describe('RequiredParamsExist', () => {
+  describe('requiredParamsExist', () => {
     describe('when container is not defined', () => {
       it('returns false', () => {
         const expectedReturnedValue = false;
 
-        const actualReturnedValue = CalendarUtils.RequiredParamsExist();
+        const actualReturnedValue = CalendarUtils.requiredParamsExist();
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
@@ -26,7 +23,7 @@ describe('CalendarUtils', () => {
       it('returns false', () => {
         const expectedReturnedValue = false;
 
-        const actualReturnedValue = CalendarUtils.RequiredParamsExist('div');
+        const actualReturnedValue = CalendarUtils.requiredParamsExist('div');
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
@@ -36,63 +33,59 @@ describe('CalendarUtils', () => {
       it('returns true', () => {
         const expectedReturnedValue = true;
 
-        const actualReturnedValue = CalendarUtils.RequiredParamsExist('div', []);
+        const actualReturnedValue = CalendarUtils.requiredParamsExist('div', []);
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
     });
   });
 
-  describe('RenderCalendarWithContributions', () => {
-    // https://github.com/rstacruz/mocha-jsdom/issues/36
-    // https://github.com/jsdom/jsdom/issues/2383
-    jsdom({
-      url: 'https://example.org/',
-    });
-
+  describe('initializeBasicAppearance', () => {
     const sandbox = sinon.createSandbox();
 
-    svgsonStub.stringify = () => ({
-      innerHTML: null,
-    });
+    let calendarWithContributionsStub;
+    let getJsonFormattedCalendarSyncStub;
+    let restoreCalendarValuesStub;
 
     const container = '.container';
-
-    let containerStub;
-    let headerStub;
-
-    let appendChildSpy;
-    let prependSpy;
+    const proxyServerUrl = 'https://proxy-server.com';
+    const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+    const restoredDefaultUserCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([2])[0];
 
     beforeEach(() => {
-      appendChildSpy = sandbox.spy();
-      prependSpy = sandbox.spy();
-
-      containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns({
-        prepend: prependSpy,
-      });
-
-      headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns({
-        appendChild: appendChildSpy,
-      });
+      calendarWithContributionsStub = sandbox.stub(Render, 'calendarWithContributions');
+      getJsonFormattedCalendarSyncStub = sandbox.stub(GitHub, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
+      restoreCalendarValuesStub = sandbox.stub(GitHub, 'restoreCalendarValues').returns(restoredDefaultUserCalendar);
     });
 
     afterEach(() => {
       sandbox.restore();
     });
 
-    it('renders a container based on the passed param', () => {
-      CalendarUtils.RenderCalendarWithContributions(container);
+    it('renders `BasicCalendar` with zero contributions', async () => {
+      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
 
-      expect(containerStub.calledWith(container)).to.equal(true);
+      expect(calendarWithContributionsStub.calledWith(container, BasicCalendar, 0)).to.equal(true);
     });
 
-    it('renders the calendar header with the total contributions', () => {
-      const totalContributions = 1024;
+    it('fetches the default user`s calendar synchronously', async () => {
+      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
 
-      CalendarUtils.RenderCalendarWithContributions(container, null, totalContributions);
+      expect(getJsonFormattedCalendarSyncStub.calledWith(proxyServerUrl, DefaultUsers.GitHub))
+        .to.equal(true);
+    });
 
-      expect(headerStub.calledWith(totalContributions)).to.equal(true);
+    it('restores the user`s values to the default ones', async () => {
+      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
+
+      expect(restoreCalendarValuesStub.calledWith(defaultUserJsonCalendar)).to.equal(true);
+    });
+
+    it('renders the restored user calendar with zero contributions', async () => {
+      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
+
+      expect(calendarWithContributionsStub.calledWith(container, restoredDefaultUserCalendar, 0))
+        .to.equal(true);
     });
   });
 });
