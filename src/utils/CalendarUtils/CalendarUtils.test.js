@@ -50,7 +50,7 @@ describe('CalendarUtils', () => {
     const container = '.container';
     const proxyServerUrl = 'https://proxy-server.com';
     const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
-    const restoredDefaultUserCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([2])[0];
+    const restoredDefaultUserCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
 
     beforeEach(() => {
       calendarWithContributionsStub = sandbox.stub(Render, 'calendarWithContributions');
