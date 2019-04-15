@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { State } from './State';
+import State from './State';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as TestUtils from '../../utils/TestUtils/TestUtils';
 

@@ -1,6 +1,6 @@
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 
-export class State {
+export default class State {
   constructor() {
     this.actualCalendar = BasicCalendar;
     this.totalContributions = 0;
