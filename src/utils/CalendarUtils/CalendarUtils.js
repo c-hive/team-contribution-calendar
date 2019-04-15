@@ -1,7 +1,6 @@
 import * as JavaScriptUtils from '../JavaScriptUtils/JavaScriptUtils';
 import * as Render from './Render/Render';
 import * as DefaultUsers from '../../resources/DefaultUsers/DefaultUsers';
-import BasicCalendar from '../../resources/BasicCalendar/BasicCalendar.json';
 import * as GitHub from './GitHub/GitHub';
 
 export const requiredParamsExist = (container, gitHubUsers) => {
@@ -16,14 +15,19 @@ export const requiredParamsExist = (container, gitHubUsers) => {
   return true;
 };
 
-export const initializeBasicAppearance = async (container, proxyServerUrl) => {
-  Render.calendarWithContributions(container, BasicCalendar, 0);
+export const initializeBasicAppearance = async (state, container, proxyServerUrl) => {
+  Render.calendarWithContributions(container, state.actualCalendar, state.totalContributions);
 
   const defaultUserJsonCalendar = await GitHub
     .getJsonFormattedCalendarSync(proxyServerUrl, DefaultUsers.GitHub);
 
   const restoredDefaultUserCalendar = GitHub.restoreCalendarValues(defaultUserJsonCalendar);
 
+  state.setState({
+    currentUserTotalContributions: 0,
+    updatedActualCalendar: restoredDefaultUserCalendar,
+  });
+
   Render.calendarWithContributions(container,
-    restoredDefaultUserCalendar, 0);
+    state.actualCalendar, state.totalContributions);
 };

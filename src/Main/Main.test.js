@@ -2,17 +2,20 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as Main from './Main';
 import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
+import { State } from '../resources/State/State';
 
 describe('Main', () => {
   describe('processParams', () => {
-    let initializeBasicAppearanceStub;
+    const state = new State();
+
+    let initializeBasicAppearanceSpy;
 
     beforeEach(() => {
-      initializeBasicAppearanceStub = sinon.stub(CalendarUtils, 'initializeBasicAppearance');
+      initializeBasicAppearanceSpy = sinon.spy(CalendarUtils, 'initializeBasicAppearance');
     });
 
     afterEach(() => {
-      initializeBasicAppearanceStub.restore();
+      initializeBasicAppearanceSpy.restore();
     });
 
     it('initializes the basic apperance with an empty calendar', () => {
@@ -21,7 +24,8 @@ describe('Main', () => {
 
       Main.processParams(container, proxyServerUrl);
 
-      expect(initializeBasicAppearanceStub.calledWith(container, proxyServerUrl)).to.equal(true);
+      expect(initializeBasicAppearanceSpy.calledWith(state, container, proxyServerUrl))
+        .to.equal(true);
     });
   });
 });
