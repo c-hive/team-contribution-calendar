@@ -1,8 +1,10 @@
-import { stringify } from 'svgson';
-import * as GetStyledCalendarElement from '../GetStyledCalendarElement/GetStyledCalendarElement';
 import * as JavaScriptUtils from '../JavaScriptUtils/JavaScriptUtils';
+import * as Render from './Render/Render';
+import * as DefaultUsers from '../../resources/DefaultUsers/DefaultUsers';
+import BasicCalendar from '../../resources/BasicCalendar/BasicCalendar.json';
+import * as GitHub from './GitHub/GitHub';
 
-export const RequiredParamsExist = (container, gitHubUsers) => {
+export const requiredParamsExist = (container, gitHubUsers) => {
   if (!JavaScriptUtils.isDefined(container)) {
     return false;
   }
@@ -14,12 +16,14 @@ export const RequiredParamsExist = (container, gitHubUsers) => {
   return true;
 };
 
-export const RenderCalendarWithContributions = (container, calendar, totalContributions) => {
-  const calendarContainer = GetStyledCalendarElement.container(container);
-  const calendarHeader = GetStyledCalendarElement.header(totalContributions);
+export const initializeBasicAppearance = async (container, proxyServerUrl) => {
+  Render.calendarWithContributions(container, BasicCalendar, 0);
 
-  const stringifiedHTMLContent = stringify(calendar);
+  const defaultUserJsonCalendar = await GitHub
+    .getJsonFormattedCalendarSync(proxyServerUrl, DefaultUsers.GitHub);
 
-  calendarContainer.innerHTML = stringifiedHTMLContent;
-  calendarContainer.prepend(calendarHeader);
+  const restoredDefaultUserCalendar = GitHub.restoreCalendarValues(defaultUserJsonCalendar);
+
+  Render.calendarWithContributions(container,
+    restoredDefaultUserCalendar, 0);
 };
