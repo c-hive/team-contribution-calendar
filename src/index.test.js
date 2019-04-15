@@ -1,7 +1,9 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import TeamContributionCalendar from './index';
+import * as Main from './Main/Main';
 import * as CalendarUtils from './utils/CalendarUtils/CalendarUtils';
+import * as Proxy from './utils/Proxy/Proxy';
 
 describe('TeamContributionCalendar', () => {
   const sandbox = sinon.createSandbox();
@@ -29,17 +31,21 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('when the required params exist', () => {
-    let consoleInfoSpy;
+    let processParamsStub;
 
     beforeEach(() => {
-      consoleInfoSpy = sandbox.stub(console, 'info');
+      processParamsStub = sandbox.stub(Main, 'processParams');
       requiredParamsExistStub.callsFake(() => true);
     });
 
-    it('logs the information message to the console', () => {
-      TeamContributionCalendar();
+    it('processes the given parameters', () => {
+      const container = 'div';
+      const gitHubUsers = ['userName'];
 
-      expect(consoleInfoSpy.calledOnce).to.equal(true);
+      TeamContributionCalendar(container, gitHubUsers);
+
+      expect(processParamsStub
+        .calledWith(container, gitHubUsers, [], Proxy.defaultProxyServerUrl)).to.equal(true);
     });
   });
 });
