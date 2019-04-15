@@ -8,14 +8,14 @@ describe('Main', () => {
   describe('processParams', () => {
     const state = new State();
 
-    let initializeBasicAppearanceSpy;
+    let initializeBasicAppearanceStub;
 
     beforeEach(() => {
-      initializeBasicAppearanceSpy = sinon.spy(CalendarUtils, 'initializeBasicAppearance');
+      initializeBasicAppearanceStub = sinon.stub(CalendarUtils, 'initializeBasicAppearance');
     });
 
     afterEach(() => {
-      initializeBasicAppearanceSpy.restore();
+      initializeBasicAppearanceStub.restore();
     });
 
     it('initializes the basic apperance with an empty calendar', () => {
@@ -24,7 +24,7 @@ describe('Main', () => {
 
       Main.processParams(container, proxyServerUrl);
 
-      expect(initializeBasicAppearanceSpy.calledWith(state, container, proxyServerUrl))
+      expect(initializeBasicAppearanceStub.calledWithExactly(state, container, proxyServerUrl))
         .to.equal(true);
     });
   });
