@@ -5,7 +5,7 @@ import * as Render from './Render/Render';
 import * as GitHub from './GitHub/GitHub';
 import * as TestUtils from '../TestUtils/TestUtils';
 import * as DefaultUsers from '../../resources/DefaultUsers/DefaultUsers';
-import BasicCalendar from '../../resources/BasicCalendar/BasicCalendar.json';
+import { State } from '../../resources/State/State';
 
 describe('CalendarUtils', () => {
   describe('requiredParamsExist', () => {
@@ -43,6 +43,8 @@ describe('CalendarUtils', () => {
   describe('initializeBasicAppearance', () => {
     const sandbox = sinon.createSandbox();
 
+    const state = new State();
+
     let calendarWithContributionsStub;
     let getJsonFormattedCalendarSyncStub;
     let restoreCalendarValuesStub;
@@ -63,28 +65,47 @@ describe('CalendarUtils', () => {
     });
 
     it('renders `BasicCalendar` with 0 total contributions', async () => {
-      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
+      const expectedTotalContributions = 0;
 
-      expect(calendarWithContributionsStub.calledWith(container, BasicCalendar, 0)).to.equal(true);
+      await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
+
+      expect(calendarWithContributionsStub
+        .calledWith(container, state.actualCalendar, expectedTotalContributions)).to.equal(true);
     });
 
     it('fetches the default user`s calendar synchronously', async () => {
-      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
+      await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
       expect(getJsonFormattedCalendarSyncStub.calledWith(proxyServerUrl, DefaultUsers.GitHub))
         .to.equal(true);
     });
 
     it('restores the user`s values to the default ones', async () => {
-      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
+      await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
       expect(restoreCalendarValuesStub.calledWith(defaultUserJsonCalendar)).to.equal(true);
     });
 
-    it('renders the restored user calendar with 0 total contributions', async () => {
-      await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
+    it('sets the restored user calendar to the state and increments the total contributions by 0', async () => {
+      const setStateSpy = sandbox.spy(state, 'setState');
 
-      expect(calendarWithContributionsStub.calledWith(container, restoredDefaultUserCalendar, 0))
+      const expectedCalledData = {
+        currentUserTotalContributions: 0,
+        updatedActualCalendar: restoredDefaultUserCalendar,
+      };
+
+      await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
+
+      expect(setStateSpy.calledWith(expectedCalledData)).to.equal(true);
+    });
+
+    it('renders the restored user calendar with 0 total contributions', async () => {
+      const expectedTotalContributions = 0;
+
+      await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
+
+      expect(calendarWithContributionsStub
+        .calledWith(container, restoredDefaultUserCalendar, expectedTotalContributions))
         .to.equal(true);
     });
   });
