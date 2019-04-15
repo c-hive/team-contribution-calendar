@@ -65,7 +65,7 @@ describe('CalendarUtils', () => {
       sandbox.restore();
     });
 
-    it('renders the state`s actual calendar(BasicCalendar) with 0 total contributions', async () => {
+    it('renders the state`s actual calendar(`BasicCalendar`) with 0 total contributions', async () => {
       const expectedTotalContributions = 0;
 
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
