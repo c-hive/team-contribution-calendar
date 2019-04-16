@@ -21,7 +21,7 @@ export default class State {
     );
   }
 
-  setState(data) {
+  setStateAndRender(data) {
     const { currentUserTotalContributions, updatedActualCalendar } = data;
 
     this.actualCalendar = {

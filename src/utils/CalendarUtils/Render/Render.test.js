@@ -71,7 +71,7 @@ describe('Render', () => {
   describe('defaultUserCalendar', () => {
     let getJsonFormattedCalendarSyncStub;
     let restoreCalendarValuesStub;
-    let setStateStub;
+    let setStateAndRenderStub;
 
     let state;
 
@@ -83,7 +83,7 @@ describe('Render', () => {
 
       getJsonFormattedCalendarSyncStub = sandbox.stub(GitHub, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
       restoreCalendarValuesStub = sandbox.stub(GitHub, 'restoreCalendarValues').returns(restoredDefaultUserCalendar);
-      setStateStub = sandbox.stub(State.prototype, 'setState');
+      setStateAndRenderStub = sandbox.stub(State.prototype, 'setStateAndRender');
     });
 
     it('fetches the default GH user`s calendar synchronously', async () => {
@@ -111,7 +111,7 @@ describe('Render', () => {
         updatedActualCalendar: restoredDefaultUserCalendar,
       };
 
-      expect(setStateStub.calledWith(expectedCalledData)).to.equal(true);
+      expect(setStateAndRenderStub.calledWith(expectedCalledData)).to.equal(true);
     });
   });
 });
