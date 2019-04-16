@@ -16,7 +16,7 @@ describe('Main', () => {
       initializeBasicAppearanceStub.restore();
     });
 
-    it('initializes the basic apperance with an empty state', () => {
+    it('initializes the basic apperance with a default state', () => {
       const state = new State();
       const container = '.container';
       const proxyServerUrl = 'https://proxy-server.com';
