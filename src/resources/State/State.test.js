@@ -56,14 +56,14 @@ describe('State', () => {
     });
   });
 
-  describe('setState', () => {
+  describe('setStateAndRender', () => {
     const data = {
       currentUserTotalContributions: 2048,
       updatedActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0],
     };
 
     it('sets the updated actual calendar to the state', () => {
-      state.setState(data);
+      state.setStateAndRender(data);
 
       expect(state.actualCalendar).to.eql(data.updatedActualCalendar);
     });
@@ -72,7 +72,7 @@ describe('State', () => {
       const expectedTotalContributionsValue = state.totalContributions
             + data.currentUserTotalContributions;
 
-      state.setState(data);
+      state.setStateAndRender(data);
 
       expect(state.totalContributions).to.equal(expectedTotalContributionsValue);
     });
@@ -80,7 +80,7 @@ describe('State', () => {
     it('renders the actual calendar details', () => {
       const renderSpy = sinon.spy(State.prototype, 'render');
 
-      state.setState(data);
+      state.setStateAndRender(data);
 
       expect(renderSpy.calledOnce).to.equal(true);
     });

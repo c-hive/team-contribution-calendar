@@ -20,7 +20,7 @@ export const defaultUserCalendar = async (state) => {
 
   const restoredDefaultUserCalendar = GitHub.restoreCalendarValues(defaultUserJsonCalendar);
 
-  state.setState({
+  state.setStateAndRender({
     currentUserTotalContributions: 0,
     updatedActualCalendar: restoredDefaultUserCalendar,
   });
