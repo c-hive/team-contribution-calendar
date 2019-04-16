@@ -9,12 +9,15 @@ describe('State', () => {
   let state;
   let calendarWithContributionsStub;
 
-  const container = '.container';
-  const proxyServerUrl = 'https://proxy-server.com';
+  const stateFakeParams = TestUtils.getStateFakeParams();
 
   beforeEach(() => {
     // In order to have a default state in each case.
-    state = new State(container, proxyServerUrl);
+    state = new State(
+      stateFakeParams.container,
+      stateFakeParams.proxyServerUrl,
+      stateFakeParams.gitHubUsers,
+    );
 
     calendarWithContributionsStub = sinon.stub(Render, 'calendarWithContributions');
   });
@@ -25,15 +28,15 @@ describe('State', () => {
 
   it('sets the given container and proxy server url into `configs`', () => {
     const expectedStateConfig = {
-      container,
-      proxyServerUrl,
+      container: stateFakeParams.container,
+      proxyServerUrl: stateFakeParams.proxyServerUrl,
     };
 
     expect(state.configs).to.eql(expectedStateConfig);
   });
 
   it('sets the actual calendar to `BasicCalendar` by default', () => {
-    expect(state.actualCalendar).to.equal(BasicCalendar);
+    expect(state.actualCalendar).to.eql(BasicCalendar);
   });
 
   it('sets the total contributions to 0 by default', () => {
@@ -46,21 +49,51 @@ describe('State', () => {
 
   describe('render', () => {
     it('renders the actual calendar details into the given container', () => {
+      const expectedCalendarDetails = {
+        container: state.configs.container,
+        actualCalendar: state.actualCalendar,
+        totalContributions: state.totalContributions,
+        isLoading: state.isLoading,
+      };
+
       state.render();
 
-      expect(calendarWithContributionsStub.calledWithExactly(
-        state.configs.container,
-        state.actualCalendar,
-        state.totalContributions,
-      )).to.equal(true);
+      expect(calendarWithContributionsStub.calledWithExactly(expectedCalendarDetails)).to.eql(true);
     });
   });
 
   describe('setStateAndRender', () => {
     const data = {
-      currentUserTotalContributions: 2048,
+      userTotalContributions: 2048,
       updatedActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0],
     };
+
+    describe('when `isLoading` is not defined', () => {
+      const dataWithoutIsLoading = {
+        ...data,
+      };
+
+      it('does not update the `isLoading` state value', () => {
+        const previousIsLoadingState = state.isLoading;
+
+        state.setStateAndRender(dataWithoutIsLoading);
+
+        expect(state.isLoading).to.equal(previousIsLoadingState);
+      });
+    });
+
+    describe('when `isLoading` is defined', () => {
+      const dataWithIsLoading = {
+        ...data,
+        isLoading: false,
+      };
+
+      it('updates `isLoading` to the received value', () => {
+        state.setStateAndRender(dataWithIsLoading);
+
+        expect(state.isLoading).to.equal(dataWithIsLoading.isLoading);
+      });
+    });
 
     it('sets the updated actual calendar to the state', () => {
       state.setStateAndRender(data);
@@ -68,9 +101,9 @@ describe('State', () => {
       expect(state.actualCalendar).to.eql(data.updatedActualCalendar);
     });
 
-    it('adds the received total contributions to the previous value', () => {
+    it('adds the received user total contributions to the previous value', () => {
       const expectedTotalContributionsValue = state.totalContributions
-            + data.currentUserTotalContributions;
+            + data.userTotalContributions;
 
       state.setStateAndRender(data);
 

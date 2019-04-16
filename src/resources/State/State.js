@@ -1,34 +1,44 @@
-import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as Render from '../../utils/CalendarUtils/Render/Render';
+import * as JavaScriptUtils from '../../utils/JavaScriptUtils/JavaScriptUtils';
+import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 
 export default class State {
-  constructor(container, proxyServerUrl) {
+  constructor(container, proxyServerUrl, gitHubUsers) {
     this.configs = {
       container,
       proxyServerUrl,
     };
 
-    this.actualCalendar = BasicCalendar;
+    this.users = {
+      gitHubUsers: [...gitHubUsers],
+    };
+
+    this.actualCalendar = { ...BasicCalendar };
     this.totalContributions = 0;
     this.isLoading = true;
   }
 
   render() {
-    Render.calendarWithContributions(
-      this.configs.container,
-      this.actualCalendar,
-      this.totalContributions,
-    );
+    Render.calendarWithContributions({
+      container: this.configs.container,
+      actualCalendar: this.actualCalendar,
+      totalContributions: this.totalContributions,
+      isLoading: this.isLoading,
+    });
   }
 
   setStateAndRender(data) {
-    const { currentUserTotalContributions, updatedActualCalendar } = data;
+    const { userTotalContributions, updatedActualCalendar } = data;
+
+    if (JavaScriptUtils.isDefined(data.isLoading)) {
+      this.isLoading = data.isLoading;
+    }
 
     this.actualCalendar = {
       ...updatedActualCalendar,
     };
 
-    this.totalContributions = this.totalContributions + currentUserTotalContributions;
+    this.totalContributions = this.totalContributions + userTotalContributions;
 
     this.render();
   }

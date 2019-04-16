@@ -3,11 +3,13 @@ import * as GetStyledCalendarElement from '../../GetStyledCalendarElement/GetSty
 import * as GitHub from '../GitHub/GitHub';
 import * as DefaultUsers from '../../../resources/DefaultUsers/DefaultUsers';
 
-export const calendarWithContributions = (container, calendar, totalContributions) => {
-  const calendarContainer = GetStyledCalendarElement.container(container);
-  const calendarHeader = GetStyledCalendarElement.header(totalContributions);
+export const calendarWithContributions = (calendarDetails) => {
+  const calendarContainer = GetStyledCalendarElement.container(calendarDetails.container);
+  const calendarHeader = GetStyledCalendarElement.header(
+    calendarDetails.totalContributions, calendarDetails.isLoading,
+  );
 
-  const stringifiedHTMLContent = stringify(calendar);
+  const stringifiedHTMLContent = stringify(calendarDetails.actualCalendar);
 
   calendarContainer.innerHTML = stringifiedHTMLContent;
   calendarContainer.prepend(calendarHeader);

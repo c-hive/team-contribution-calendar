@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 
-import { parseSync } from 'svgson';
+import { parseSync, parse } from 'svgson';
 import * as Proxy from '../../Proxy/Proxy';
 import * as JavaScriptUtils from '../../JavaScriptUtils/JavaScriptUtils';
+import * as Common from '../Common/Common';
 
 const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
   const userUrl = Proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
@@ -34,8 +35,65 @@ export const restoreCalendarValues = (calendar) => {
   return copiedCalendar;
 };
 
+const mergeCalendars = (actualCalendar, userJsonCalendar) => {
+  const copiedActualCalendar = JavaScriptUtils.deepCopyObject(actualCalendar);
+
+  userJsonCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
+    weeklyData.children.forEach((dailyData, dayIndex) => {
+      if (dailyData.attributes['data-count']) {
+        const actualCalendarDailyData = Common
+          .getCalendarDataByIndexes(copiedActualCalendar, weekIndex, dayIndex);
+        const totalDailyContributions = Number(actualCalendarDailyData.attributes['data-count']) + Number(dailyData.attributes['data-count']);
+
+        copiedActualCalendar.children[0].children[weekIndex].children[dayIndex].attributes = {
+          ...actualCalendarDailyData.attributes,
+          'data-count': String(totalDailyContributions),
+          fill: Common.getFillColor(totalDailyContributions),
+        };
+      }
+    });
+  });
+
+  return copiedActualCalendar;
+};
+
+const getUserTotalContributions = (userJsonCalendar) => {
+  let sum = 0;
+
+  userJsonCalendar.children[0].children.forEach((weeklyData) => {
+    weeklyData.children.forEach((dailyData) => {
+      if (dailyData.attributes['data-count']) {
+        sum += Number(dailyData.attributes['data-count']);
+      }
+    });
+  });
+
+  return sum;
+};
+
+export const handleUserCalendar = (state, userJsonCalendar) => {
+  const updatedActualCalendar = mergeCalendars(state.actualCalendar, userJsonCalendar);
+  const userTotalContributions = getUserTotalContributions(userJsonCalendar);
+
+  console.log('[actual]', updatedActualCalendar.children[0]);
+
+  state.setStateAndRender({
+    updatedActualCalendar,
+    userTotalContributions,
+    isLoading: false,
+  });
+};
+
 export const getJsonFormattedCalendarSync = async (proxyServerUrl, gitHubUsername) => {
   const userSvg = await getUserSvg(proxyServerUrl, gitHubUsername);
 
   return parseSync(userSvg.outerHTML);
+};
+
+export const getJsonFormattedCalendarAsync = async (proxyServerUrl, gitHubUsername) => {
+  const rawUserSvg = await getUserSvg(proxyServerUrl, gitHubUsername);
+
+  return parse(rawUserSvg.outerHTML)
+    .then(parsedGitHubCalendar => parsedGitHubCalendar)
+    .catch(err => console.log(err));
 };
