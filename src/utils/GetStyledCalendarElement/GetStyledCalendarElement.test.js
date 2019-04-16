@@ -24,10 +24,34 @@ describe('GetStyledCalendarElement', () => {
   });
 
   describe('header', () => {
+    const totalContributions = 1024;
+
     it('returns a `div` element', () => {
-      const calendarHeader = GetStyledCalendarElement.header();
+      const calendarHeader = GetStyledCalendarElement.header(totalContributions);
 
       expect(calendarHeader.nodeName).to.equal('DIV');
+    });
+
+    describe('when `isLoading` is true', () => {
+      const isLoading = true;
+
+      it('does not render the total contributions text', () => {
+        const calendarHeader = GetStyledCalendarElement.header(totalContributions, isLoading);
+
+        expect(calendarHeader.childNodes[0].innerText).to.be.an('undefined');
+      });
+    });
+
+    describe('when `isLoading` is false', () => {
+      const isLoading = false;
+
+      it('renders the total contributions text', () => {
+        const expectedTotalContributionsText = `${totalContributions} contributions in the last year`;
+
+        const calendarHeader = GetStyledCalendarElement.header(totalContributions, isLoading);
+
+        expect(calendarHeader.childNodes[0].innerText).to.equal(expectedTotalContributionsText);
+      });
     });
 
     it('appends a paragraph to the header', () => {

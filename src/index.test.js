@@ -40,12 +40,12 @@ describe('TeamContributionCalendar', () => {
 
     it('processes the given parameters', () => {
       const container = 'div';
-      const gitHubUsers = ['userName'];
+      const gitHubUsers = ['userName_one', 'userName_two'];
 
       TeamContributionCalendar(container, gitHubUsers);
 
       expect(processParamsStub
-        .calledWithExactly(container, Proxy.defaultProxyServerUrl)).to.equal(true);
+        .calledWithExactly(container, Proxy.defaultProxyServerUrl, gitHubUsers)).to.equal(true);
     });
   });
 });

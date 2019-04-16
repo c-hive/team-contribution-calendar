@@ -32,7 +32,12 @@ describe('Render', () => {
   });
 
   describe('calendarWithContributions', () => {
-    const container = '.container';
+    const calendarDetails = {
+      container: '.container',
+      actualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([3])[0],
+      totalContributions: 4096,
+      isLoading: true,
+    };
 
     let containerStub;
     let headerStub;
@@ -54,17 +59,18 @@ describe('Render', () => {
     });
 
     it('renders a container based on the passed param', () => {
-      Render.calendarWithContributions(container);
+      Render.calendarWithContributions(calendarDetails);
 
-      expect(containerStub.calledWithExactly(container)).to.equal(true);
+      expect(containerStub.calledWithExactly(calendarDetails.container)).to.equal(true);
     });
 
     it('renders the calendar header with the total contributions', () => {
-      const totalContributions = 1024;
+      Render.calendarWithContributions(calendarDetails);
 
-      Render.calendarWithContributions(container, null, totalContributions);
-
-      expect(headerStub.calledWithExactly(totalContributions)).to.equal(true);
+      expect(headerStub.calledWithExactly(
+        calendarDetails.totalContributions,
+        calendarDetails.isLoading,
+      )).to.equal(true);
     });
   });
 
@@ -75,11 +81,17 @@ describe('Render', () => {
 
     let state;
 
+    const stateFakeParams = TestUtils.getStateFakeParams();
+
     const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
     const restoredDefaultUserCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
 
     beforeEach(() => {
-      state = new State();
+      state = new State(
+        stateFakeParams.container,
+        stateFakeParams.proxyServerUrl,
+        stateFakeParams.gitHubUsers,
+      );
 
       getJsonFormattedCalendarSyncStub = sandbox.stub(GitHub, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
       restoreCalendarValuesStub = sandbox.stub(GitHub, 'restoreCalendarValues').returns(restoredDefaultUserCalendar);
