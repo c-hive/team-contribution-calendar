@@ -95,7 +95,7 @@ describe('Render', () => {
       )).to.equal(true);
     });
 
-    it('restores the default user`s calendar values to the default ones', async () => {
+    it('restores the default user`s calendar values', async () => {
       await Render.defaultUserCalendar(state);
 
       expect(restoreCalendarValuesStub.calledWithExactly(
