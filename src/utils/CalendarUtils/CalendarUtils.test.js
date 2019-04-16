@@ -44,14 +44,14 @@ describe('CalendarUtils', () => {
   describe('initializeBasicAppearance', () => {
     const sandbox = sinon.createSandbox();
 
-    const state = new State();
-
     let calendarWithContributionsStub;
     let getJsonFormattedCalendarSyncStub;
     let restoreCalendarValuesStub;
 
+    const state = new State();
     const container = '.container';
     const proxyServerUrl = 'https://proxy-server.com';
+
     const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
     const restoredDefaultUserCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
 
@@ -91,14 +91,14 @@ describe('CalendarUtils', () => {
     it('sets the restored user calendar to the state and increments the total contributions by 0', async () => {
       const setStateSpy = sandbox.spy(state, 'setState');
 
-      const expectedCalledData = {
+      const expectedParamsToState = {
         currentUserTotalContributions: 0,
         updatedActualCalendar: restoredDefaultUserCalendar,
       };
 
       await CalendarUtils.initializeBasicAppearance(state, container, proxyServerUrl);
 
-      expect(setStateSpy.calledWithExactly(expectedCalledData)).to.equal(true);
+      expect(setStateSpy.calledWithExactly(expectedParamsToState)).to.equal(true);
     });
 
     it('renders the state`s actual calendar(restored user calendar) with 0 total contributions', async () => {
