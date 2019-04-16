@@ -3,6 +3,10 @@ import sinon from 'sinon';
 import proxyquire from 'proxyquire';
 import jsdom from 'mocha-jsdom';
 import * as GetStyledCalendarElement from '../../GetStyledCalendarElement/GetStyledCalendarElement';
+import * as GitHub from '../GitHub/GitHub';
+import * as TestUtils from '../../TestUtils/TestUtils';
+import State from '../../../resources/State/State';
+import * as DefaultUsers from '../../../resources/DefaultUsers/DefaultUsers';
 
 const svgsonStub = {};
 
@@ -61,6 +65,53 @@ describe('Render', () => {
       Render.calendarWithContributions(container, null, totalContributions);
 
       expect(headerStub.calledWithExactly(totalContributions)).to.equal(true);
+    });
+  });
+
+  describe('defaultUserCalendar', () => {
+    let getJsonFormattedCalendarSyncStub;
+    let restoreCalendarValuesStub;
+    let setStateStub;
+
+    let state;
+
+    const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+    const restoredDefaultUserCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
+
+    beforeEach(() => {
+      state = new State();
+
+      getJsonFormattedCalendarSyncStub = sandbox.stub(GitHub, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
+      restoreCalendarValuesStub = sandbox.stub(GitHub, 'restoreCalendarValues').returns(restoredDefaultUserCalendar);
+      setStateStub = sandbox.stub(State.prototype, 'setState');
+    });
+
+    it('fetches the default GH user`s calendar synchronously', async () => {
+      await Render.defaultUserCalendar(state);
+
+      expect(getJsonFormattedCalendarSyncStub.calledWithExactly(
+        state.configs.proxyServerUrl,
+        DefaultUsers.GitHub,
+      )).to.equal(true);
+    });
+
+    it('restores the default user`s calendar values to the default ones', async () => {
+      await Render.defaultUserCalendar(state);
+
+      expect(restoreCalendarValuesStub.calledWithExactly(
+        defaultUserJsonCalendar,
+      )).to.equal(true);
+    });
+
+    it('sets the restored user calendar to the state and increments the total contributions by 0', async () => {
+      await Render.defaultUserCalendar(state);
+
+      const expectedCalledData = {
+        currentUserTotalContributions: 0,
+        updatedActualCalendar: restoredDefaultUserCalendar,
+      };
+
+      expect(setStateStub.calledWith(expectedCalledData)).to.equal(true);
     });
   });
 });
