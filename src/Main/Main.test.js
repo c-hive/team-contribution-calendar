@@ -6,8 +6,6 @@ import State from '../resources/State/State';
 
 describe('Main', () => {
   describe('processParams', () => {
-    const state = new State();
-
     let initializeBasicAppearanceStub;
 
     beforeEach(() => {
@@ -18,7 +16,8 @@ describe('Main', () => {
       initializeBasicAppearanceStub.restore();
     });
 
-    it('initializes the basic apperance with an empty calendar', () => {
+    it('initializes the basic apperance with an empty state', () => {
+      const state = new State();
       const container = '.container';
       const proxyServerUrl = 'https://proxy-server.com';
 
