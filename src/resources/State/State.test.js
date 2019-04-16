@@ -24,12 +24,12 @@ describe('State', () => {
   });
 
   it('sets the given container and proxy server url into `configs`', () => {
-    const expectedConfig = {
+    const expectedStateConfig = {
       container,
       proxyServerUrl,
     };
 
-    expect(state.configs).to.eql(expectedConfig);
+    expect(state.configs).to.eql(expectedStateConfig);
   });
 
   it('sets the actual calendar to `BasicCalendar` by default', () => {
