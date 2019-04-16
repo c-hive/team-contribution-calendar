@@ -5,11 +5,10 @@ import * as Proxy from './utils/Proxy/Proxy';
 const TeamContributionCalendar = (
   container,
   gitHubUsers,
-  gitLabUsers = [],
-  proxyUrl = Proxy.defaultProxyServerUrl,
+  proxyServerUrl = Proxy.defaultProxyServerUrl,
 ) => {
-  if (CalendarUtils.RequiredParamsExist(container, gitHubUsers)) {
-    Main.processParams(container, gitHubUsers, gitLabUsers, proxyUrl);
+  if (CalendarUtils.requiredParamsExist(container, gitHubUsers)) {
+    Main.processParams(container, proxyServerUrl);
   } else {
     throw new Error('Please provide the required parameters in the appropriate format.');
   }
