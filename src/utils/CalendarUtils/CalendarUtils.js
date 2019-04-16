@@ -20,10 +20,15 @@ export const processStateUsers = (state) => {
       state.configs.proxyServerUrl, gitHubUsername,
     );
 
-    GitHub.handleUserCalendar(state, userJsonCalendar);
+    const mergedCalendars = GitHub.getMergedCalendars(state.actualCalendar, userJsonCalendar);
+    const userTotalContributions = GitHub.getUserTotalContributions(userJsonCalendar);
+
+    state.setStateAndRender({
+      updatedActualCalendar: mergedCalendars,
+      userTotalContributions,
+      isLoading: false,
+    });
   });
 };
-
-// handleGitHubUserCalendar?!
 
 export { Render };
