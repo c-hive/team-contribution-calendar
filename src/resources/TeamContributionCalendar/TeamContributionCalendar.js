@@ -1,11 +1,12 @@
 import { stringify } from 'svgson';
 import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
+import * as JavaScriptUtils from '../../utils/JavaScriptUtils/JavaScriptUtils';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
 export default class TeamContributionCalendar {
-  constructor(container, proxyServerUrl, gitHubUsers) {
+  constructor(container, gitHubUsers, proxyServerUrl) {
     this.configs = {
       container,
       proxyServerUrl,
@@ -18,16 +19,6 @@ export default class TeamContributionCalendar {
     this.actualCalendar = BasicCalendar;
     this.totalContributions = 0;
     this.isLoading = true;
-  }
-
-  renderActualCalendar() {
-    const calendarContainer = GetStyledCalendarElement.container(this.configs.container);
-    const calendarHeader = GetStyledCalendarElement.header(this.totalContributions);
-
-    const stringifiedHTMLContent = stringify(this.actualCalendar);
-
-    calendarContainer.innerHTML = stringifiedHTMLContent;
-    calendarContainer.prepend(calendarHeader);
   }
 
   async renderBasicAppearance() {
@@ -48,6 +39,10 @@ export default class TeamContributionCalendar {
   updateCalendar(data) {
     const { contributions, newActualCalendar } = data;
 
+    if (JavaScriptUtils.isDefined(data.isLoading)) {
+      this.isLoading = data.isLoading;
+    }
+
     this.actualCalendar = {
       ...newActualCalendar,
     };
@@ -55,5 +50,39 @@ export default class TeamContributionCalendar {
     this.totalContributions = this.totalContributions + contributions;
 
     this.renderActualCalendar();
+  }
+
+  renderActualCalendar() {
+    const calendarContainer = GetStyledCalendarElement.container(this.configs.container);
+    const calendarHeader = GetStyledCalendarElement.header(this.totalContributions, this.isLoading);
+
+    const stringifiedHTMLContent = stringify(this.actualCalendar);
+
+    calendarContainer.innerHTML = stringifiedHTMLContent;
+    calendarContainer.prepend(calendarHeader);
+  }
+
+  aggregateUserCalendars() {
+    this.users.gitHub.map(async (gitHubUsername) => {
+      const gitHubUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarAsync(
+        this.configs.proxyServerUrl, gitHubUsername,
+      );
+
+      this.processGitHubCalendar(gitHubUserJsonCalendar);
+    });
+  }
+
+  processGitHubCalendar(gitHubUserJsonCalendar) {
+    const newActualCalendar = GitHubUtils.mergeCalendarsContributions(
+      this.actualCalendar, gitHubUserJsonCalendar,
+    );
+
+    const lastYearContributions = GitHubUtils.getLastYearContributions(gitHubUserJsonCalendar);
+
+    this.updateCalendar({
+      newActualCalendar,
+      contributions: lastYearContributions,
+      isLoading: false,
+    });
   }
 }

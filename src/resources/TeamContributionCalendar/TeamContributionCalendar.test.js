@@ -17,8 +17,8 @@ describe('TeamContributionCalendar', () => {
   beforeEach(() => {
     teamContributionCalendar = new TeamContributionCalendar(
       testParams.container,
-      testParams.proxyServerUrl,
       testParams.gitHubUsers,
+      testParams.proxyServerUrl,
     );
   });
 
@@ -62,24 +62,31 @@ describe('TeamContributionCalendar', () => {
     let appendChildSpy;
     let prependSpy;
 
+    let calendarContainer;
+    let calendarHeader;
+
     beforeEach(() => {
       appendChildSpy = sandbox.spy();
       prependSpy = sandbox.spy();
 
-      containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns({
+      calendarContainer = {
         prepend: prependSpy,
-      });
+        innerHTML: null,
+      };
 
-      headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns({
+      calendarHeader = {
         appendChild: appendChildSpy,
-      });
+      };
+
+      containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
+      headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
     });
 
     afterEach(() => {
       sandbox.restore();
     });
 
-    it('renders a container based on the passed param', () => {
+    it('renders the styled container into the given element', () => {
       teamContributionCalendar.renderActualCalendar();
 
       expect(containerStub.calledWithExactly(
@@ -87,11 +94,20 @@ describe('TeamContributionCalendar', () => {
       )).to.equal(true);
     });
 
-    it('renders the calendar header with the total contributions', () => {
+    it('gets the styled calendar header', () => {
       teamContributionCalendar.renderActualCalendar();
 
       expect(headerStub.calledWithExactly(
         teamContributionCalendar.totalContributions,
+        teamContributionCalendar.isLoading,
+      )).to.equal(true);
+    });
+
+    it('prepends the header to the container', () => {
+      teamContributionCalendar.renderActualCalendar();
+
+      expect(calendarContainer.prepend.calledWithExactly(
+        calendarHeader,
       )).to.equal(true);
     });
   });
@@ -170,6 +186,33 @@ describe('TeamContributionCalendar', () => {
       sandbox.restore();
     });
 
+    describe('when `isLoading` is not defined', () => {
+      const dataWithoutIsLoading = {
+        ...data,
+      };
+
+      it('does not update `isLoading`', () => {
+        const expectedIsLoadingValue = teamContributionCalendar.isLoading;
+
+        teamContributionCalendar.updateCalendar(dataWithoutIsLoading);
+
+        expect(teamContributionCalendar.isLoading).to.equal(expectedIsLoadingValue);
+      });
+    });
+
+    describe('when `isLoading` is defined', () => {
+      const dataWithIsLoading = {
+        ...data,
+        isLoading: false,
+      };
+
+      it('updates `isLoading` to the received value', () => {
+        teamContributionCalendar.updateCalendar(dataWithIsLoading);
+
+        expect(teamContributionCalendar.isLoading).to.equal(dataWithIsLoading.isLoading);
+      });
+    });
+
     it('sets the new actual calendar', () => {
       teamContributionCalendar.updateCalendar(data);
 
@@ -189,6 +232,91 @@ describe('TeamContributionCalendar', () => {
       teamContributionCalendar.updateCalendar(data);
 
       expect(renderActualCalendarStub.calledOnce).to.equal(true);
+    });
+  });
+
+  describe('aggregateUserCalendars', () => {
+    describe('GitHub', () => {
+      let getJsonFormattedCalendarAsyncStub;
+      let processGitHubCalendarStub;
+
+      const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+
+      beforeEach(() => {
+        getJsonFormattedCalendarAsyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarAsync').returns(gitHubUserJsonCalendar);
+
+        processGitHubCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitHubCalendar');
+      });
+
+      afterEach(() => {
+        sandbox.restore();
+      });
+
+      it('fetches the user calendars asynchronously', async () => {
+        const expectedCalledTimes = teamContributionCalendar.users.gitHub.length;
+
+        await teamContributionCalendar.aggregateUserCalendars();
+
+        expect(getJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+      });
+
+      it('processes the fetched GH user calendars', async () => {
+        await teamContributionCalendar.aggregateUserCalendars();
+
+        expect(processGitHubCalendarStub.calledWithExactly(
+          gitHubUserJsonCalendar,
+        )).to.equal(true);
+      });
+    });
+  });
+
+  describe('processGitHubCalendar', () => {
+    let mergeCalendarsContributionsStub;
+    let getLastYearContributionsStub;
+    let updateCalendarStub;
+
+    const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([4])[0];
+    const newActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([12])[0];
+    const contributions = 1024;
+
+    beforeEach(() => {
+      mergeCalendarsContributionsStub = sandbox.stub(GitHubUtils, 'mergeCalendarsContributions').returns(newActualCalendar);
+      getLastYearContributionsStub = sandbox.stub(GitHubUtils, 'getLastYearContributions').returns(contributions);
+
+      updateCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendar');
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it('merges the actual calendar contributions into the GH user`s contributions', () => {
+      teamContributionCalendar.processGitHubCalendar(gitHubUserJsonCalendar);
+
+      expect(mergeCalendarsContributionsStub.calledWithExactly(
+        teamContributionCalendar.actualCalendar,
+        gitHubUserJsonCalendar,
+      )).to.equal(true);
+    });
+
+    it('calculates the user`s last year contributions', () => {
+      teamContributionCalendar.processGitHubCalendar(gitHubUserJsonCalendar);
+
+      expect(getLastYearContributionsStub.calledWithExactly(
+        gitHubUserJsonCalendar,
+      )).to.equal(true);
+    });
+
+    it('calls `updateCalendar` with the merged calendar, the calculated contributions and `isLoading` false', () => {
+      const expectedUpdatedData = {
+        newActualCalendar,
+        contributions,
+        isLoading: false,
+      };
+
+      teamContributionCalendar.processGitHubCalendar(gitHubUserJsonCalendar);
+
+      expect(updateCalendarStub.calledWithExactly(expectedUpdatedData)).to.equal(true);
     });
   });
 });

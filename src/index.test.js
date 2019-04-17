@@ -43,12 +43,12 @@ describe('Index', () => {
     });
 
     it('processes the given parameters', () => {
-      Index(testParams.container, testParams.proxyServerUrl, testParams.gitHubUsers);
+      Index(testParams.container, testParams.gitHubUsers, testParams.proxyServerUrl);
 
       expect(processParamsStub.calledWithExactly(
         testParams.container,
-        testParams.proxyServerUrl,
         testParams.gitHubUsers,
+        testParams.proxyServerUrl,
       )).to.equal(true);
     });
   });
