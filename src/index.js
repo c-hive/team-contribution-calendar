@@ -5,10 +5,11 @@ import * as Main from './Main/Main';
 const index = (
   container,
   gitHubUsers,
+  gitLabUsers = [],
   proxyServerUrl = Proxy.defaultProxyServerUrl,
 ) => {
   if (CalendarUtils.requiredParamsExist(container, gitHubUsers)) {
-    Main.processParams(container, gitHubUsers, proxyServerUrl);
+    Main.processParams(container, gitHubUsers, gitLabUsers, proxyServerUrl);
   } else {
     throw new Error('Please provide the required parameters in the appropriate format.');
   }

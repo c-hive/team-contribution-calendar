@@ -24,7 +24,10 @@ describe('Main', () => {
 
     it('renders the basic appearance', async () => {
       await Main.processParams(
-        testParams.container, testParams.gitHubUsers, testParams.proxyServerUrl,
+        testParams.container,
+        testParams.gitHubUsers,
+        testParams.gitLabUsers,
+        testParams.proxyServerUrl,
       );
 
       expect(renderBasicAppearanceStub.calledOnce).to.equal(true);
@@ -32,7 +35,10 @@ describe('Main', () => {
 
     it('aggregates the user calendars', async () => {
       await Main.processParams(
-        testParams.container, testParams.gitHubUsers, testParams.proxyServerUrl,
+        testParams.container,
+        testParams.gitHubUsers,
+        testParams.gitLabUsers,
+        testParams.proxyServerUrl,
       );
 
       expect(aggregateUserCalendarsStub.calledOnce).to.equal(true);
