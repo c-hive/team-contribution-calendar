@@ -1,7 +1,7 @@
-import Calendar from '../resources/Calendar/Calendar';
+import TeamContributionCalendar from '../resources/TeamContributionCalendar/TeamContributionCalendar';
 
 export const processParams = async (container, proxyServerUrl) => {
-  const calendar = new Calendar(container, proxyServerUrl);
+  const teamContributionCalendar = new TeamContributionCalendar(container, proxyServerUrl);
 
-  await calendar.renderBasicAppearance();
+  await teamContributionCalendar.renderBasicAppearance();
 };

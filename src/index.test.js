@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import TeamContributionCalendar from './index';
+import Index from './index';
 import * as Main from './Main/Main';
 import * as CalendarUtils from './utils/CalendarUtils/CalendarUtils';
-import * as Proxy from './utils/Proxy/Proxy';
 
-describe('TeamContributionCalendar', () => {
+describe('Index', () => {
   const sandbox = sinon.createSandbox();
+
   let requiredParamsExistStub;
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('TeamContributionCalendar', () => {
     it('throws an error', () => {
       const expectedErrorMessage = 'Please provide the required parameters in the appropriate format.';
 
-      expect(() => TeamContributionCalendar())
+      expect(() => Index())
         .to.throw(expectedErrorMessage);
     });
   });
@@ -33,19 +33,21 @@ describe('TeamContributionCalendar', () => {
   describe('when the required params exist', () => {
     let processParamsStub;
 
+    const container = '.container';
+    const gitHubUsers = ['userName'];
+    const proxyServerUrl = 'https://proxy-server.com';
+
     beforeEach(() => {
       processParamsStub = sandbox.stub(Main, 'processParams');
+
       requiredParamsExistStub.callsFake(() => true);
     });
 
     it('processes the given parameters', () => {
-      const container = 'div';
-      const gitHubUsers = ['userName'];
-
-      TeamContributionCalendar(container, gitHubUsers);
+      Index(container, gitHubUsers, proxyServerUrl);
 
       expect(processParamsStub
-        .calledWithExactly(container, Proxy.defaultProxyServerUrl)).to.equal(true);
+        .calledWithExactly(container, proxyServerUrl)).to.equal(true);
     });
   });
 });
