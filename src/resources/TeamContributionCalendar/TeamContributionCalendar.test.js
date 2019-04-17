@@ -7,16 +7,18 @@ import * as TestUtils from '../../utils/TestUtils/TestUtils';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
-describe('Calendar', () => {
+describe('TeamContributionCalendar', () => {
   const sandbox = sinon.createSandbox();
 
   let teamContributionCalendar;
 
-  const container = '.container';
-  const proxyServerUrl = 'https://proxy-server.com';
+  const testParams = TestUtils.getTestParams();
 
   beforeEach(() => {
-    teamContributionCalendar = new TeamContributionCalendar(container, proxyServerUrl);
+    teamContributionCalendar = new TeamContributionCalendar(
+      testParams.container,
+      testParams.proxyServerUrl,
+    );
   });
 
   afterEach(() => {
@@ -25,8 +27,8 @@ describe('Calendar', () => {
 
   it('sets the given container and proxy server url into `configs`', () => {
     const expectedStateConfig = {
-      container,
-      proxyServerUrl,
+      container: testParams.container,
+      proxyServerUrl: testParams.proxyServerUrl,
     };
 
     expect(teamContributionCalendar.configs).to.eql(expectedStateConfig);

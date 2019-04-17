@@ -2,13 +2,13 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as Main from './Main';
 import TeamContributionCalendar from '../resources/TeamContributionCalendar/TeamContributionCalendar';
+import * as TestUtils from '../utils/TestUtils/TestUtils';
 
 describe('Main', () => {
   describe('processParams', () => {
     let renderBasicAppearanceStub;
 
-    const container = '.container';
-    const proxyServerUrl = 'https://proxy-server.com';
+    const testParams = TestUtils.getTestParams();
 
     beforeEach(() => {
       renderBasicAppearanceStub = sinon.stub(TeamContributionCalendar.prototype, 'renderBasicAppearance');
@@ -19,7 +19,7 @@ describe('Main', () => {
     });
 
     it('renders the basic appearance', async () => {
-      await Main.processParams(container, proxyServerUrl);
+      await Main.processParams(testParams.container, testParams.proxyServerUrl);
 
       expect(renderBasicAppearanceStub.calledOnce).to.equal(true);
     });
