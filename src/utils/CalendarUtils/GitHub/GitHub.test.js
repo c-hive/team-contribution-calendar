@@ -40,4 +40,16 @@ describe('GitHub', () => {
       expect(actualDataCountValue).to.equal(expectedDataCountValue);
     });
   });
+
+  describe('getUserTotalContributions', () => {
+    const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+
+    it('returns the total contributions of the given user', () => {
+      const expectedTotalContributionsValue = 5;
+
+      const actualTotalContributionsValue = GitHub.getUserTotalContributions(userJsonCalendar);
+
+      expect(actualTotalContributionsValue).to.equal(expectedTotalContributionsValue);
+    });
+  });
 });
