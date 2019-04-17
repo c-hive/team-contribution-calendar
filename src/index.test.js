@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import Index from './index';
 import * as Main from './Main/Main';
 import * as CalendarUtils from './utils/CalendarUtils/CalendarUtils';
+import * as TestUtils from './utils/TestUtils/TestUtils';
 
 describe('Index', () => {
   const sandbox = sinon.createSandbox();
@@ -33,9 +34,7 @@ describe('Index', () => {
   describe('when the required params exist', () => {
     let processParamsStub;
 
-    const container = '.container';
-    const gitHubUsers = ['userName'];
-    const proxyServerUrl = 'https://proxy-server.com';
+    const testParams = TestUtils.getTestParams();
 
     beforeEach(() => {
       processParamsStub = sandbox.stub(Main, 'processParams');
@@ -44,10 +43,12 @@ describe('Index', () => {
     });
 
     it('processes the given parameters', () => {
-      Index(container, gitHubUsers, proxyServerUrl);
+      Index(testParams.container, testParams.gitHubUsers, testParams.proxyServerUrl);
 
-      expect(processParamsStub
-        .calledWithExactly(container, proxyServerUrl)).to.equal(true);
+      expect(processParamsStub.calledWithExactly(
+        testParams.container,
+        testParams.proxyServerUrl,
+      )).to.equal(true);
     });
   });
 });
