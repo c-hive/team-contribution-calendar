@@ -1,26 +1,26 @@
-/* import { expect } from 'chai';
+import { expect } from 'chai';
 import sinon from 'sinon';
-import State from './State';
-import * as Render from '../../utils/CalendarUtils/Render/Render';
+import Calendar from './Calendar';
+import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
+import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
 import * as TestUtils from '../../utils/TestUtils/TestUtils';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
+import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
-describe('State', () => {
-  let state;
-  let calendarWithContributionsStub;
+describe('Calendar', () => {
+  const sandbox = sinon.createSandbox();
+
+  let calendar;
 
   const container = '.container';
   const proxyServerUrl = 'https://proxy-server.com';
 
   beforeEach(() => {
-    // In order to have a default state in each case.
-    state = new State(container, proxyServerUrl);
-
-    calendarWithContributionsStub = sinon.stub(Render, 'calendarWithContributions');
+    calendar = new Calendar(container, proxyServerUrl);
   });
 
   afterEach(() => {
-    calendarWithContributionsStub.restore();
+    sandbox.restore();
   });
 
   it('sets the given container and proxy server url into `configs`', () => {
@@ -29,60 +29,150 @@ describe('State', () => {
       proxyServerUrl,
     };
 
-    expect(state.configs).to.eql(expectedStateConfig);
+    expect(calendar.configs).to.eql(expectedStateConfig);
   });
 
   it('sets the actual calendar to `BasicCalendar` by default', () => {
-    expect(state.actualCalendar).to.equal(BasicCalendar);
+    expect(calendar.actualCalendar).to.equal(BasicCalendar);
   });
 
   it('sets the total contributions to 0 by default', () => {
-    expect(state.totalContributions).to.equal(0);
+    expect(calendar.totalContributions).to.equal(0);
   });
 
   it('sets `isLoading` to true by default', () => {
-    expect(state.isLoading).to.equal(true);
+    expect(calendar.isLoading).to.equal(true);
   });
 
-  describe('render', () => {
-    it('renders the actual calendar details into the given container', () => {
-      state.render();
+  describe('renderActualCalendar', () => {
+    let containerStub;
+    let headerStub;
 
-      expect(calendarWithContributionsStub.calledWithExactly(
-        state.configs.container,
-        state.actualCalendar,
-        state.totalContributions,
+    let appendChildSpy;
+    let prependSpy;
+
+    beforeEach(() => {
+      appendChildSpy = sandbox.spy();
+      prependSpy = sandbox.spy();
+
+      containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns({
+        prepend: prependSpy,
+      });
+
+      headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns({
+        appendChild: appendChildSpy,
+      });
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it('renders a container based on the passed param', () => {
+      calendar.renderActualCalendar();
+
+      expect(containerStub.calledWith(calendar.configs.container)).to.equal(true);
+    });
+
+    it('renders the calendar header with the total contributions', () => {
+      calendar.renderActualCalendar();
+
+      expect(headerStub.calledWith(calendar.totalContributions)).to.equal(true);
+    });
+  });
+
+  describe('renderBasicAppearance', () => {
+    let renderBasicCalendarStub;
+    let getJsonFormattedCalendarSyncStub;
+    let setEmptyCalendarValuesStub;
+    let updateCalendarDetailsStub;
+
+    const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+    const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
+
+    beforeEach(() => {
+      renderBasicCalendarStub = sandbox.stub(Calendar.prototype, 'renderActualCalendar');
+      getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
+      setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
+
+      updateCalendarDetailsStub = sandbox.stub(Calendar.prototype, 'updateCalendarDetails');
+    });
+
+    afterEach(() => {
+      sandbox.restore();
+    });
+
+    it('renders the `BasicCalendar`', () => {
+      calendar.renderBasicAppearance();
+
+      expect(renderBasicCalendarStub.calledOnce).to.equal(true);
+    });
+
+    it('fetches the default GH user`s calendar synchronously', async () => {
+      await calendar.renderBasicAppearance();
+
+      expect(getJsonFormattedCalendarSyncStub.calledWithExactly(
+        calendar.configs.proxyServerUrl,
+        DefaultUsers.GitHub,
+      )).to.equal(true);
+    });
+
+    it('sets the fetched default GH user`s calendar values to empty ones', async () => {
+      await calendar.renderBasicAppearance();
+
+      expect(setEmptyCalendarValuesStub.calledWithExactly(
+        defaultUserJsonCalendar,
+      )).to.equal(true);
+    });
+
+    it('calls `updateCalendarDetails` with the empty default user calendar and 0 contributions', async () => {
+      const expectedCalledCalendarDetails = {
+        contributions: 0,
+        newActualCalendar: defaultUserEmptyCalendar,
+      };
+
+      await calendar.renderBasicAppearance();
+
+      expect(updateCalendarDetailsStub.calledWithExactly(
+        expectedCalledCalendarDetails,
       )).to.equal(true);
     });
   });
 
-  describe('setStateAndRender', () => {
+  describe('updateCalendarDetails', () => {
+    let renderActualCalendarStub;
+
     const data = {
-      currentUserTotalContributions: 2048,
-      updatedActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0],
+      contributions: 1024,
+      newActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([4])[0],
     };
 
-    it('sets the updated actual calendar to the state', () => {
-      state.setStateAndRender(data);
-
-      expect(state.actualCalendar).to.eql(data.updatedActualCalendar);
+    beforeEach(() => {
+      renderActualCalendarStub = sandbox.stub(Calendar.prototype, 'renderActualCalendar');
     });
 
-    it('adds the received total contributions to the previous value', () => {
-      const expectedTotalContributionsValue = state.totalContributions
-            + data.currentUserTotalContributions;
-
-      state.setStateAndRender(data);
-
-      expect(state.totalContributions).to.equal(expectedTotalContributionsValue);
+    afterEach(() => {
+      sandbox.restore();
     });
 
-    it('renders the actual calendar details', () => {
-      const renderSpy = sinon.spy(State.prototype, 'render');
+    it('sets the new actual calendar', () => {
+      calendar.updateCalendarDetails(data);
 
-      state.setStateAndRender(data);
+      expect(calendar.actualCalendar).to.eql(data.newActualCalendar);
+    });
 
-      expect(renderSpy.calledOnce).to.equal(true);
+    it('adds the received contributions to the current total contributions', () => {
+      const expectedTotalContributions = calendar.totalContributions + data.contributions;
+
+      calendar.updateCalendarDetails(data);
+
+      expect(calendar.totalContributions).to.equal(expectedTotalContributions);
+    });
+
+    it('re-renders the calendar based on the new values', () => {
+      calendar.updateCalendarDetails(data);
+
+      expect(renderActualCalendarStub.calledOnce).to.equal(true);
     });
   });
-}); */
+});

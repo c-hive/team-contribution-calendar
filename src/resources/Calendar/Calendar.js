@@ -27,7 +27,6 @@ export default class Calendar {
   }
 
   async renderBasicAppearance() {
-    // In order to render the basic calendar before the sync fetching.
     this.renderActualCalendar();
 
     const defaultUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarSync(
@@ -37,19 +36,19 @@ export default class Calendar {
     const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(defaultUserJsonCalendar);
 
     this.updateCalendarDetails({
-      updatedActualCalendar: defaultUserEmptyCalendar,
-      currentUserTotalContributions: 0,
+      contributions: 0,
+      newActualCalendar: defaultUserEmptyCalendar,
     });
   }
 
   updateCalendarDetails(data) {
-    const { currentUserTotalContributions, updatedActualCalendar } = data;
+    const { contributions, newActualCalendar } = data;
 
     this.actualCalendar = {
-      ...updatedActualCalendar,
+      ...newActualCalendar,
     };
 
-    this.totalContributions = this.totalContributions + currentUserTotalContributions;
+    this.totalContributions = this.totalContributions + contributions;
 
     this.renderActualCalendar();
   }
