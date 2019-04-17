@@ -19,7 +19,9 @@ describe('Main', () => {
     });
 
     it('renders the basic appearance', async () => {
-      await Main.processParams(testParams.container, testParams.proxyServerUrl);
+      await Main.processParams(
+        testParams.container, testParams.proxyServerUrl, testParams.gitHubUsers,
+      );
 
       expect(renderBasicAppearanceStub.calledOnce).to.equal(true);
     });

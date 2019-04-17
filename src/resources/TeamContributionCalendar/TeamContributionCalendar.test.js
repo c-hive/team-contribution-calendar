@@ -18,6 +18,7 @@ describe('TeamContributionCalendar', () => {
     teamContributionCalendar = new TeamContributionCalendar(
       testParams.container,
       testParams.proxyServerUrl,
+      testParams.gitHubUsers,
     );
   });
 
@@ -26,12 +27,20 @@ describe('TeamContributionCalendar', () => {
   });
 
   it('sets the given container and proxy server url into `configs`', () => {
-    const expectedStateConfig = {
+    const expectedConfig = {
       container: testParams.container,
       proxyServerUrl: testParams.proxyServerUrl,
     };
 
-    expect(teamContributionCalendar.configs).to.eql(expectedStateConfig);
+    expect(teamContributionCalendar.configs).to.eql(expectedConfig);
+  });
+
+  it('sets the GH users into `users`', () => {
+    const expectedUsers = {
+      gitHub: [...testParams.gitHubUsers],
+    };
+
+    expect(teamContributionCalendar.users).to.eql(expectedUsers);
   });
 
   it('sets the actual calendar to `BasicCalendar` by default', () => {
