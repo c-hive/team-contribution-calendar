@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+/* import { expect } from 'chai';
 import sinon from 'sinon';
 import State from './State';
 import * as Render from '../../utils/CalendarUtils/Render/Render';
@@ -85,4 +85,4 @@ describe('State', () => {
       expect(renderSpy.calledOnce).to.equal(true);
     });
   });
-});
+}); */

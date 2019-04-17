@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+/* import { expect } from 'chai';
 import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
 import * as Main from './Main';
@@ -40,4 +40,4 @@ describe('Main', () => {
       expect(renderDefaultUserCalendarStub.calledOnce).to.equal(true);
     });
   });
-});
+}); */

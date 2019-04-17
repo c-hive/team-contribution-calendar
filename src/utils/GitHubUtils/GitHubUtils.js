@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
 import { parseSync } from 'svgson';
-import * as Proxy from '../../Proxy/Proxy';
-import * as JavaScriptUtils from '../../JavaScriptUtils/JavaScriptUtils';
+import * as Proxy from '../Proxy/Proxy';
+import * as JavaScriptUtils from '../JavaScriptUtils/JavaScriptUtils';
 
 const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
   const userUrl = Proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
@@ -18,7 +18,7 @@ const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
     }).catch(err => console.log(err));
 };
 
-export const restoreCalendarValues = (calendar) => {
+export const setEmptyCalendarValues = (calendar) => {
   const copiedCalendar = JavaScriptUtils.deepCopyObject(calendar);
 
   copiedCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
