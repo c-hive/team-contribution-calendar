@@ -32,19 +32,19 @@ export default class TeamContributionCalendar {
 
     this.updateCalendar({
       contributions: 0,
-      newActualCalendar: defaultUserEmptyCalendar,
+      updatedActualCalendar: defaultUserEmptyCalendar,
     });
   }
 
   updateCalendar(data) {
-    const { contributions, newActualCalendar } = data;
+    const { contributions, updatedActualCalendar } = data;
 
     if (JavaScriptUtils.isDefined(data.isLoading)) {
       this.isLoading = data.isLoading;
     }
 
     this.actualCalendar = {
-      ...newActualCalendar,
+      ...updatedActualCalendar,
     };
 
     this.totalContributions = this.totalContributions + contributions;
@@ -73,14 +73,14 @@ export default class TeamContributionCalendar {
   }
 
   processGitHubCalendar(gitHubUserJsonCalendar) {
-    const newActualCalendar = GitHubUtils.mergeCalendarsContributions(
+    const updatedActualCalendar = GitHubUtils.mergeCalendarsContributions(
       this.actualCalendar, gitHubUserJsonCalendar,
     );
 
     const lastYearContributions = GitHubUtils.getLastYearContributions(gitHubUserJsonCalendar);
 
     this.updateCalendar({
-      newActualCalendar,
+      updatedActualCalendar,
       contributions: lastYearContributions,
       isLoading: false,
     });
