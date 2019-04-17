@@ -159,7 +159,7 @@ describe('TeamContributionCalendar', () => {
     it('calls `updateCalendar` with the empty default user calendar and 0 contributions', async () => {
       const expectedCalledCalendarDetails = {
         contributions: 0,
-        newActualCalendar: defaultUserEmptyCalendar,
+        updatedActualCalendar: defaultUserEmptyCalendar,
       };
 
       await teamContributionCalendar.renderBasicAppearance();
@@ -175,7 +175,7 @@ describe('TeamContributionCalendar', () => {
 
     const data = {
       contributions: 1024,
-      newActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([4])[0],
+      updatedActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([4])[0],
     };
 
     beforeEach(() => {
@@ -213,10 +213,10 @@ describe('TeamContributionCalendar', () => {
       });
     });
 
-    it('sets the new actual calendar', () => {
+    it('sets the updated actual calendar', () => {
       teamContributionCalendar.updateCalendar(data);
 
-      expect(teamContributionCalendar.actualCalendar).to.eql(data.newActualCalendar);
+      expect(teamContributionCalendar.actualCalendar).to.eql(data.updatedActualCalendar);
     });
 
     it('adds the received contributions to the current total contributions', () => {
@@ -276,11 +276,11 @@ describe('TeamContributionCalendar', () => {
     let updateCalendarStub;
 
     const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([4])[0];
-    const newActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([12])[0];
+    const updatedActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([12])[0];
     const contributions = 1024;
 
     beforeEach(() => {
-      mergeCalendarsContributionsStub = sandbox.stub(GitHubUtils, 'mergeCalendarsContributions').returns(newActualCalendar);
+      mergeCalendarsContributionsStub = sandbox.stub(GitHubUtils, 'mergeCalendarsContributions').returns(updatedActualCalendar);
       getLastYearContributionsStub = sandbox.stub(GitHubUtils, 'getLastYearContributions').returns(contributions);
 
       updateCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendar');
@@ -307,9 +307,9 @@ describe('TeamContributionCalendar', () => {
       )).to.equal(true);
     });
 
-    it('calls `updateCalendar` with the merged calendar, the calculated contributions and `isLoading` false', () => {
+    it('calls `updateCalendar` with the updated actual calendar, the calculated contributions and `isLoading` false', () => {
       const expectedUpdatedData = {
-        newActualCalendar,
+        updatedActualCalendar,
         contributions,
         isLoading: false,
       };
