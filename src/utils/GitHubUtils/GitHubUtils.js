@@ -35,10 +35,10 @@ export const setEmptyCalendarValues = (calendar) => {
   return copiedCalendar;
 };
 
-export const getMergedCalendars = (actualCalendar, userJsonCalendar) => {
+export const mergeCalendarsContributions = (actualCalendar, gitHubUserJsonCalendar) => {
   const copiedActualCalendar = JavaScriptUtils.deepCopyObject(actualCalendar);
 
-  userJsonCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
+  gitHubUserJsonCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
       if (dailyData.attributes['data-count']) {
         const actualCalendarDailyData = CalendarUtils
@@ -57,18 +57,18 @@ export const getMergedCalendars = (actualCalendar, userJsonCalendar) => {
   return copiedActualCalendar;
 };
 
-export const getUserTotalContributions = (userJsonCalendar) => {
-  let sum = 0;
+export const getLastYearContributions = (userCalendar) => {
+  let contributions = 0;
 
-  userJsonCalendar.children[0].children.forEach((weeklyData) => {
+  userCalendar.children[0].children.forEach((weeklyData) => {
     weeklyData.children.forEach((dailyData) => {
       if (dailyData.attributes['data-count']) {
-        sum += Number(dailyData.attributes['data-count']);
+        contributions += Number(dailyData.attributes['data-count']);
       }
     });
   });
 
-  return sum;
+  return contributions;
 };
 
 export const getJsonFormattedCalendarSync = async (proxyServerUrl, gitHubUsername) => {

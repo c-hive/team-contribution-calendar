@@ -25,15 +25,17 @@ describe('GitHubUtils', () => {
     });
   });
 
-  describe('getMergedCalendars', () => {
+  describe('mergeCalendarsContributions', () => {
     const actualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
     const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([6])[0];
 
-    it('sets the `data-count` property based on the given calendars', () => {
+    it('merges the `data-count` properties based on the given calendars', () => {
       // Because of the previously created 5 and 6 contribution calendars.
       const expectedDataCountValue = '11';
 
-      const mergedCalendar = GitHubUtils.getMergedCalendars(actualCalendar, userJsonCalendar);
+      const mergedCalendar = GitHubUtils.mergeCalendarsContributions(
+        actualCalendar, userJsonCalendar,
+      );
       const actualDataCountValue = mergedCalendar.children[0].children[0].children[0]
         .attributes['data-count'];
 
@@ -41,15 +43,15 @@ describe('GitHubUtils', () => {
     });
   });
 
-  describe('getUserTotalContributions', () => {
+  describe('getLastYearContributions', () => {
     const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
 
-    it('returns the total contributions of the given user', () => {
-      const expectedTotalContributionsValue = 5;
+    it('returns the given user last year contributions', () => {
+      const expectedLastYearContributions = 5;
 
-      const actualTotalContributionsValue = GitHubUtils.getUserTotalContributions(userJsonCalendar);
+      const actualLastYearContributions = GitHubUtils.getLastYearContributions(userJsonCalendar);
 
-      expect(actualTotalContributionsValue).to.equal(expectedTotalContributionsValue);
+      expect(actualLastYearContributions).to.equal(expectedLastYearContributions);
     });
   });
 });

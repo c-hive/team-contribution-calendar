@@ -4,11 +4,11 @@ import * as Main from './Main/Main';
 
 const index = (
   container,
-  proxyServerUrl = Proxy.defaultProxyServerUrl,
   gitHubUsers,
+  proxyServerUrl = Proxy.defaultProxyServerUrl,
 ) => {
   if (CalendarUtils.requiredParamsExist(container, gitHubUsers)) {
-    Main.processParams(container, proxyServerUrl, gitHubUsers);
+    Main.processParams(container, gitHubUsers, proxyServerUrl);
   } else {
     throw new Error('Please provide the required parameters in the appropriate format.');
   }

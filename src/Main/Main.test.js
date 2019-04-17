@@ -5,25 +5,37 @@ import TeamContributionCalendar from '../resources/TeamContributionCalendar/Team
 import * as TestUtils from '../utils/TestUtils/TestUtils';
 
 describe('Main', () => {
+  const sandbox = sinon.createSandbox();
+
   describe('processParams', () => {
     let renderBasicAppearanceStub;
+    let aggregateUserCalendarsStub;
 
     const testParams = TestUtils.getTestParams();
 
     beforeEach(() => {
-      renderBasicAppearanceStub = sinon.stub(TeamContributionCalendar.prototype, 'renderBasicAppearance');
+      renderBasicAppearanceStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderBasicAppearance');
+      aggregateUserCalendarsStub = sandbox.stub(TeamContributionCalendar.prototype, 'aggregateUserCalendars');
     });
 
     afterEach(() => {
-      renderBasicAppearanceStub.restore();
+      sandbox.restore();
     });
 
     it('renders the basic appearance', async () => {
       await Main.processParams(
-        testParams.container, testParams.proxyServerUrl, testParams.gitHubUsers,
+        testParams.container, testParams.gitHubUsers, testParams.proxyServerUrl,
       );
 
       expect(renderBasicAppearanceStub.calledOnce).to.equal(true);
+    });
+
+    it('aggregates the user calendars', async () => {
+      await Main.processParams(
+        testParams.container, testParams.gitHubUsers, testParams.proxyServerUrl,
+      );
+
+      expect(aggregateUserCalendarsStub.calledOnce).to.equal(true);
     });
   });
 });
