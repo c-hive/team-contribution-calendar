@@ -84,7 +84,7 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('renderBasicAppearance', () => {
-    let renderBasicCalendarStub;
+    let renderActualCalendarStub;
     let getJsonFormattedCalendarSyncStub;
     let setEmptyCalendarValuesStub;
     let updateCalendarDetailsStub;
@@ -93,7 +93,7 @@ describe('TeamContributionCalendar', () => {
     const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
 
     beforeEach(() => {
-      renderBasicCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
+      renderActualCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
       getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
       setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
 
@@ -104,10 +104,10 @@ describe('TeamContributionCalendar', () => {
       sandbox.restore();
     });
 
-    it('renders the `BasicCalendar`', () => {
+    it('renders the default calendar(`BasicCalendar`)', () => {
       teamContributionCalendar.renderBasicAppearance();
 
-      expect(renderBasicCalendarStub.calledOnce).to.equal(true);
+      expect(renderActualCalendarStub.calledOnce).to.equal(true);
     });
 
     it('fetches the default GH user`s calendar synchronously', async () => {
