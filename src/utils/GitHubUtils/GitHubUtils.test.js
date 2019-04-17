@@ -29,7 +29,7 @@ describe('GitHubUtils', () => {
     const actualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
     const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([6])[0];
 
-    it('merges the `data-count` properties based on the given calendars', () => {
+    it('merges the `data-count` properties of the given calendars', () => {
       // Because of the previously created 5 and 6 contribution calendars.
       const expectedDataCountValue = '11';
 
