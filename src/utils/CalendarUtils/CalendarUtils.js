@@ -1,6 +1,4 @@
 import * as JavaScriptUtils from '../JavaScriptUtils/JavaScriptUtils';
-import * as GitHub from './GitHub/GitHub';
-import * as Render from './Render/Render';
 
 export const requiredParamsExist = (container, gitHubUsers) => {
   if (!JavaScriptUtils.isDefined(container)) {
@@ -14,21 +12,32 @@ export const requiredParamsExist = (container, gitHubUsers) => {
   return true;
 };
 
-export const processStateUsers = (state) => {
-  state.users.gitHubUsers.map(async (gitHubUsername) => {
-    const userJsonCalendar = await GitHub.getJsonFormattedCalendarAsync(
-      state.configs.proxyServerUrl, gitHubUsername,
-    );
+export const getFillColor = (totalDailyContributions) => {
+  let fillColor = '#ebedf0';
 
-    const mergedCalendars = GitHub.getMergedCalendars(state.actualCalendar, userJsonCalendar);
-    const userTotalContributions = GitHub.getUserTotalContributions(userJsonCalendar);
+  if (totalDailyContributions > 0 && totalDailyContributions < 10) {
+    fillColor = '#c6e48b';
+  }
 
-    state.setStateAndRender({
-      updatedActualCalendar: mergedCalendars,
-      userTotalContributions,
-      isLoading: false,
-    });
-  });
+  if (totalDailyContributions >= 10 && totalDailyContributions < 20) {
+    fillColor = '#7bc96f';
+  }
+
+  if (totalDailyContributions >= 20 && totalDailyContributions < 30) {
+    fillColor = '#239a3b';
+  }
+
+  if (totalDailyContributions >= 30) {
+    fillColor = '#196127';
+  }
+
+  return fillColor;
 };
 
-export { Render };
+export const getCalendarDataByIndexes = (calendarData, weekIndex, dayIndex) => {
+  if (JavaScriptUtils.isDefined(dayIndex)) {
+    return calendarData.children[0].children[weekIndex].children[dayIndex];
+  }
+
+  return calendarData.children[0].children[weekIndex];
+};

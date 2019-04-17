@@ -1,9 +1,6 @@
 import { expect } from 'chai';
-import sinon from 'sinon';
 import * as CalendarUtils from './CalendarUtils';
-import * as GitHub from './GitHub/GitHub';
 import * as TestUtils from '../TestUtils/TestUtils';
-import State from '../../resources/State/State';
 
 describe('CalendarUtils', () => {
   describe('requiredParamsExist', () => {
@@ -38,72 +35,95 @@ describe('CalendarUtils', () => {
     });
   });
 
-  describe('processStateUsers', () => {
-    const sandbox = sinon.createSandbox();
+  describe('getFillColor', () => {
+    describe('when the total of the daily contributions is 0', () => {
+      const totalDailyContributions = 0;
 
-    let getJsonFormattedCalendarAsyncStub;
-    let getMergedCalendarsStub;
-    let getUserTotalContributionsStub;
-    let setStateAndRenderStub;
+      it('returns the default color', () => {
+        const expectedFillColor = '#ebedf0';
 
-    let state;
+        const actualFillColor = CalendarUtils.getFillColor(totalDailyContributions);
 
-    const stateFakeParams = TestUtils.getStateFakeParams();
-
-    const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([3])[0];
-    const mergedCalendars = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
-    const userTotalContributions = 512;
-
-    beforeEach(() => {
-      state = new State(
-        stateFakeParams.container,
-        stateFakeParams.proxyServerUrl,
-        stateFakeParams.gitHubUsers,
-      );
-
-      getJsonFormattedCalendarAsyncStub = sandbox.stub(GitHub, 'getJsonFormattedCalendarAsync').returns(userJsonCalendar);
-      getMergedCalendarsStub = sandbox.stub(GitHub, 'getMergedCalendars').returns(mergedCalendars);
-      getUserTotalContributionsStub = sandbox.stub(GitHub, 'getUserTotalContributions').returns(userTotalContributions);
-      setStateAndRenderStub = sandbox.stub(State.prototype, 'setStateAndRender');
+        expect(actualFillColor).to.equal(expectedFillColor);
+      });
     });
 
-    afterEach(() => {
-      sandbox.restore();
+    describe('when the total of the daily contributions is higher than 0 and less than 10', () => {
+      const totalDailyContributions = 9;
+
+      it('returns the `#c6e48b` color', () => {
+        const expectedFillColor = '#c6e48b';
+
+        const actualFillColor = CalendarUtils.getFillColor(totalDailyContributions);
+
+        expect(actualFillColor).to.equal(expectedFillColor);
+      });
     });
 
-    it('fetches the GH users JSON calendars asynchronously', async () => {
-      const expectedCalledTimes = state.users.gitHubUsers.length;
+    describe('when the total of the daily contributions is higher than or equal to 10 and less than 20', () => {
+      const totalDailyContributions = 19;
 
-      await CalendarUtils.processStateUsers(state);
+      it('returns the `#7bc96f` color', () => {
+        const expectedFillColor = '#7bc96f';
 
-      expect(getJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+        const actualFillColor = CalendarUtils.getFillColor(totalDailyContributions);
+
+        expect(actualFillColor).to.equal(expectedFillColor);
+      });
     });
 
-    it('merges the current user JSON calendar into the actual calendar', async () => {
-      await CalendarUtils.processStateUsers(state);
+    describe('when the total of the daily contributions is higher than or equal to 20 and less than 30', () => {
+      const totalDailyContributions = 29;
 
-      expect(getMergedCalendarsStub.calledWithExactly(
-        state.actualCalendar,
-        userJsonCalendar,
-      )).to.equal(true);
+      it('returns the `#239a3b` color', () => {
+        const expectedFillColor = '#239a3b';
+
+        const actualFillColor = CalendarUtils.getFillColor(totalDailyContributions);
+
+        expect(actualFillColor).to.equal(expectedFillColor);
+      });
     });
 
-    it('calculates the total contributions', async () => {
-      await CalendarUtils.processStateUsers(state);
+    describe('when the total of the daily contributions is higher than or equal to 30', () => {
+      const totalDailyContributions = 30;
 
-      expect(getUserTotalContributionsStub.calledWithExactly(userJsonCalendar)).to.equal(true);
+      it('returns the `#196127` color', () => {
+        const expectedFillColor = '#196127';
+
+        const actualFillColor = CalendarUtils.getFillColor(totalDailyContributions);
+
+        expect(actualFillColor).to.equal(expectedFillColor);
+      });
+    });
+  });
+
+  describe('getCalendarDataByIndexes', () => {
+    const calendarData = TestUtils.getFakeContributionsObjectWithDailyCounts([12])[0];
+    const weekIndex = 0;
+
+    describe('when the day index is defined', () => {
+      const dayIndex = 0;
+
+      it('returns the daily data', () => {
+        const expectedDailyData = calendarData.children[0]
+          .children[weekIndex].children[dayIndex];
+
+        const actualDailyData = CalendarUtils.getCalendarDataByIndexes(
+          calendarData, weekIndex, dayIndex,
+        );
+
+        expect(actualDailyData).to.equal(expectedDailyData);
+      });
     });
 
-    it('sets the updated details into the state', async () => {
-      const expectedCalledState = {
-        updatedActualCalendar: mergedCalendars,
-        userTotalContributions,
-        isLoading: false,
-      };
+    describe('when the day index is not defined', () => {
+      it('returns the weekly data', () => {
+        const expectedWeeklyData = calendarData.children[0].children[weekIndex];
 
-      await CalendarUtils.processStateUsers(state);
+        const actualWeeklyData = CalendarUtils.getCalendarDataByIndexes(calendarData, weekIndex);
 
-      expect(setStateAndRenderStub.calledWithExactly(expectedCalledState)).to.equal(true);
+        expect(actualWeeklyData).to.equal(expectedWeeklyData);
+      });
     });
   });
 });
