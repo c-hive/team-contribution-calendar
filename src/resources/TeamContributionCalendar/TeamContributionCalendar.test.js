@@ -18,6 +18,7 @@ describe('TeamContributionCalendar', () => {
     teamContributionCalendar = new TeamContributionCalendar(
       testParams.container,
       testParams.gitHubUsers,
+      testParams.gitLabUsers,
       testParams.proxyServerUrl,
     );
   });
@@ -35,9 +36,10 @@ describe('TeamContributionCalendar', () => {
     expect(teamContributionCalendar.configs).to.eql(expectedConfig);
   });
 
-  it('sets the GH users into `users`', () => {
+  it('sets the GH and GL users into `users`', () => {
     const expectedUsers = {
       gitHub: [...testParams.gitHubUsers],
+      gitLab: [...testParams.gitLabUsers],
     };
 
     expect(teamContributionCalendar.users).to.eql(expectedUsers);

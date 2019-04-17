@@ -1,12 +1,13 @@
 import { stringify } from 'svgson';
 import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
+import * as GitLabUtils from '../../utils/GitLabUtils/GitLabUtils';
 import * as JavaScriptUtils from '../../utils/JavaScriptUtils/JavaScriptUtils';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
 export default class TeamContributionCalendar {
-  constructor(container, gitHubUsers, proxyServerUrl) {
+  constructor(container, gitHubUsers, gitLabUsers, proxyServerUrl) {
     this.configs = {
       container,
       proxyServerUrl,
@@ -14,6 +15,7 @@ export default class TeamContributionCalendar {
 
     this.users = {
       gitHub: [...gitHubUsers],
+      gitLab: [...gitLabUsers],
     };
 
     this.actualCalendar = BasicCalendar;
@@ -70,6 +72,14 @@ export default class TeamContributionCalendar {
 
       this.processGitHubCalendar(gitHubUserJsonCalendar);
     });
+
+    this.users.gitLab.map(async (gitLabUsername) => {
+      const gitLabUserJsonCalendar = await GitLabUtils.getJsonFormattedCalendarAsync(
+        this.configs.proxyServerUrl, gitLabUsername,
+      );
+
+      this.processGitLabCalendar(gitLabUserJsonCalendar);
+    });
   }
 
   processGitHubCalendar(gitHubUserJsonCalendar) {
@@ -78,6 +88,20 @@ export default class TeamContributionCalendar {
     );
 
     const lastYearContributions = GitHubUtils.getLastYearContributions(gitHubUserJsonCalendar);
+
+    this.updateCalendar({
+      updatedActualCalendar,
+      contributions: lastYearContributions,
+      isLoading: false,
+    });
+  }
+
+  processGitLabCalendar(gitLabUserJsonCalendar) {
+    const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
+      this.actualCalendar, gitLabUserJsonCalendar,
+    );
+
+    const lastYearContributions = GitLabUtils.getLastYearContributions(gitLabUserJsonCalendar);
 
     this.updateCalendar({
       updatedActualCalendar,
