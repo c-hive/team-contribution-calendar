@@ -1,5 +1,7 @@
-import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
+import TeamContributionCalendar from '../resources/TeamContributionCalendar/TeamContributionCalendar';
 
 export const processParams = async (container, proxyServerUrl) => {
-  await CalendarUtils.initializeBasicAppearance(container, proxyServerUrl);
+  const teamContributionCalendar = new TeamContributionCalendar(container, proxyServerUrl);
+
+  await teamContributionCalendar.renderBasicAppearance();
 };
