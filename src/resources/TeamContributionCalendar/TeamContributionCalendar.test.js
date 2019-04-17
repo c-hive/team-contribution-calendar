@@ -87,7 +87,7 @@ describe('TeamContributionCalendar', () => {
     let renderActualCalendarStub;
     let getJsonFormattedCalendarSyncStub;
     let setEmptyCalendarValuesStub;
-    let updateCalendarDetailsStub;
+    let updateCalendarStub;
 
     const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
     const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
@@ -97,7 +97,7 @@ describe('TeamContributionCalendar', () => {
       getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
       setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
 
-      updateCalendarDetailsStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendarDetails');
+      updateCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendar');
     });
 
     afterEach(() => {
@@ -127,7 +127,7 @@ describe('TeamContributionCalendar', () => {
       )).to.equal(true);
     });
 
-    it('calls `updateCalendarDetails` with the empty default user calendar and 0 contributions', async () => {
+    it('calls `updateCalendar` with the empty default user calendar and 0 contributions', async () => {
       const expectedCalledCalendarDetails = {
         contributions: 0,
         newActualCalendar: defaultUserEmptyCalendar,
@@ -135,13 +135,13 @@ describe('TeamContributionCalendar', () => {
 
       await teamContributionCalendar.renderBasicAppearance();
 
-      expect(updateCalendarDetailsStub.calledWithExactly(
+      expect(updateCalendarStub.calledWithExactly(
         expectedCalledCalendarDetails,
       )).to.equal(true);
     });
   });
 
-  describe('updateCalendarDetails', () => {
+  describe('updateCalendar', () => {
     let renderActualCalendarStub;
 
     const data = {
@@ -158,7 +158,7 @@ describe('TeamContributionCalendar', () => {
     });
 
     it('sets the new actual calendar', () => {
-      teamContributionCalendar.updateCalendarDetails(data);
+      teamContributionCalendar.updateCalendar(data);
 
       expect(teamContributionCalendar.actualCalendar).to.eql(data.newActualCalendar);
     });
@@ -167,13 +167,13 @@ describe('TeamContributionCalendar', () => {
       const expectedTotalContributions = teamContributionCalendar.totalContributions
         + data.contributions;
 
-      teamContributionCalendar.updateCalendarDetails(data);
+      teamContributionCalendar.updateCalendar(data);
 
       expect(teamContributionCalendar.totalContributions).to.equal(expectedTotalContributions);
     });
 
     it('re-renders the calendar based on the new values', () => {
-      teamContributionCalendar.updateCalendarDetails(data);
+      teamContributionCalendar.updateCalendar(data);
 
       expect(renderActualCalendarStub.calledOnce).to.equal(true);
     });

@@ -35,13 +35,13 @@ export default class TeamContributionCalendar {
 
     const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(defaultUserJsonCalendar);
 
-    this.updateCalendarDetails({
+    this.updateCalendar({
       contributions: 0,
       newActualCalendar: defaultUserEmptyCalendar,
     });
   }
 
-  updateCalendarDetails(data) {
+  updateCalendar(data) {
     const { contributions, newActualCalendar } = data;
 
     this.actualCalendar = {
