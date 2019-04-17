@@ -47,6 +47,7 @@ describe('Index', () => {
 
       expect(processParamsStub.calledWithExactly(
         testParams.container,
+        testParams.gitHubUsers,
         testParams.proxyServerUrl,
       )).to.equal(true);
     });

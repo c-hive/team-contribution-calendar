@@ -10,7 +10,8 @@
         "presets": ["@babel/preset-env", "minify"],
         "plugins": [
           "add-module-exports",
-          "@babel/plugin-transform-runtime"
+          "@babel/plugin-transform-runtime",
+          "inline-svg"
         ]
       }
     }

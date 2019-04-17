@@ -24,4 +24,34 @@ describe('GitHubUtils', () => {
       expect(actualFillColor).to.equal(expectedFillColor);
     });
   });
+
+  describe('mergeCalendarsContributions', () => {
+    const actualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+    const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([6])[0];
+
+    it('merges the `data-count` properties of the given calendars', () => {
+      // Because of the previously created 5 and 6 contribution calendars.
+      const expectedDataCountValue = '11';
+
+      const mergedCalendar = GitHubUtils.mergeCalendarsContributions(
+        actualCalendar, userJsonCalendar,
+      );
+      const actualDataCountValue = mergedCalendar.children[0].children[0].children[0]
+        .attributes['data-count'];
+
+      expect(actualDataCountValue).to.equal(expectedDataCountValue);
+    });
+  });
+
+  describe('getLastYearContributions', () => {
+    const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+
+    it('returns the given user last year contributions', () => {
+      const expectedLastYearContributions = 5;
+
+      const actualLastYearContributions = GitHubUtils.getLastYearContributions(userJsonCalendar);
+
+      expect(actualLastYearContributions).to.equal(expectedLastYearContributions);
+    });
+  });
 });

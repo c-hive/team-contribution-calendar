@@ -1,5 +1,6 @@
 import $ from 'elly';
 import * as ColorSchemas from '../../resources/ColorSchemas/ColorSchemas';
+import LoaderIcon from '../../resources/assets/SVG/LoaderIcon/LoaderIcon.svg';
 
 export const container = (htmlContainerElement) => {
   const selectedDOMElement = $(htmlContainerElement);
@@ -31,7 +32,6 @@ const getColorsList = () => {
   const calendarColorsList = document.createElement('UL');
 
   calendarColorsList.style.listStyle = 'none';
-  calendarColorsList.style.fontSize = '12px';
 
   ColorSchemas.GitHub.forEach((color) => {
     const colorElement = getColorElement(color);
@@ -53,12 +53,18 @@ const getColorsList = () => {
   return calendarColorsList;
 };
 
-export const header = (totalContributions) => {
+export const header = (totalContributions, isLoading) => {
   const calendarHeader = document.createElement('DIV');
   const calendarColorsList = getColorsList();
 
+  calendarHeader.style.fontSize = '12px';
+
   const contributionsValueDisplayer = document.createElement('P');
-  contributionsValueDisplayer.innerText = `${totalContributions} contributions in the last year`;
+  contributionsValueDisplayer.innerHTML = LoaderIcon;
+
+  if (!isLoading) {
+    contributionsValueDisplayer.innerText = `${totalContributions} contributions in the last year`;
+  }
 
   calendarHeader.appendChild(contributionsValueDisplayer);
   calendarHeader.appendChild(calendarColorsList);
