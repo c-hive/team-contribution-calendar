@@ -1,27 +1,27 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import * as Main from './Main';
-import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
+import TeamContributionCalendar from '../resources/TeamContributionCalendar/TeamContributionCalendar';
+import * as TestUtils from '../utils/TestUtils/TestUtils';
 
 describe('Main', () => {
   describe('processParams', () => {
-    let initializeBasicAppearanceStub;
+    let renderBasicAppearanceStub;
+
+    const testParams = TestUtils.getTestParams();
 
     beforeEach(() => {
-      initializeBasicAppearanceStub = sinon.stub(CalendarUtils, 'initializeBasicAppearance');
+      renderBasicAppearanceStub = sinon.stub(TeamContributionCalendar.prototype, 'renderBasicAppearance');
     });
 
     afterEach(() => {
-      initializeBasicAppearanceStub.restore();
+      renderBasicAppearanceStub.restore();
     });
 
-    it('initializes the basic apperance with an empty calendar', () => {
-      const container = '.container';
-      const proxyServerUrl = 'https://proxy-server.com';
+    it('renders the basic appearance', async () => {
+      await Main.processParams(testParams.container, testParams.proxyServerUrl);
 
-      Main.processParams(container, proxyServerUrl);
-
-      expect(initializeBasicAppearanceStub.calledWith(container, proxyServerUrl)).to.equal(true);
+      expect(renderBasicAppearanceStub.calledOnce).to.equal(true);
     });
   });
 });

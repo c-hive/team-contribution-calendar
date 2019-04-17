@@ -22,3 +22,9 @@ export const getFakeContributionsObjectWithDailyCounts = dailyCounts => dailyCou
     },
   ],
 }));
+
+export const getTestParams = () => ({
+  container: '.container',
+  gitHubUsers: ['userName'],
+  proxyServerUrl: 'https://proxy-server.com',
+});
