@@ -1,10 +1,7 @@
-import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
-import State from '../resources/State/State';
+import Calendar from '../resources/Calendar/Calendar';
 
 export const processParams = async (container, proxyServerUrl) => {
-  const state = new State(container, proxyServerUrl);
+  const calendar = new Calendar(container, proxyServerUrl);
 
-  state.render();
-
-  await CalendarUtils.Render.defaultUserCalendar(state);
+  await calendar.renderBasicAppearance();
 };
