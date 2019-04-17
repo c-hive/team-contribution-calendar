@@ -5,10 +5,14 @@ import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
 export default class TeamContributionCalendar {
-  constructor(container, proxyServerUrl) {
+  constructor(container, proxyServerUrl, gitHubUsers) {
     this.configs = {
       container,
       proxyServerUrl,
+    };
+
+    this.users = {
+      gitHub: [...gitHubUsers],
     };
 
     this.actualCalendar = BasicCalendar;
