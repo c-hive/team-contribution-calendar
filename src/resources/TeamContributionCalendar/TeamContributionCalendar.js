@@ -4,7 +4,7 @@ import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
-export default class Calendar {
+export default class TeamContributionCalendar {
   constructor(container, proxyServerUrl) {
     this.configs = {
       container,

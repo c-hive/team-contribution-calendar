@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import Calendar from './Calendar';
+import TeamContributionCalendar from './TeamContributionCalendar';
 import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
 import * as TestUtils from '../../utils/TestUtils/TestUtils';
@@ -10,13 +10,13 @@ import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 describe('Calendar', () => {
   const sandbox = sinon.createSandbox();
 
-  let calendar;
+  let teamContributionCalendar;
 
   const container = '.container';
   const proxyServerUrl = 'https://proxy-server.com';
 
   beforeEach(() => {
-    calendar = new Calendar(container, proxyServerUrl);
+    teamContributionCalendar = new TeamContributionCalendar(container, proxyServerUrl);
   });
 
   afterEach(() => {
@@ -29,19 +29,19 @@ describe('Calendar', () => {
       proxyServerUrl,
     };
 
-    expect(calendar.configs).to.eql(expectedStateConfig);
+    expect(teamContributionCalendar.configs).to.eql(expectedStateConfig);
   });
 
   it('sets the actual calendar to `BasicCalendar` by default', () => {
-    expect(calendar.actualCalendar).to.equal(BasicCalendar);
+    expect(teamContributionCalendar.actualCalendar).to.equal(BasicCalendar);
   });
 
   it('sets the total contributions to 0 by default', () => {
-    expect(calendar.totalContributions).to.equal(0);
+    expect(teamContributionCalendar.totalContributions).to.equal(0);
   });
 
   it('sets `isLoading` to true by default', () => {
-    expect(calendar.isLoading).to.equal(true);
+    expect(teamContributionCalendar.isLoading).to.equal(true);
   });
 
   describe('renderActualCalendar', () => {
@@ -69,15 +69,15 @@ describe('Calendar', () => {
     });
 
     it('renders a container based on the passed param', () => {
-      calendar.renderActualCalendar();
+      teamContributionCalendar.renderActualCalendar();
 
-      expect(containerStub.calledWith(calendar.configs.container)).to.equal(true);
+      expect(containerStub.calledWith(teamContributionCalendar.configs.container)).to.equal(true);
     });
 
     it('renders the calendar header with the total contributions', () => {
-      calendar.renderActualCalendar();
+      teamContributionCalendar.renderActualCalendar();
 
-      expect(headerStub.calledWith(calendar.totalContributions)).to.equal(true);
+      expect(headerStub.calledWith(teamContributionCalendar.totalContributions)).to.equal(true);
     });
   });
 
@@ -91,11 +91,11 @@ describe('Calendar', () => {
     const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
 
     beforeEach(() => {
-      renderBasicCalendarStub = sandbox.stub(Calendar.prototype, 'renderActualCalendar');
+      renderBasicCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
       getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
       setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
 
-      updateCalendarDetailsStub = sandbox.stub(Calendar.prototype, 'updateCalendarDetails');
+      updateCalendarDetailsStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendarDetails');
     });
 
     afterEach(() => {
@@ -103,22 +103,22 @@ describe('Calendar', () => {
     });
 
     it('renders the `BasicCalendar`', () => {
-      calendar.renderBasicAppearance();
+      teamContributionCalendar.renderBasicAppearance();
 
       expect(renderBasicCalendarStub.calledOnce).to.equal(true);
     });
 
     it('fetches the default GH user`s calendar synchronously', async () => {
-      await calendar.renderBasicAppearance();
+      await teamContributionCalendar.renderBasicAppearance();
 
       expect(getJsonFormattedCalendarSyncStub.calledWithExactly(
-        calendar.configs.proxyServerUrl,
+        teamContributionCalendar.configs.proxyServerUrl,
         DefaultUsers.GitHub,
       )).to.equal(true);
     });
 
     it('sets the fetched default GH user`s calendar values to empty ones', async () => {
-      await calendar.renderBasicAppearance();
+      await teamContributionCalendar.renderBasicAppearance();
 
       expect(setEmptyCalendarValuesStub.calledWithExactly(
         defaultUserJsonCalendar,
@@ -131,7 +131,7 @@ describe('Calendar', () => {
         newActualCalendar: defaultUserEmptyCalendar,
       };
 
-      await calendar.renderBasicAppearance();
+      await teamContributionCalendar.renderBasicAppearance();
 
       expect(updateCalendarDetailsStub.calledWithExactly(
         expectedCalledCalendarDetails,
@@ -148,7 +148,7 @@ describe('Calendar', () => {
     };
 
     beforeEach(() => {
-      renderActualCalendarStub = sandbox.stub(Calendar.prototype, 'renderActualCalendar');
+      renderActualCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
     });
 
     afterEach(() => {
@@ -156,21 +156,22 @@ describe('Calendar', () => {
     });
 
     it('sets the new actual calendar', () => {
-      calendar.updateCalendarDetails(data);
+      teamContributionCalendar.updateCalendarDetails(data);
 
-      expect(calendar.actualCalendar).to.eql(data.newActualCalendar);
+      expect(teamContributionCalendar.actualCalendar).to.eql(data.newActualCalendar);
     });
 
     it('adds the received contributions to the current total contributions', () => {
-      const expectedTotalContributions = calendar.totalContributions + data.contributions;
+      const expectedTotalContributions = teamContributionCalendar.totalContributions
+        + data.contributions;
 
-      calendar.updateCalendarDetails(data);
+      teamContributionCalendar.updateCalendarDetails(data);
 
-      expect(calendar.totalContributions).to.equal(expectedTotalContributions);
+      expect(teamContributionCalendar.totalContributions).to.equal(expectedTotalContributions);
     });
 
     it('re-renders the calendar based on the new values', () => {
-      calendar.updateCalendarDetails(data);
+      teamContributionCalendar.updateCalendarDetails(data);
 
       expect(renderActualCalendarStub.calledOnce).to.equal(true);
     });

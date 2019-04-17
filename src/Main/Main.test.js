@@ -1,43 +1,27 @@
-/* import { expect } from 'chai';
+import { expect } from 'chai';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
 import * as Main from './Main';
-import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
-import State from '../resources/State/State';
+import TeamContributionCalendar from '../resources/TeamContributionCalendar/TeamContributionCalendar';
 
 describe('Main', () => {
-  const sandbox = sinon.createSandbox();
-
-  jsdom({
-    url: 'https://example.org/',
-  });
-
   describe('processParams', () => {
-    let renderDefaultUserCalendarStub;
-    let stateRenderStub;
+    let renderBasicAppearanceStub;
 
     const container = '.container';
     const proxyServerUrl = 'https://proxy-server.com';
 
     beforeEach(() => {
-      stateRenderStub = sandbox.stub(State.prototype, 'render');
-      renderDefaultUserCalendarStub = sandbox.stub(CalendarUtils.Render, 'defaultUserCalendar');
+      renderBasicAppearanceStub = sinon.stub(TeamContributionCalendar.prototype, 'renderBasicAppearance');
     });
 
     afterEach(() => {
-      sandbox.restore();
+      renderBasicAppearanceStub.restore();
     });
 
-    it('renders `BasicCalendar` by calling `state.render`', () => {
-      Main.processParams(container, proxyServerUrl);
+    it('renders the basic appearance', async () => {
+      await Main.processParams(container, proxyServerUrl);
 
-      expect(stateRenderStub.calledOnce).to.equal(true);
-    });
-
-    it('renders the default user calendar', () => {
-      Main.processParams(container, proxyServerUrl);
-
-      expect(renderDefaultUserCalendarStub.calledOnce).to.equal(true);
+      expect(renderBasicAppearanceStub.calledOnce).to.equal(true);
     });
   });
-}); */
+});
