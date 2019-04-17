@@ -71,7 +71,7 @@ describe('CalendarUtils', () => {
       sandbox.restore();
     });
 
-    it('fetches GH users JSON calendars asynchronously', async () => {
+    it('fetches the GH users JSON calendars asynchronously', async () => {
       const expectedCalledTimes = state.users.gitHubUsers.length;
 
       await CalendarUtils.processStateUsers(state);

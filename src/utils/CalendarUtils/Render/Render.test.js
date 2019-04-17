@@ -119,7 +119,7 @@ describe('Render', () => {
       await Render.defaultUserCalendar(state);
 
       const expectedCalledData = {
-        currentUserTotalContributions: 0,
+        userTotalContributions: 0,
         updatedActualCalendar: restoredDefaultUserCalendar,
       };
 
