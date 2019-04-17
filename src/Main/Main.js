@@ -1,12 +1,7 @@
-import * as CalendarUtils from '../utils/CalendarUtils/CalendarUtils';
-import State from '../resources/State/State';
+import TeamContributionCalendar from '../resources/TeamContributionCalendar/TeamContributionCalendar';
 
-export const processParams = async (container, proxyServerUrl, gitHubUsers) => {
-  const state = new State(container, proxyServerUrl, gitHubUsers);
+export const processParams = async (container, proxyServerUrl) => {
+  const teamContributionCalendar = new TeamContributionCalendar(container, proxyServerUrl);
 
-  state.render();
-
-  await CalendarUtils.Render.defaultUserCalendar(state);
-
-  CalendarUtils.processStateUsers(state);
+  await teamContributionCalendar.renderBasicAppearance();
 };
