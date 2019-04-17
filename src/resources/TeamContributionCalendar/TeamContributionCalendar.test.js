@@ -73,13 +73,17 @@ describe('TeamContributionCalendar', () => {
     it('renders a container based on the passed param', () => {
       teamContributionCalendar.renderActualCalendar();
 
-      expect(containerStub.calledWith(teamContributionCalendar.configs.container)).to.equal(true);
+      expect(containerStub.calledWithExactly(
+        teamContributionCalendar.configs.container,
+      )).to.equal(true);
     });
 
     it('renders the calendar header with the total contributions', () => {
       teamContributionCalendar.renderActualCalendar();
 
-      expect(headerStub.calledWith(teamContributionCalendar.totalContributions)).to.equal(true);
+      expect(headerStub.calledWithExactly(
+        teamContributionCalendar.totalContributions,
+      )).to.equal(true);
     });
   });
 
@@ -93,10 +97,10 @@ describe('TeamContributionCalendar', () => {
     const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
 
     beforeEach(() => {
-      renderActualCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
       getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
       setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
 
+      renderActualCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
       updateCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendar');
     });
 
