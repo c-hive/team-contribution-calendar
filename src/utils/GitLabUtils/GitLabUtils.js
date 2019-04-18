@@ -34,11 +34,11 @@ export const mergeCalendarsContributions = (actualCalendar, gitLabUserJsonCalend
   return copiedActualCalendar;
 };
 
-export const getLastYearContributions = (gitLabCalendar) => {
+export const getLastYearContributions = (userJsonCalendar) => {
   let lastYearContributions = 0;
 
-  Object.keys(gitLabCalendar).forEach((date) => {
-    lastYearContributions += gitLabCalendar[date];
+  Object.keys(userJsonCalendar).forEach((date) => {
+    lastYearContributions += userJsonCalendar[date];
   });
 
   return lastYearContributions;
