@@ -5,46 +5,46 @@ import * as TestUtils from '../TestUtils/TestUtils';
 describe('GitLabUtils', () => {
   describe('mergeCalendarsContributions', () => {
     const actualCalendarFirstDate = '2019-04-18';
-    const actualCalendarFirstDateContributions = 5;
+    const contributionsOnFirstDate = 5;
 
     const actualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts(
-      [actualCalendarFirstDateContributions],
+      [contributionsOnFirstDate],
       [actualCalendarFirstDate],
     )[0];
 
     describe('when the user`s JSON calendar contains contributions on `actualCalendarFirstDate`', () => {
-      const gitLabUserJsonCalendar = {
+      const calendarWithContributionsOnFirstDate = {
         '2019-04-18': 7,
       };
 
-      it('increments the `data-count` property by the user`s contributions on `actualCalendarFirstDate`', () => {
+      it('increments the first date`s `data-count` property by the user`s contributions on `actualCalendarFirstDate`', () => {
         const expectedDataCountValue = String(
-          actualCalendarFirstDateContributions + gitLabUserJsonCalendar[actualCalendarFirstDate],
+          contributionsOnFirstDate + calendarWithContributionsOnFirstDate[actualCalendarFirstDate],
         );
 
-        const mergedCalendar = GitLabUtils.mergeCalendarsContributions(
-          actualCalendar, gitLabUserJsonCalendar,
+        const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
+          actualCalendar, calendarWithContributionsOnFirstDate,
         );
 
-        const actualDataCountValue = mergedCalendar.children[0].children[0].children[0].attributes['data-count'];
+        const actualDataCountValue = updatedActualCalendar.children[0].children[0].children[0].attributes['data-count'];
 
         expect(actualDataCountValue).to.equal(expectedDataCountValue);
       });
     });
 
     describe('when the user`s JSON calendar does not contain contributions on `actualCalendarFirstDate`', () => {
-      const gitLabUserJsonCalendar = {
-        '2019-04-19': 12,
+      const calendarWithoutContributionsOnFirstDate = {
+        '2019-05-29': 12,
       };
 
-      it('does not increment the `data-count` property', () => {
-        const expectedDataCountValue = String(actualCalendarFirstDateContributions);
+      it('does not increment first date`s the `data-count` property', () => {
+        const expectedDataCountValue = String(contributionsOnFirstDate);
 
-        const mergedCalendar = GitLabUtils.mergeCalendarsContributions(
-          actualCalendar, gitLabUserJsonCalendar,
+        const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
+          actualCalendar, calendarWithoutContributionsOnFirstDate,
         );
 
-        const actualDataCountValue = mergedCalendar.children[0].children[0].children[0].attributes['data-count'];
+        const actualDataCountValue = updatedActualCalendar.children[0].children[0].children[0].attributes['data-count'];
 
         expect(actualDataCountValue).to.equal(expectedDataCountValue);
       });
