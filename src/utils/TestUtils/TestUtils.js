@@ -1,4 +1,6 @@
-export const getFakeContributionsObjectWithDailyCounts = dailyCounts => dailyCounts.map(count => ({
+export const getFakeContributionsObjectWithDailyCounts = (
+  dailyCounts, dates,
+) => dailyCounts.map((count, index) => ({
   children: [
     {
       children: [
@@ -8,7 +10,7 @@ export const getFakeContributionsObjectWithDailyCounts = dailyCounts => dailyCou
               attributes: {
                 class: 'day',
                 'data-count': count,
-                'data-date': '2018-03-18',
+                'data-date': dates ? dates[index] : '2018-03-18',
                 fill: '#ebedf0',
                 height: '10',
                 width: '10',
