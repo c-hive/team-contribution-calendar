@@ -10,7 +10,7 @@ Status and support
 - &#x2714; supported
 - &#x2714; ongoing development
 
-#### Usage
+### Usage
 
 Include the CDN in the desired file.
 ```html
@@ -32,13 +32,13 @@ The function can be called likewise the examples below.
 ```html
 <div class="container"></div>
 <script>
-	TeamContributionCalendar('.container', ['gh_usernames']);
+   TeamContributionCalendar('.container', ['gh_usernames']);
 </script>
 ```
 
 ```html
 <div class="container"></div>
 <script>
-	TeamContributionCalendar('.container', ['gh_usernames'], ['gl_usernames'], 'https://proxy-server-url.com');
+   TeamContributionCalendar('.container', ['gh_usernames'], ['gl_usernames'], 'https://proxy-server-url.com');
 </script>
 ```
