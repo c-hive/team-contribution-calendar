@@ -7,7 +7,7 @@ generate_distified_file() {
 
     mkdir dist
 
-    $NODE_MODULES_BIN_PATH/browserify lib/index.js -o dist/team-contribution-calendar.min.js
+    $NODE_MODULES_BIN_PATH/browserify lib/index.js --standalone TeamContributionCalendar -o dist/team-contribution-calendar.min.js
 
     $NODE_MODULES_BIN_PATH/uglifyjs dist/team-contribution-calendar.min.js -o dist/team-contribution-calendar.min.js
 
