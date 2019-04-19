@@ -37,7 +37,7 @@ describe('GitLabUtils', () => {
         '2019-05-29': 12,
       };
 
-      it('does not increment first date`s the `data-count` property', () => {
+      it('does not increment the first date`s the `data-count` property', () => {
         const expectedDataCountValue = String(contributionsOnFirstDate);
 
         const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
