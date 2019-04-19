@@ -18,7 +18,7 @@ Include the CDN in the desired file.
 </script>
 ```
 
-##### Config
+#### Config
 
 <pre>
 <b>TeamContributionCalendar(container, gitHubUsers, gitLabUsers, proxyServerUrl)</b>
