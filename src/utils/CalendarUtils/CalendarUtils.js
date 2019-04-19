@@ -9,6 +9,12 @@ export const requiredParamsExist = (container, gitHubUsers) => {
     return false;
   }
 
+  const gitHubUsersArrayIsEmpty = gitHubUsers.length === 0;
+
+  if (gitHubUsersArrayIsEmpty) {
+    return false;
+  }
+
   return true;
 };
 

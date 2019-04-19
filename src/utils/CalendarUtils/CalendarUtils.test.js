@@ -24,11 +24,21 @@ describe('CalendarUtils', () => {
       });
     });
 
-    describe('when the parameters are defined', () => {
+    describe('when the GH users array is empty', () => {
+      it('returns false', () => {
+        const expectedReturnedValue = false;
+
+        const actualReturnedValue = CalendarUtils.requiredParamsExist('div', []);
+
+        expect(actualReturnedValue).to.equal(expectedReturnedValue);
+      });
+    });
+
+    describe('when the parameters are defined and at least one GH user is presented in the array', () => {
       it('returns true', () => {
         const expectedReturnedValue = true;
 
-        const actualReturnedValue = CalendarUtils.requiredParamsExist('div', []);
+        const actualReturnedValue = CalendarUtils.requiredParamsExist('div', ['gitHubUsername']);
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
