@@ -227,24 +227,35 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('aggregateUserCalendars', () => {
-    describe('GitHub', () => {
-      let getJsonFormattedCalendarAsyncStub;
-      let processGitHubCalendarStub;
+    // All the related functions should be mocked before
+    // because they're being called simultaneously within `aggregateUserCalendars`.
+    // Otherwise, it'd raise `fetch is not defined` errors.
+    let gitHubGetJsonFormattedCalendarAsyncStub;
+    let gitLabGetJsonFormattedCalendarAsyncStub;
+    let processGitHubCalendarStub;
+    let processGitLabCalendarStub;
 
+    beforeEach(() => {
+      gitHubGetJsonFormattedCalendarAsyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarAsync');
+      gitLabGetJsonFormattedCalendarAsyncStub = sandbox.stub(GitLabUtils, 'getJsonFormattedCalendarAsync');
+
+      processGitHubCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitHubCalendar');
+      processGitLabCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitLabCalendar');
+    });
+
+    describe('GitHub', () => {
       const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
 
       beforeEach(() => {
-        getJsonFormattedCalendarAsyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarAsync').returns(gitHubUserJsonCalendar);
-
-        processGitHubCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitHubCalendar').returns({});
+        gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserJsonCalendar);
       });
 
-      it('fetches the GH user calendars asynchronously', async () => {
+      it('fetches the GH user calendars asynchronously', () => {
         const expectedCalledTimes = teamContributionCalendar.users.gitHub.length;
 
-        await teamContributionCalendar.aggregateUserCalendars();
+        teamContributionCalendar.aggregateUserCalendars();
 
-        expect(getJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+        expect(gitHubGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
       });
 
       it('processes the fetched GH user calendars', async () => {
@@ -257,33 +268,28 @@ describe('TeamContributionCalendar', () => {
     });
 
     describe('GitLab', () => {
-      let getJsonFormattedCalendarAsyncStub;
-      let processGitLabCalendarStub;
-
-      const userJsonCalendar = {
+      const gitLabUserJsonCalendar = {
         '2018-02-03': 7,
         '2018-02-09': 3,
       };
 
       beforeEach(() => {
-        getJsonFormattedCalendarAsyncStub = sandbox.stub(GitLabUtils, 'getJsonFormattedCalendarAsync').returns(userJsonCalendar);
-
-        processGitLabCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitLabCalendar');
+        gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserJsonCalendar);
       });
 
-      it('fetches the GL user calendars asynchronously', async () => {
+      it('fetches the GL user calendars asynchronously', () => {
         const expectedCalledTimes = teamContributionCalendar.users.gitLab.length;
 
-        await teamContributionCalendar.aggregateUserCalendars();
+        teamContributionCalendar.aggregateUserCalendars();
 
-        expect(getJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+        expect(gitLabGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
       });
 
       it('processes the fetched GL user calendars', async () => {
         await teamContributionCalendar.aggregateUserCalendars();
 
         expect(processGitLabCalendarStub.calledWithExactly(
-          userJsonCalendar,
+          gitLabUserJsonCalendar,
         )).to.equal(true);
       });
     });
