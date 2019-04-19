@@ -230,6 +230,7 @@ describe('TeamContributionCalendar', () => {
     // All the related functions should be mocked before
     // because they're being called simultaneously within `aggregateUserCalendars`.
     // Otherwise, it'd raise `fetch is not defined` errors.
+    // See https://github.com/c-hive/team-contribution-calendar/issues/17.
     let gitHubGetJsonFormattedCalendarAsyncStub;
     let gitLabGetJsonFormattedCalendarAsyncStub;
     let processGitHubCalendarStub;
