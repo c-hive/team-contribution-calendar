@@ -4,7 +4,7 @@ import * as Proxy from '../Proxy/Proxy';
 import * as CalendarUtils from '../CalendarUtils/CalendarUtils';
 import * as JavaScriptUtils from '../JavaScriptUtils/JavaScriptUtils';
 
-const getSpecificDateContributions = (gitLabCalendar, date) => {
+const getDailyContributions = (gitLabCalendar, date) => {
   if (gitLabCalendar[date]) {
     return gitLabCalendar[date];
   }
@@ -20,7 +20,7 @@ export const mergeCalendarsContributions = (actualCalendar, gitLabUserJsonCalend
       if (dailyData.attributes['data-count']) {
         const actualCalendarDailyData = CalendarUtils
           .getCalendarDataByIndexes(actualCalendar, weekIndex, dayIndex);
-        const totalDailyContributions = Number(actualCalendarDailyData.attributes['data-count']) + getSpecificDateContributions(gitLabUserJsonCalendar, actualCalendarDailyData.attributes['data-date']);
+        const totalDailyContributions = Number(actualCalendarDailyData.attributes['data-count']) + getDailyContributions(gitLabUserJsonCalendar, actualCalendarDailyData.attributes['data-date']);
 
         copiedActualCalendar.children[0].children[weekIndex].children[dayIndex].attributes = {
           ...actualCalendarDailyData.attributes,
