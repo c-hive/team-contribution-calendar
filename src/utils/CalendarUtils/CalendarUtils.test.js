@@ -29,7 +29,7 @@ describe('CalendarUtils', () => {
         it('returns true', () => {
           const expectedReturnedValue = true;
 
-          const actualReturnedValue = CalendarUtils.requiredParamsExist('div', ['gitHubUsername'], []);
+          const actualReturnedValue = CalendarUtils.requiredParamsExist('div', ['gitHubUsername']);
 
           expect(actualReturnedValue).to.equal(expectedReturnedValue);
         });
