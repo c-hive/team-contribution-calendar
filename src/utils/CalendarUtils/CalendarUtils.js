@@ -1,11 +1,13 @@
 import * as JavaScriptUtils from '../JavaScriptUtils/JavaScriptUtils';
 
-export const requiredParamsExist = (container, gitHubUsers) => {
+export const requiredParamsExist = (container, gitHubUsers, gitLabUsers) => {
   if (!JavaScriptUtils.isDefined(container)) {
     return false;
   }
 
-  if (!JavaScriptUtils.isDefined(gitHubUsers)) {
+  const userArraysAreEmpty = gitHubUsers.length === 0 && gitLabUsers.length === 0;
+
+  if (userArraysAreEmpty) {
     return false;
   }
 
