@@ -12,7 +12,7 @@ Status and support
 
 ### Usage
 
-Include the CDN in the desired file.
+Include the script in the desired file.
 ```html
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar/dist/team-contribution-calendar.min.js">
 </script>
@@ -23,29 +23,28 @@ Include the CDN in the desired file.
 <pre>
 <b>TeamContributionCalendar(container, gitHubUsers, gitLabUsers, proxyServerUrl)</b>
 </pre>
-    	
+
 Required params:
 - `container`: a DOM element in which the calendar will be rendered,
-- `gitHubUsers`: array of GitHub usernames(at least one).
+- `gitHubUsers` / `gitLabUsers`: array of users(at least one user should be presented in either of them).
 
-Optional params:
-- `gitLabUsers`: array of GitLab usernames,
+Optional param:
 - `proxyServerUrl`: CORS proxy url(we serve one by default).
 
-The function can be called likewise the examples below.
+Examples:
 
 ```html
 <div class="container"></div>
 <script>
-   // Without the optional params.
-   TeamContributionCalendar('.container', ['gh_username']);
+   // Empty GitHub users, without the optional param.
+   TeamContributionCalendar('.container', [], ['gl_username_one', 'gl_username_two']);
 </script>
 ```
 
 ```html
 <div class="container"></div>
 <script>
-   // With both the required and optional params.
+   // Passing both GitHub and GitLab users along with a cors-proxy url.
    TeamContributionCalendar('.container', ['gh_username_one', 'gh_username_two'], ['gl_username'], 'https://proxy-server-url.com');
 </script>
 ```
