@@ -38,7 +38,7 @@ The function can be called likewise the examples below.
 <div class="container"></div>
 <script>
    // Without the optional params.
-   TeamContributionCalendar('.container', ['gh_usernames']);
+   TeamContributionCalendar('.container', ['gh_username']);
 </script>
 ```
 
@@ -46,6 +46,6 @@ The function can be called likewise the examples below.
 <div class="container"></div>
 <script>
    // With both the required and optional params.
-   TeamContributionCalendar('.container', ['gh_usernames'], ['gl_usernames'], 'https://proxy-server-url.com');
+   TeamContributionCalendar('.container', ['gh_username_one', 'gh_username_two'], ['gl_username'], 'https://proxy-server-url.com');
 </script>
 ```
