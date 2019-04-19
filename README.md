@@ -36,6 +36,14 @@ Examples:
 ```html
 <div class="container"></div>
 <script>
+   // Empty GitLab users, without the optional param.
+   TeamContributionCalendar('.container', ['gh_username']);
+</script>
+```
+
+```html
+<div class="container"></div>
+<script>
    // Empty GitHub users, without the optional param.
    TeamContributionCalendar('.container', [], ['gl_username_one', 'gl_username_two']);
 </script>
