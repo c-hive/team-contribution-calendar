@@ -18,27 +18,34 @@ Include the CDN in the desired file.
 </script>
 ```
 
+##### Config
+
+<pre>
+<b>TeamContributionCalendar(container, gitHubUsers, gitLabUsers, proxyServerUrl)</b>
+</pre>
     	
 Required params:
-- container: a DOM element in which the calendar will be rendered,
-- at least one GitHub user(array).
+- `container`: a DOM element in which the calendar will be rendered,
+- `gitHubUsers`: array of GitHub usernames(at least one).
 
 Optional params:
-- GitLab users(array).
-- CORS proxy server url(we serve one by default).
+- `gitLabUsers`: array of GitLab usernames,
+- `proxyServerUrl`: CORS proxy url(we serve one by default).
 
 The function can be called likewise the examples below.
 
 ```html
 <div class="container"></div>
 <script>
-   TeamContributionCalendar('.container', ['gh_usernames']);
+	// Without the optional params.
+	TeamContributionCalendar('.container', ['gh_usernames']);
 </script>
 ```
 
 ```html
 <div class="container"></div>
 <script>
-   TeamContributionCalendar('.container', ['gh_usernames'], ['gl_usernames'], 'https://proxy-server-url.com');
+   // With both the required and optional params.
+	TeamContributionCalendar('.container', ['gh_usernames'], ['gl_usernames'], 'https://proxy-server-url.com');
 </script>
 ```
