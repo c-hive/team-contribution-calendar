@@ -81,11 +81,11 @@ describe('GetStyledCalendarElement', () => {
     });
   });
 
-  describe('contributionsWithDate', () => {
+  describe('contributionsWithDateText', () => {
     const date = '2019-01-23';
 
     it('returns a `span` element', () => {
-      const tooltipText = GetStyledCalendarElement.contributionsWithDate(
+      const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
         50, date,
       );
 
@@ -93,7 +93,7 @@ describe('GetStyledCalendarElement', () => {
     });
 
     it('appends a `span` to the tooltip element', () => {
-      const tooltipText = GetStyledCalendarElement.contributionsWithDate(
+      const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
         50, date,
       );
 
@@ -103,7 +103,7 @@ describe('GetStyledCalendarElement', () => {
     it('sets the appended span`s text to the given date', () => {
       const expectedDateText = ` on ${date}`;
 
-      const tooltipText = GetStyledCalendarElement.contributionsWithDate(
+      const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
         50, date,
       );
 
@@ -118,7 +118,7 @@ describe('GetStyledCalendarElement', () => {
       it('renders `No contributions`', () => {
         const expectedContributionsText = 'No contributions';
 
-        const tooltipText = GetStyledCalendarElement.contributionsWithDate(
+        const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
           contributions, date,
         );
 
@@ -134,7 +134,7 @@ describe('GetStyledCalendarElement', () => {
       it('renders the passed `contributions`', () => {
         const expectedContributionsText = `${contributions} contributions`;
 
-        const tooltipText = GetStyledCalendarElement.contributionsWithDate(
+        const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
           contributions, date,
         );
 
