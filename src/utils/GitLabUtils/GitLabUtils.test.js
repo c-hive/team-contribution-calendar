@@ -8,7 +8,7 @@ describe('GitLabUtils', () => {
       '2019-04-20': 10,
     });
 
-    describe('when the user`s calendar contains contributions on the date presented in the actual calendar', () => {
+    describe('when the user`s calendar contains contributions on the date that is presented in the actual calendar', () => {
       const gitLabUserJsonCalendar = {
         '2019-04-20': 22,
       };
@@ -25,7 +25,7 @@ describe('GitLabUtils', () => {
       });
     });
 
-    describe('when the user`s calendar does not contain contributions on the date presented in the actual calendar', () => {
+    describe('when the user`s calendar does not contain contributions on the date that is presented in the actual calendar', () => {
       const gitLabUserJsonCalendar = {
         '2019-01-25': 5,
       };
