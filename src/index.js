@@ -4,7 +4,7 @@ import * as Main from './Main/Main';
 
 const index = (
   container,
-  gitHubUsers,
+  gitHubUsers = [],
   gitLabUsers = [],
   proxyServerUrl = Proxy.defaultProxyServerUrl,
 ) => {

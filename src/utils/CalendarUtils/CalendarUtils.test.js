@@ -4,7 +4,7 @@ import * as TestUtils from '../TestUtils/TestUtils';
 
 describe('CalendarUtils', () => {
   describe('requiredParamsExist', () => {
-    describe('when container is not defined', () => {
+    describe('when `container` is not defined', () => {
       it('returns false', () => {
         const expectedReturnedValue = false;
 
@@ -14,23 +14,45 @@ describe('CalendarUtils', () => {
       });
     });
 
-    describe('when GH users are not defined', () => {
+    describe('when the GH and GL user arrays are empty', () => {
       it('returns false', () => {
         const expectedReturnedValue = false;
 
-        const actualReturnedValue = CalendarUtils.requiredParamsExist('div');
+        const actualReturnedValue = CalendarUtils.requiredParamsExist('div', [], []);
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
     });
 
-    describe('when the parameters are defined', () => {
-      it('returns true', () => {
-        const expectedReturnedValue = true;
+    describe('when the `container` is defined', () => {
+      describe('when one GH user is presented and the GL users array is empty', () => {
+        it('returns true', () => {
+          const expectedReturnedValue = true;
 
-        const actualReturnedValue = CalendarUtils.requiredParamsExist('div', []);
+          const actualReturnedValue = CalendarUtils.requiredParamsExist('div', ['gitHubUsername']);
 
-        expect(actualReturnedValue).to.equal(expectedReturnedValue);
+          expect(actualReturnedValue).to.equal(expectedReturnedValue);
+        });
+      });
+
+      describe('when one GL user is presented and the GH users array is empty', () => {
+        it('returns true', () => {
+          const expectedReturnedValue = true;
+
+          const actualReturnedValue = CalendarUtils.requiredParamsExist('div', [], ['gitLabUsername']);
+
+          expect(actualReturnedValue).to.equal(expectedReturnedValue);
+        });
+      });
+
+      describe('when both arrays are filled with users', () => {
+        it('returns true', () => {
+          const expectedReturnedValue = true;
+
+          const actualReturnedValue = CalendarUtils.requiredParamsExist('div', ['gitHubUsername'], ['gitLabUsername']);
+
+          expect(actualReturnedValue).to.equal(expectedReturnedValue);
+        });
       });
     });
   });
