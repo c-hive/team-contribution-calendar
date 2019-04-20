@@ -9,7 +9,7 @@ const showTooltip = (event) => {
 
   const tooltipDOMElement = document.getElementById('tooltip');
 
-  const tooltipText = GetStyledCalendarElement.contributionsWithDate(
+  const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
     contributions, date,
   );
 
