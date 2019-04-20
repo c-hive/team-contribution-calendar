@@ -81,34 +81,34 @@ describe('GetStyledCalendarElement', () => {
     });
   });
 
-  describe('tooltipContributionsWithDateText', () => {
+  describe('contributionsWithDate', () => {
     const date = '2019-01-23';
 
     it('returns a `span` element', () => {
-      const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+      const tooltipText = GetStyledCalendarElement.contributionsWithDate(
         50, date,
       );
 
-      expect(contributionsWithDateText.nodeName).to.equal('SPAN');
+      expect(tooltipText.nodeName).to.equal('SPAN');
     });
 
     it('appends a `span` to the tooltip element', () => {
-      const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+      const tooltipText = GetStyledCalendarElement.contributionsWithDate(
         50, date,
       );
 
-      expect(contributionsWithDateText.childNodes[0].nodeName).to.equal('SPAN');
+      expect(tooltipText.childNodes[0].nodeName).to.equal('SPAN');
     });
 
     it('sets the appended span`s text to the given date', () => {
-      const expectedContributionsDateText = ` on ${date}`;
+      const expectedDateText = ` on ${date}`;
 
-      const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+      const tooltipText = GetStyledCalendarElement.contributionsWithDate(
         50, date,
       );
 
-      expect(contributionsWithDateText.childNodes[0].innerText).to.equal(
-        expectedContributionsDateText,
+      expect(tooltipText.childNodes[0].innerText).to.equal(
+        expectedDateText,
       );
     });
 
@@ -118,11 +118,11 @@ describe('GetStyledCalendarElement', () => {
       it('renders `No contributions`', () => {
         const expectedContributionsText = 'No contributions';
 
-        const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+        const tooltipText = GetStyledCalendarElement.contributionsWithDate(
           contributions, date,
         );
 
-        expect(contributionsWithDateText.innerText).to.equal(
+        expect(tooltipText.innerText).to.equal(
           expectedContributionsText,
         );
       });
@@ -134,11 +134,11 @@ describe('GetStyledCalendarElement', () => {
       it('renders the passed `contributions`', () => {
         const expectedContributionsText = `${contributions} contributions`;
 
-        const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+        const tooltipText = GetStyledCalendarElement.contributionsWithDate(
           contributions, date,
         );
 
-        expect(contributionsWithDateText.innerText).to.equal(
+        expect(tooltipText.innerText).to.equal(
           expectedContributionsText,
         );
       });
