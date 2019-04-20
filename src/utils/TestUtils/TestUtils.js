@@ -28,6 +28,6 @@ export const getFakeContributionsObjectWithDailyCounts = (
 export const getTestParams = () => ({
   container: '.container',
   gitHubUsers: ['gitHubUsername'],
-  gitLabUsers: ['gitLabUsername_one', 'gitLabUsername_one'],
+  gitLabUsers: ['gitLabUsername_one', 'gitLabUsername_two'],
   proxyServerUrl: 'https://proxy-server.com/',
 });
