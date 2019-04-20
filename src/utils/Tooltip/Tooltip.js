@@ -15,9 +15,12 @@ const showTooltip = (event) => {
 
   tooltipDOMElement.appendChild(tooltipText);
 
+  const toopltipTopPosition = `${rectCoordinates.top - 40}px`;
+  const tooltipLeftPosition = `${rectCoordinates.left - (tooltipDOMElement.clientWidth / 2)}px`;
+
   tooltipDOMElement.style.display = 'block';
-  tooltipDOMElement.style.top = `${rectCoordinates.top - 40}px`;
-  tooltipDOMElement.style.left = `${rectCoordinates.left - (tooltipDOMElement.clientWidth / 2)}px`;
+  tooltipDOMElement.style.top = toopltipTopPosition;
+  tooltipDOMElement.style.left = tooltipLeftPosition;
 };
 
 const hideTooltip = () => {
