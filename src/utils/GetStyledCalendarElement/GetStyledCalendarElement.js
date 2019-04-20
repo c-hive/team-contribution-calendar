@@ -76,3 +76,24 @@ export const header = (totalContributions, isLoading) => {
 
   return calendarHeader;
 };
+
+export const tooltip = () => {
+  const calendarTooltip = document.createElement('DIV');
+
+  calendarTooltip.id = 'tooltip';
+
+  calendarTooltip.style.background = 'rgba(0, 0, 0, 0.8)';
+  calendarTooltip.style.borderRadius = '3px';
+  calendarTooltip.style.color = '#959da5';
+  calendarTooltip.style.fontSize = '12px';
+  calendarTooltip.style.padding = '10px';
+  calendarTooltip.style.textAlign = 'center';
+  calendarTooltip.style.position = 'absolute';
+  calendarTooltip.style.zIndex = '99999';
+
+  calendarTooltip.style.display = 'none';
+  calendarTooltip.style.left = '0px';
+  calendarTooltip.style.top = '0px';
+
+  return calendarTooltip;
+};

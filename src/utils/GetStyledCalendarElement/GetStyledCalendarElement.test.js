@@ -66,4 +66,18 @@ describe('GetStyledCalendarElement', () => {
       expect(calendarHeader.childNodes[1].nodeName).to.equal('UL');
     });
   });
+
+  describe('tooltip', () => {
+    it('sets the `id` attribute to `tooltip`', () => {
+      const calendarTooltip = GetStyledCalendarElement.tooltip();
+
+      expect(calendarTooltip.id).to.equal('tooltip');
+    });
+
+    it('returns a `div` element', () => {
+      const calendarTooltip = GetStyledCalendarElement.tooltip();
+
+      expect(calendarTooltip.nodeName).to.equal('DIV');
+    });
+  });
 });
