@@ -97,7 +97,7 @@ export const tooltip = () => {
   return calendarTooltip;
 };
 
-const getContributionsDateText = (date) => {
+const getDateText = (date) => {
   const contributionsDateText = document.createElement('SPAN');
 
   contributionsDateText.style.color = '#959DA5';
@@ -107,7 +107,7 @@ const getContributionsDateText = (date) => {
   return contributionsDateText;
 };
 
-export const tooltipContributionsWithDateText = (contributions, date) => {
+export const contributionsWithDate = (contributions, date) => {
   const contributionsWithDateText = document.createElement('SPAN');
 
   contributionsWithDateText.style.color = '#FFFFFF';
@@ -118,9 +118,9 @@ export const tooltipContributionsWithDateText = (contributions, date) => {
     contributionsWithDateText.innerText = `${contributions} contributions`;
   }
 
-  const contributionsDateText = getContributionsDateText(date);
+  const dateText = getDateText(date);
 
-  contributionsWithDateText.appendChild(contributionsDateText);
+  contributionsWithDateText.appendChild(dateText);
 
   return contributionsWithDateText;
 };

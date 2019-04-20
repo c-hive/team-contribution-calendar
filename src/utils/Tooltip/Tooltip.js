@@ -9,11 +9,11 @@ const showTooltip = (event) => {
 
   const tooltipDOMElement = document.getElementById('tooltip');
 
-  const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+  const tooltipText = GetStyledCalendarElement.contributionsWithDate(
     contributions, date,
   );
 
-  tooltipDOMElement.appendChild(contributionsWithDateText);
+  tooltipDOMElement.appendChild(tooltipText);
 
   tooltipDOMElement.style.display = 'block';
   tooltipDOMElement.style.top = `${rectCoordinates.top - 40}px`;
