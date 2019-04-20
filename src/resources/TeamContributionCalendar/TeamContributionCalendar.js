@@ -3,6 +3,7 @@ import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
 import * as GitLabUtils from '../../utils/GitLabUtils/GitLabUtils';
 import * as JavaScriptUtils from '../../utils/JavaScriptUtils/JavaScriptUtils';
+import * as Tooltip from '../../utils/Tooltip/Tooltip';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
@@ -64,6 +65,8 @@ export default class TeamContributionCalendar {
     calendarContainer.innerHTML = stringifiedHTMLContent;
     calendarContainer.prepend(calendarHeader);
     calendarContainer.appendChild(calendarTooltip);
+
+    Tooltip.addEvents();
   }
 
   aggregateUserCalendars() {
