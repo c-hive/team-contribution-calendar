@@ -61,12 +61,14 @@ describe('TeamContributionCalendar', () => {
   describe('renderActualCalendar', () => {
     let containerStub;
     let headerStub;
+    let tooltipStub;
 
     let appendChildSpy;
     let prependSpy;
 
     let calendarContainer;
     let calendarHeader;
+    let calendarTooltip;
 
     beforeEach(() => {
       appendChildSpy = sandbox.spy();
@@ -74,6 +76,7 @@ describe('TeamContributionCalendar', () => {
 
       calendarContainer = {
         prepend: prependSpy,
+        appendChild: appendChildSpy,
         innerHTML: null,
       };
 
@@ -83,6 +86,7 @@ describe('TeamContributionCalendar', () => {
 
       containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
       headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
+      tooltipStub = sandbox.stub(GetStyledCalendarElement, 'tooltip').returns(calendarTooltip);
     });
 
     it('renders the styled container into the given element', () => {
@@ -107,6 +111,20 @@ describe('TeamContributionCalendar', () => {
 
       expect(calendarContainer.prepend.calledWithExactly(
         calendarHeader,
+      )).to.equal(true);
+    });
+
+    it('gets the tooltip element', () => {
+      teamContributionCalendar.renderActualCalendar();
+
+      expect(tooltipStub.calledOnce).to.equal(true);
+    });
+
+    it('appends the tooltip element to the container', () => {
+      teamContributionCalendar.renderActualCalendar();
+
+      expect(calendarContainer.appendChild.calledWithExactly(
+        calendarTooltip,
       )).to.equal(true);
     });
   });

@@ -57,11 +57,13 @@ export default class TeamContributionCalendar {
   renderActualCalendar() {
     const calendarContainer = GetStyledCalendarElement.container(this.configs.container);
     const calendarHeader = GetStyledCalendarElement.header(this.totalContributions, this.isLoading);
+    const calendarTooltip = GetStyledCalendarElement.tooltip();
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
     calendarContainer.innerHTML = stringifiedHTMLContent;
     calendarContainer.prepend(calendarHeader);
+    calendarContainer.appendChild(calendarTooltip);
   }
 
   aggregateUserCalendars() {
