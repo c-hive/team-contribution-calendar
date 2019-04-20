@@ -5,7 +5,7 @@ import * as TestUtils from '../TestUtils/TestUtils';
 describe('GitHubUtils', () => {
   describe('setEmptyCalendarValues', () => {
     const calendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
-      '2019-05-20': 5,
+      '2019-03-21': 5,
     });
 
     it('sets the daily contributions to zero', () => {
@@ -32,7 +32,7 @@ describe('GitHubUtils', () => {
       '2019-04-19': 5,
     });
     const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
-      '2019-04-20': 6,
+      '2019-04-19': 6,
     });
 
     it('merges the `data-count` properties of the given calendars', () => {
