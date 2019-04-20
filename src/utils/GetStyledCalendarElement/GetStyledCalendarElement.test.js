@@ -80,4 +80,68 @@ describe('GetStyledCalendarElement', () => {
       expect(calendarTooltip.nodeName).to.equal('DIV');
     });
   });
+
+  describe('tooltipContributionsWithDateText', () => {
+    const date = '2019-01-23';
+
+    it('returns a `span` element', () => {
+      const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+        50, date,
+      );
+
+      expect(contributionsWithDateText.nodeName).to.equal('SPAN');
+    });
+
+    it('appends a `span` to the text', () => {
+      const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+        50, date,
+      );
+
+      expect(contributionsWithDateText.childNodes[0].nodeName).to.equal('SPAN');
+    });
+
+    it('sets the appended span`s text to the given date', () => {
+      const expectedContributionsDateText = ` on ${date}`;
+
+      const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+        50, date,
+      );
+
+      expect(contributionsWithDateText.childNodes[0].innerText).to.equal(
+        expectedContributionsDateText,
+      );
+    });
+
+    describe('when the `contributions` is 0', () => {
+      const contributions = 0;
+
+      it('renders the `No contributions` text', () => {
+        const expectedContributionsText = 'No contributions';
+
+        const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+          contributions, date,
+        );
+
+        expect(contributionsWithDateText.innerText).to.equal(
+          expectedContributionsText,
+        );
+      });
+    });
+
+    describe('when the `contributions` is higher than 0', () => {
+      const contributions = 1;
+
+      it('renders the `contributions` text', () => {
+        const expectedContributionsText = `${contributions} contributions`;
+
+        const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
+          contributions, date,
+        );
+
+        expect(contributionsWithDateText.innerText).to.equal(
+          expectedContributionsText,
+        );
+      });
+    });
+  });
 });

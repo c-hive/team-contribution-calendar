@@ -5,6 +5,7 @@ import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
 import * as GitLabUtils from '../../utils/GitLabUtils/GitLabUtils';
 import * as TestUtils from '../../utils/TestUtils/TestUtils';
+import * as Tooltip from '../../utils/Tooltip/Tooltip';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
@@ -63,6 +64,8 @@ describe('TeamContributionCalendar', () => {
     let headerStub;
     let tooltipStub;
 
+    let addEventsStub;
+
     let appendChildSpy;
     let prependSpy;
 
@@ -87,6 +90,8 @@ describe('TeamContributionCalendar', () => {
       containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
       headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
       tooltipStub = sandbox.stub(GetStyledCalendarElement, 'tooltip').returns(calendarTooltip);
+
+      addEventsStub = sandbox.stub(Tooltip, 'addEvents');
     });
 
     it('renders the styled container into the given element', () => {
@@ -126,6 +131,12 @@ describe('TeamContributionCalendar', () => {
       expect(calendarContainer.appendChild.calledWithExactly(
         calendarTooltip,
       )).to.equal(true);
+    });
+
+    it('adds the tooltip events to the `rect` elements', () => {
+      teamContributionCalendar.renderActualCalendar();
+
+      expect(addEventsStub.calledOnce).to.equal(true);
     });
   });
 
