@@ -368,10 +368,10 @@ describe('TeamContributionCalendar', () => {
       '2018-02-09': 3,
     };
 
-    const updatedActualCalendar = {
-      '2018-02-03': 22,
-      '2018-02-09': 10,
-    };
+    const updatedActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+      '2018-02-03': 11,
+      '2018-02-09': 20,
+    });
 
     const lastYearContributions = 2048;
 
