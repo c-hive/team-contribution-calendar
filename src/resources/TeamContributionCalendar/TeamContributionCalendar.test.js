@@ -117,8 +117,12 @@ describe('TeamContributionCalendar', () => {
     let setEmptyCalendarValuesStub;
     let updateCalendarStub;
 
-    const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
-    const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([0])[0];
+    const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+      '2019-01-20': 12,
+    });
+    const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+      '2019-01-20': 0,
+    });
 
     beforeEach(() => {
       getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
@@ -170,7 +174,9 @@ describe('TeamContributionCalendar', () => {
 
     const data = {
       contributions: 1024,
-      updatedActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts([4])[0],
+      updatedActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts({
+        '2018-10-10': 12,
+      }),
     };
 
     beforeEach(() => {
@@ -245,7 +251,10 @@ describe('TeamContributionCalendar', () => {
     });
 
     describe('GitHub', () => {
-      const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([5])[0];
+      const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+        '2019-03-19': 5,
+        '2019-03-20': 5,
+      });
 
       beforeEach(() => {
         gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserJsonCalendar);
@@ -301,8 +310,15 @@ describe('TeamContributionCalendar', () => {
     let getLastYearContributionsStub;
     let updateCalendarStub;
 
-    const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([4])[0];
-    const updatedActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts([12])[0];
+    const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+      '2019-03-10': 15,
+      '2019-03-12': 5,
+    });
+    const updatedActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+      '2019-03-10': 18,
+      '2019-03-11': 15,
+      '2019-03-12': 7,
+    });
     const lastYearContributions = 1024;
 
     beforeEach(() => {
