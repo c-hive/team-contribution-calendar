@@ -1,6 +1,6 @@
 import * as GetStyledCalendarElement from '../GetStyledCalendarElement/GetStyledCalendarElement';
 
-const showContributionsTooltip = (event) => {
+const showTooltip = (event) => {
   const hoveredRectElement = event.target;
 
   const contributions = Number(hoveredRectElement.getAttribute('data-count'));
@@ -14,12 +14,13 @@ const showContributionsTooltip = (event) => {
   );
 
   tooltipDOMElement.appendChild(contributionsWithDateText);
+
   tooltipDOMElement.style.display = 'block';
   tooltipDOMElement.style.top = `${rectCoordinates.top - 40}px`;
   tooltipDOMElement.style.left = `${rectCoordinates.left - (tooltipDOMElement.clientWidth / 2)}px`;
 };
 
-const hideContributionsTooltip = () => {
+const hideTooltip = () => {
   const tooltipDOMElement = document.getElementById('tooltip');
 
   if (tooltipDOMElement.childNodes.length === 0) {
@@ -38,7 +39,7 @@ export const addEvents = () => {
   const rects = Array.from(rectElements);
 
   rects.forEach((rect) => {
-    rect.addEventListener('mouseenter', showContributionsTooltip);
-    rect.addEventListener('mouseleave', hideContributionsTooltip);
+    rect.addEventListener('mouseenter', showTooltip);
+    rect.addEventListener('mouseleave', hideTooltip);
   });
 };
