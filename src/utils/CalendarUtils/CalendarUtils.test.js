@@ -120,7 +120,9 @@ describe('CalendarUtils', () => {
   });
 
   describe('getCalendarDataByIndexes', () => {
-    const calendarData = TestUtils.getFakeContributionsObjectWithDailyCounts([12])[0];
+    const calendarData = TestUtils.getFakeContributionsObjectWithDailyCounts({
+      '2019-04-20': 15,
+    });
     const weekIndex = 0;
 
     describe('when the day index is defined', () => {
