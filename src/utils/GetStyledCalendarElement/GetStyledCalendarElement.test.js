@@ -92,7 +92,7 @@ describe('GetStyledCalendarElement', () => {
       expect(contributionsWithDateText.nodeName).to.equal('SPAN');
     });
 
-    it('appends a `span` to the text', () => {
+    it('appends a `span` to the tooltip element', () => {
       const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
         50, date,
       );
@@ -115,7 +115,7 @@ describe('GetStyledCalendarElement', () => {
     describe('when the `contributions` is 0', () => {
       const contributions = 0;
 
-      it('renders the `No contributions` text', () => {
+      it('renders `No contributions`', () => {
         const expectedContributionsText = 'No contributions';
 
         const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
@@ -131,7 +131,7 @@ describe('GetStyledCalendarElement', () => {
     describe('when the `contributions` is higher than 0', () => {
       const contributions = 1;
 
-      it('renders the `contributions` text', () => {
+      it('renders the passed `contributions`', () => {
         const expectedContributionsText = `${contributions} contributions`;
 
         const contributionsWithDateText = GetStyledCalendarElement.tooltipContributionsWithDateText(
