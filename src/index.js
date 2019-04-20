@@ -9,7 +9,7 @@ const index = (
   proxyServerUrl = Proxy.defaultProxyServerUrl,
 ) => {
   if (CalendarUtils.requiredParamsExist(container, gitHubUsers, gitLabUsers)) {
-    Main.processParams(container, gitHubUsers, proxyServerUrl);
+    Main.processParams(container, gitHubUsers, gitLabUsers, proxyServerUrl);
   } else {
     throw new Error('Please provide the required parameters in the appropriate format.');
   }
