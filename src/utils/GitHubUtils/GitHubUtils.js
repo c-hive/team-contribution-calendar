@@ -58,17 +58,17 @@ export const mergeCalendarsContributions = (actualCalendar, gitHubUserJsonCalend
 };
 
 export const getLastYearContributions = (userCalendar) => {
-  let contributions = 0;
+  let lastYearContributions = 0;
 
   userCalendar.children[0].children.forEach((weeklyData) => {
     weeklyData.children.forEach((dailyData) => {
       if (dailyData.attributes['data-count']) {
-        contributions += Number(dailyData.attributes['data-count']);
+        lastYearContributions += Number(dailyData.attributes['data-count']);
       }
     });
   });
 
-  return contributions;
+  return lastYearContributions;
 };
 
 export const getJsonFormattedCalendarSync = async (proxyServerUrl, gitHubUsername) => {
