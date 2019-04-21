@@ -35,7 +35,7 @@ const hideTooltip = () => {
   tooltipDOMElement.removeChild(tooltipDOMElement.childNodes[0]);
 };
 
-export const addEvents = () => {
+export const addEventsToRectElements = () => {
   const rectElements = document.getElementsByTagName('rect');
   const rects = Array.from(rectElements);
 

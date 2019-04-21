@@ -66,7 +66,7 @@ export default class TeamContributionCalendar {
     calendarContainer.prepend(calendarHeader);
     calendarContainer.appendChild(calendarTooltip);
 
-    Tooltip.addEvents();
+    Tooltip.addEventsToRectElements();
   }
 
   aggregateUserCalendars() {
