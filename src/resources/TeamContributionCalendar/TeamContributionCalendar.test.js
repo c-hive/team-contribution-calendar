@@ -64,7 +64,7 @@ describe('TeamContributionCalendar', () => {
     let headerStub;
     let tooltipStub;
 
-    let addEventsStub;
+    let addEventsToRectElementsStub;
 
     let appendChildSpy;
     let prependSpy;
@@ -91,7 +91,7 @@ describe('TeamContributionCalendar', () => {
       headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
       tooltipStub = sandbox.stub(GetStyledCalendarElement, 'tooltip').returns(calendarTooltip);
 
-      addEventsStub = sandbox.stub(Tooltip, 'addEvents');
+      addEventsToRectElementsStub = sandbox.stub(Tooltip, 'addEventsToRectElements');
     });
 
     it('renders the styled container into the given element', () => {
@@ -136,7 +136,7 @@ describe('TeamContributionCalendar', () => {
     it('adds the tooltip events to the `rect` elements', () => {
       teamContributionCalendar.renderActualCalendar();
 
-      expect(addEventsStub.calledOnce).to.equal(true);
+      expect(addEventsToRectElementsStub.calledOnce).to.equal(true);
     });
   });
 
