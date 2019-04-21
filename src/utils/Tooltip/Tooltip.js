@@ -22,17 +22,17 @@ const showTooltip = (event) => {
 };
 
 const hideTooltip = () => {
-  const tooltipDOMElement = document.getElementById('tooltip');
+  const tooltipElement = document.getElementById('tooltip');
 
-  if (tooltipDOMElement.childNodes.length === 0) {
+  if (tooltipElement.childNodes.length === 0) {
     return;
   }
 
-  tooltipDOMElement.style.display = 'none';
-  tooltipDOMElement.style.top = '0px';
-  tooltipDOMElement.style.left = '0px;';
+  tooltipElement.style.display = 'none';
+  tooltipElement.style.top = '0px';
+  tooltipElement.style.left = '0px;';
 
-  tooltipDOMElement.removeChild(tooltipDOMElement.childNodes[0]);
+  tooltipElement.removeChild(tooltipElement.childNodes[0]);
 };
 
 export const addEventsToRectElements = () => {
