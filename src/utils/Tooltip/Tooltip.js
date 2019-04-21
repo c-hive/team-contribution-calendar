@@ -37,9 +37,9 @@ const hideTooltip = () => {
 
 export const addEventsToRectElements = () => {
   const rectElements = document.getElementsByTagName('rect');
-  const rects = Array.from(rectElements);
+  const rectsArray = Array.from(rectElements);
 
-  rects.forEach((rect) => {
+  rectsArray.forEach((rect) => {
     rect.addEventListener('mouseenter', showTooltip);
     rect.addEventListener('mouseleave', hideTooltip);
   });
