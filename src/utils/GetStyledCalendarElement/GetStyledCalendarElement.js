@@ -98,13 +98,13 @@ export const tooltip = () => {
 };
 
 const getDateText = (date) => {
-  const contributionsDateText = document.createElement('SPAN');
+  const dateText = document.createElement('SPAN');
 
-  contributionsDateText.style.color = '#959DA5';
-  contributionsDateText.style.fontWeight = 'normal';
-  contributionsDateText.innerText = ` on ${date}`;
+  dateText.style.color = '#959DA5';
+  dateText.style.fontWeight = 'normal';
+  dateText.innerText = ` on ${date}`;
 
-  return contributionsDateText;
+  return dateText;
 };
 
 export const contributionsWithDateText = (contributions, date) => {
