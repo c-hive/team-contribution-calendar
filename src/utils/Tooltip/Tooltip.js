@@ -1,26 +1,24 @@
 import * as GetStyledCalendarElement from '../GetStyledCalendarElement/GetStyledCalendarElement';
 
 const showTooltip = (event) => {
-  const hoveredRectElement = event.target;
+  const hoveredDay = event.target;
 
-  const contributions = Number(hoveredRectElement.getAttribute('data-count'));
-  const date = hoveredRectElement.getAttribute('data-date');
-  const rectCoordinates = hoveredRectElement.getBoundingClientRect();
+  const contributions = Number(hoveredDay.getAttribute('data-count'));
+  const date = hoveredDay.getAttribute('data-date');
 
-  const tooltipDOMElement = document.getElementById('tooltip');
+  const tooltipElement = document.getElementById('tooltip');
 
-  const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
+  const tooltipInnerText = GetStyledCalendarElement.contributionsWithDateText(
     contributions, date,
   );
 
-  tooltipDOMElement.appendChild(tooltipText);
+  tooltipElement.appendChild(tooltipInnerText);
 
-  const toopltipTopPosition = `${rectCoordinates.top - 40}px`;
-  const tooltipLeftPosition = `${rectCoordinates.left - (tooltipDOMElement.clientWidth / 2)}px`;
+  const hoveredDayPositionAttributes = hoveredDay.getBoundingClientRect();
 
-  tooltipDOMElement.style.display = 'block';
-  tooltipDOMElement.style.top = toopltipTopPosition;
-  tooltipDOMElement.style.left = tooltipLeftPosition;
+  tooltipElement.style.display = 'block';
+  tooltipElement.style.top = `${hoveredDayPositionAttributes.top - 35}px`;
+  tooltipElement.style.left = `${hoveredDayPositionAttributes.left - (tooltipElement.clientWidth / 2)}px`;
 };
 
 const hideTooltip = () => {

@@ -131,7 +131,7 @@ describe('GetStyledCalendarElement', () => {
     describe('when the `contributions` is higher than 0', () => {
       const contributions = 1;
 
-      it('renders the passed `contributions`', () => {
+      it('renders the given `contributions`', () => {
         const expectedContributionsText = `${contributions} contributions`;
 
         const tooltipText = GetStyledCalendarElement.contributionsWithDateText(

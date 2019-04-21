@@ -108,19 +108,19 @@ const getDateText = (date) => {
 };
 
 export const contributionsWithDateText = (contributions, date) => {
-  const tooltipText = document.createElement('SPAN');
+  const tooltipInnerText = document.createElement('SPAN');
 
-  tooltipText.style.color = '#FFFFFF';
-  tooltipText.style.fontWeight = 'bold';
-  tooltipText.innerText = 'No contributions';
+  tooltipInnerText.style.color = '#FFFFFF';
+  tooltipInnerText.style.fontWeight = 'bold';
+  tooltipInnerText.innerText = 'No contributions';
 
   if (contributions > 0) {
-    tooltipText.innerText = `${contributions} contributions`;
+    tooltipInnerText.innerText = `${contributions} contributions`;
   }
 
   const dateText = getDateText(date);
 
-  tooltipText.appendChild(dateText);
+  tooltipInnerText.appendChild(dateText);
 
-  return tooltipText;
+  return tooltipInnerText;
 };
