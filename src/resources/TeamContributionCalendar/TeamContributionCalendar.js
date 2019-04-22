@@ -26,30 +26,40 @@ export default class TeamContributionCalendar {
   async renderBasicAppearance() {
     this.renderActualCalendar();
 
-    const defaultUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarSync(
-      this.configs.proxyServerUrl, DefaultUsers.GitHub,
-    );
+    try {
+      const defaultUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarSync(
+        this.configs.proxyServerUrl, DefaultUsers.GitHub,
+      );
 
-    const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(defaultUserJsonCalendar);
+      const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(defaultUserJsonCalendar);
 
-    this.updateCalendar({
-      contributions: 0,
-      updatedActualCalendar: defaultUserEmptyCalendar,
-    });
+      this.updateCalendar({
+        contributions: 0,
+        updatedActualCalendar: defaultUserEmptyCalendar,
+      });
+    } catch {
+      this.updateCalendar({
+        isLoading: false,
+      });
+
+      throw new Error('Could not load the calendar of the default user. The issue might be related to the cors-proxy server.');
+    }
   }
 
   updateCalendar(data) {
-    const { contributions, updatedActualCalendar } = data;
-
     if (JavaScriptUtils.isDefined(data.isLoading)) {
       this.isLoading = data.isLoading;
     }
 
-    this.actualCalendar = {
-      ...updatedActualCalendar,
-    };
+    if (JavaScriptUtils.isDefined(data.updatedActualCalendar)) {
+      const { contributions, updatedActualCalendar } = data;
 
-    this.totalContributions = this.totalContributions + contributions;
+      this.actualCalendar = {
+        ...updatedActualCalendar,
+      };
+
+      this.totalContributions = this.totalContributions + contributions;
+    }
 
     this.renderActualCalendar();
   }
