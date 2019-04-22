@@ -60,10 +60,6 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('renderActualCalendar', () => {
-    let containerStub;
-    let headerStub;
-    let tooltipStub;
-
     let addEventsToRectElementsStub;
 
     let appendChildSpy;
@@ -87,28 +83,11 @@ describe('TeamContributionCalendar', () => {
         appendChild: appendChildSpy,
       };
 
-      containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
-      headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
-      tooltipStub = sandbox.stub(GetStyledCalendarElement, 'tooltip').returns(calendarTooltip);
+      sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
+      sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
+      sandbox.stub(GetStyledCalendarElement, 'tooltip').returns(calendarTooltip);
 
       addEventsToRectElementsStub = sandbox.stub(Tooltip, 'addEventsToRectElements');
-    });
-
-    it('renders the styled container into the given element', () => {
-      teamContributionCalendar.renderActualCalendar();
-
-      expect(containerStub.calledWithExactly(
-        teamContributionCalendar.configs.container,
-      )).to.equal(true);
-    });
-
-    it('gets the styled calendar header', () => {
-      teamContributionCalendar.renderActualCalendar();
-
-      expect(headerStub.calledWithExactly(
-        teamContributionCalendar.totalContributions,
-        teamContributionCalendar.isLoading,
-      )).to.equal(true);
     });
 
     it('prepends the header to the container', () => {
@@ -119,12 +98,6 @@ describe('TeamContributionCalendar', () => {
       )).to.equal(true);
     });
 
-    it('gets the tooltip element', () => {
-      teamContributionCalendar.renderActualCalendar();
-
-      expect(tooltipStub.calledOnce).to.equal(true);
-    });
-
     it('appends the tooltip element to the container', () => {
       teamContributionCalendar.renderActualCalendar();
 
@@ -133,7 +106,7 @@ describe('TeamContributionCalendar', () => {
       )).to.equal(true);
     });
 
-    it('adds the tooltip events to the `rect` elements', () => {
+    it('calls `addEventsToRectElements`', () => {
       teamContributionCalendar.renderActualCalendar();
 
       expect(addEventsToRectElementsStub.calledOnce).to.equal(true);

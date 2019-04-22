@@ -88,8 +88,6 @@ export const tooltip = () => {
   calendarTooltip.style.padding = '10px';
   calendarTooltip.style.textAlign = 'center';
   calendarTooltip.style.position = 'absolute';
-  calendarTooltip.style.zIndex = '99999';
-
   calendarTooltip.style.display = 'none';
   calendarTooltip.style.left = '0px';
   calendarTooltip.style.top = '0px';
