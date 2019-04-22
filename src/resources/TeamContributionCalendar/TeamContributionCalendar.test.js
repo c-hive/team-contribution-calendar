@@ -246,7 +246,7 @@ describe('TeamContributionCalendar', () => {
         expect(teamContributionCalendar.actualCalendar).to.equal(expectedActualCalendar);
       });
 
-      it('does not add the received contributions to the current total contributions', () => {
+      it('does not increase the total contributions', () => {
         const expectedTotalContributions = teamContributionCalendar.totalContributions;
 
         teamContributionCalendar.updateCalendar(data);
@@ -269,7 +269,7 @@ describe('TeamContributionCalendar', () => {
         expect(teamContributionCalendar.actualCalendar).to.eql(data.updatedActualCalendar);
       });
 
-      it('adds the received contributions to the current total contributions', () => {
+      it('increases the total contributions by the received value', () => {
         const expectedTotalContributions = teamContributionCalendar.totalContributions
           + data.contributions;
 
