@@ -1,15 +1,19 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import jsdom from 'mocha-jsdom';
 import TeamContributionCalendar from './TeamContributionCalendar';
 import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
 import * as GitLabUtils from '../../utils/GitLabUtils/GitLabUtils';
 import * as TestUtils from '../../utils/TestUtils/TestUtils';
-import * as Tooltip from '../../utils/Tooltip/Tooltip';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
 describe('TeamContributionCalendar', () => {
+  jsdom({
+    url: 'https://example.org/',
+  });
+
   const sandbox = sinon.createSandbox();
 
   let teamContributionCalendar;
@@ -60,8 +64,6 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('renderActualCalendar', () => {
-    let addEventsToRectElementsStub;
-
     let appendChildSpy;
     let prependSpy;
 
@@ -86,8 +88,6 @@ describe('TeamContributionCalendar', () => {
       sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
       sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
       sandbox.stub(GetStyledCalendarElement, 'tooltip').returns(calendarTooltip);
-
-      addEventsToRectElementsStub = sandbox.stub(Tooltip, 'addEventsToRectElements');
     });
 
     it('prepends the header to the container', () => {
@@ -104,12 +104,6 @@ describe('TeamContributionCalendar', () => {
       expect(calendarContainer.appendChild.calledWithExactly(
         calendarTooltip,
       )).to.equal(true);
-    });
-
-    it('calls `addEventsToRectElements`', () => {
-      teamContributionCalendar.renderActualCalendar();
-
-      expect(addEventsToRectElementsStub.calledOnce).to.equal(true);
     });
   });
 
