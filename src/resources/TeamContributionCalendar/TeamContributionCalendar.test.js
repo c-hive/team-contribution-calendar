@@ -114,19 +114,9 @@ describe('TeamContributionCalendar', () => {
   describe('renderBasicAppearance', () => {
     let renderActualCalendarStub;
     let getJsonFormattedCalendarSyncStub;
-    let setEmptyCalendarValuesStub;
     let updateCalendarStub;
 
-    const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
-      '2019-01-20': 12,
-    });
-    const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
-      '2019-01-20': 0,
-    });
-
     beforeEach(() => {
-      setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
-
       renderActualCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
       updateCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendar');
     });
@@ -137,7 +127,7 @@ describe('TeamContributionCalendar', () => {
       });
 
       it('calls `updateCalendar` with `isLoading` false', async () => {
-        const expectedCalledCalendarDetails = {
+        const expectedUpdatedCalendarData = {
           isLoading: false,
         };
 
@@ -145,7 +135,7 @@ describe('TeamContributionCalendar', () => {
           await teamContributionCalendar.renderBasicAppearance();
         } catch (err) {
           expect(updateCalendarStub.calledWithExactly(
-            expectedCalledCalendarDetails,
+            expectedUpdatedCalendarData,
           )).to.equal(true);
         }
       });
@@ -162,8 +152,18 @@ describe('TeamContributionCalendar', () => {
     });
 
     describe('when an error has not occurred', () => {
+      let setEmptyCalendarValuesStub;
+
+      const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+        '2019-01-20': 12,
+      });
+      const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+        '2019-01-20': 0,
+      });
+
       beforeEach(() => {
         getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
+        setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
       });
 
       it('renders the default calendar(`BasicCalendar`)', () => {
@@ -190,7 +190,7 @@ describe('TeamContributionCalendar', () => {
       });
 
       it('calls `updateCalendar` with the empty default user calendar and 0 contributions', async () => {
-        const expectedCalledCalendarDetails = {
+        const expectedUpdatedCalendarData = {
           contributions: 0,
           updatedActualCalendar: defaultUserEmptyCalendar,
         };
@@ -198,7 +198,7 @@ describe('TeamContributionCalendar', () => {
         await teamContributionCalendar.renderBasicAppearance();
 
         expect(updateCalendarStub.calledWithExactly(
-          expectedCalledCalendarDetails,
+          expectedUpdatedCalendarData,
         )).to.equal(true);
       });
     });
