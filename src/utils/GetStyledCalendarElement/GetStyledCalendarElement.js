@@ -2,18 +2,28 @@ import $ from 'elly';
 import * as ColorSchemas from '../../resources/ColorSchemas/ColorSchemas';
 import LoaderIcon from '../../resources/assets/SVG/LoaderIcon/LoaderIcon.svg';
 
-export const container = (htmlContainerElement) => {
-  const selectedDOMElement = $(htmlContainerElement);
+export const container = (containerSelector) => {
+  const domElement = $(containerSelector);
 
-  selectedDOMElement.style.width = '700px';
-  selectedDOMElement.style.borderTopLeftRadius = '3px';
-  selectedDOMElement.style.borderTopRightRadius = '3px';
-  selectedDOMElement.style.border = '1px solid #E1E4E8';
-  selectedDOMElement.style.padding = '10px 0 10px 20px';
-  selectedDOMElement.style.margin = '20px auto';
-  selectedDOMElement.style.fontSize = '10px';
+  if (!domElement) {
+    return {
+      error: true,
+      errorMessage: 'Could not find the container element in the DOM.',
+    };
+  }
 
-  return selectedDOMElement;
+  domElement.style.width = '700px';
+  domElement.style.borderTopLeftRadius = '3px';
+  domElement.style.borderTopRightRadius = '3px';
+  domElement.style.border = '1px solid #E1E4E8';
+  domElement.style.padding = '10px 0 10px 20px';
+  domElement.style.margin = '20px auto';
+  domElement.style.fontSize = '10px';
+
+  return {
+    domElement,
+    error: false,
+  };
 };
 
 const getColorElement = (color) => {
