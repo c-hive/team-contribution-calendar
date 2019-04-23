@@ -28,12 +28,12 @@ describe('JavaScriptUtils', () => {
     });
   });
 
-  describe('isResponseSucceeded', () => {
+  describe('isSuccess', () => {
     describe('when `statusCode` is OK', () => {
       const statusCode = 200;
 
       it('returns true', () => {
-        const returnedValue = JavaScriptUtils.isResponseSucceeded(statusCode);
+        const returnedValue = JavaScriptUtils.isSuccess(statusCode);
 
         expect(returnedValue).to.equal(true);
       });
@@ -43,7 +43,7 @@ describe('JavaScriptUtils', () => {
       const statusCode = 204;
 
       it('returns true', () => {
-        const returnedValue = JavaScriptUtils.isResponseSucceeded(statusCode);
+        const returnedValue = JavaScriptUtils.isSuccess(statusCode);
 
         expect(returnedValue).to.equal(true);
       });
@@ -53,7 +53,7 @@ describe('JavaScriptUtils', () => {
       const statusCode = 404;
 
       it('returns false', () => {
-        const returnedValue = JavaScriptUtils.isResponseSucceeded(statusCode);
+        const returnedValue = JavaScriptUtils.isSuccess(statusCode);
 
         expect(returnedValue).to.equal(false);
       });
