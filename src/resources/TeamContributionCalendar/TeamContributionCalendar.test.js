@@ -171,7 +171,7 @@ describe('TeamContributionCalendar', () => {
       )).to.equal(true);
     });
 
-    describe('when an error has occurred', () => {
+    describe('when `GitHubUtils.getJsonFormattedCalendarSync` returns an error', () => {
       const defaultUserData = {
         error: true,
         errorMessage: 'Could not fetch the calendar of the default user.',
@@ -204,7 +204,7 @@ describe('TeamContributionCalendar', () => {
       });
     });
 
-    describe('when an error has not occurred', () => {
+    describe('when `GitHubUtils.getJsonFormattedCalendarSync` does not return any error', () => {
       const defaultUserData = {
         parsedCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts({
           '2019-01-20': 12,
@@ -345,7 +345,7 @@ describe('TeamContributionCalendar', () => {
       processGitHubCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitHubCalendar');
       processGitLabCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitLabCalendar');
 
-      consoleErrorSpy = sandbox.spy(console, 'error');
+      consoleErrorSpy = sandbox.stub(console, 'error').returns({});
     });
 
     describe('GitHub', () => {
@@ -357,7 +357,7 @@ describe('TeamContributionCalendar', () => {
         expect(gitHubGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
       });
 
-      describe('when an error has occurred', () => {
+      describe('when `GitHubUtils.getJsonFormattedCalendarAsync` returns an error', () => {
         const gitHubUsername = 'wrongGitHubUserName';
 
         const gitHubUserData = {
@@ -382,7 +382,7 @@ describe('TeamContributionCalendar', () => {
         });
       });
 
-      describe('when an error has not occurred', () => {
+      describe('when `GitHubUtils.getJsonFormattedCalendarAsync` does not return any error', () => {
         const gitHubUserData = {
           parsedCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts({
             '2019-03-19': 5,
@@ -415,7 +415,7 @@ describe('TeamContributionCalendar', () => {
         expect(gitLabGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
       });
 
-      describe('when an error has occurred', () => {
+      describe('when `GitLabUtils.getJsonFormattedCalendarAsync` returns an error', () => {
         const gitLabUsername = 'wrongGitLabUserName';
 
         const gitLabUserData = {
@@ -438,7 +438,7 @@ describe('TeamContributionCalendar', () => {
         });
       });
 
-      describe('when an error has not occurred', () => {
+      describe('when `GitLabUtils.getJsonFormattedCalendarAsync` does not return any error', () => {
         const gitLabUserData = {
           parsedCalendar: {
             '2018-02-03': 7,
