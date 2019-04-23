@@ -3,25 +3,25 @@ import * as ColorSchemas from '../../resources/ColorSchemas/ColorSchemas';
 import LoaderIcon from '../../resources/assets/SVG/LoaderIcon/LoaderIcon.svg';
 
 export const container = (containerSelector) => {
-  const domElement = $(containerSelector);
+  const selectedElement = $(containerSelector);
 
-  if (!domElement) {
+  if (!selectedElement) {
     return {
       error: true,
       errorMessage: 'Could not find the container element in the DOM.',
     };
   }
 
-  domElement.style.width = '700px';
-  domElement.style.borderTopLeftRadius = '3px';
-  domElement.style.borderTopRightRadius = '3px';
-  domElement.style.border = '1px solid #E1E4E8';
-  domElement.style.padding = '10px 0 10px 20px';
-  domElement.style.margin = '20px auto';
-  domElement.style.fontSize = '10px';
+  selectedElement.style.width = '700px';
+  selectedElement.style.borderTopLeftRadius = '3px';
+  selectedElement.style.borderTopRightRadius = '3px';
+  selectedElement.style.border = '1px solid #E1E4E8';
+  selectedElement.style.padding = '10px 0 10px 20px';
+  selectedElement.style.margin = '20px auto';
+  selectedElement.style.fontSize = '10px';
 
   return {
-    domElement,
+    selectedElement,
     error: false,
   };
 };
