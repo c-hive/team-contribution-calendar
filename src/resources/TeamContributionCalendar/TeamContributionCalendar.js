@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { stringify } from 'svgson';
 import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
@@ -27,63 +29,88 @@ export default class TeamContributionCalendar {
   async renderBasicAppearance() {
     this.renderActualCalendar();
 
-    const defaultUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarSync(
+    const defaultUserData = await GitHubUtils.getJsonFormattedCalendarSync(
       this.configs.proxyServerUrl, DefaultUsers.GitHub,
     );
 
-    const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(defaultUserJsonCalendar);
+    if (defaultUserData.error) {
+      this.updateCalendar({
+        isLoading: false,
+      });
 
-    this.updateCalendar({
-      contributions: 0,
-      updatedActualCalendar: defaultUserEmptyCalendar,
-    });
+      throw new Error(defaultUserData.errorMessage);
+    } else {
+      const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(
+        defaultUserData.parsedCalendar,
+      );
+
+      this.updateCalendar({
+        contributions: 0,
+        updatedActualCalendar: defaultUserEmptyCalendar,
+      });
+    }
   }
 
   updateCalendar(data) {
-    const { contributions, updatedActualCalendar } = data;
-
     if (JavaScriptUtils.isDefined(data.isLoading)) {
       this.isLoading = data.isLoading;
     }
 
-    this.actualCalendar = {
-      ...updatedActualCalendar,
-    };
+    if (JavaScriptUtils.isDefined(data.updatedActualCalendar)) {
+      const { contributions, updatedActualCalendar } = data;
 
-    this.totalContributions = this.totalContributions + contributions;
+      this.actualCalendar = {
+        ...updatedActualCalendar,
+      };
+
+      this.totalContributions = this.totalContributions + contributions;
+    }
 
     this.renderActualCalendar();
   }
 
   renderActualCalendar() {
-    const calendarContainer = GetStyledCalendarElement.container(this.configs.container);
+    const containerData = GetStyledCalendarElement.container(this.configs.container);
+
+    if (containerData.error) {
+      throw new Error(containerData.errorMessage);
+    }
+
     const calendarHeader = GetStyledCalendarElement.header(this.totalContributions, this.isLoading);
     const calendarTooltip = GetStyledCalendarElement.tooltip();
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
-    calendarContainer.innerHTML = stringifiedHTMLContent;
-    calendarContainer.prepend(calendarHeader);
-    calendarContainer.appendChild(calendarTooltip);
+    containerData.selectedElement.innerHTML = stringifiedHTMLContent;
+    containerData.selectedElement.prepend(calendarHeader);
+    containerData.selectedElement.appendChild(calendarTooltip);
 
     Tooltip.addEventsToRectElements();
   }
 
   aggregateUserCalendars() {
     this.users.gitHub.map(async (gitHubUsername) => {
-      const gitHubUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarAsync(
+      const gitHubUserData = await GitHubUtils.getJsonFormattedCalendarAsync(
         this.configs.proxyServerUrl, gitHubUsername,
       );
 
-      this.processGitHubCalendar(gitHubUserJsonCalendar);
+      if (gitHubUserData.error) {
+        console.error(gitHubUserData.errorMessage);
+      } else {
+        this.processGitHubCalendar(gitHubUserData.parsedCalendar);
+      }
     });
 
     this.users.gitLab.map(async (gitLabUsername) => {
-      const gitLabUserJsonCalendar = await GitLabUtils.getJsonFormattedCalendarAsync(
+      const gitLabUserData = await GitLabUtils.getJsonFormattedCalendarAsync(
         this.configs.proxyServerUrl, gitLabUsername,
       );
 
-      this.processGitLabCalendar(gitLabUserJsonCalendar);
+      if (gitLabUserData.error) {
+        console.error(gitLabUserData.errorMessage);
+      } else {
+        this.processGitLabCalendar(gitLabUserData.parsedCalendar);
+      }
     });
   }
 
