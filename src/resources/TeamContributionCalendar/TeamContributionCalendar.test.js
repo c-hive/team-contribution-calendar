@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import jsdom from 'mocha-jsdom';
 import TeamContributionCalendar from './TeamContributionCalendar';
 import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
@@ -9,6 +10,10 @@ import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
 describe('TeamContributionCalendar', () => {
+  jsdom({
+    url: 'https://example.org/',
+  });
+
   const sandbox = sinon.createSandbox();
 
   let teamContributionCalendar;
@@ -59,14 +64,12 @@ describe('TeamContributionCalendar', () => {
   });
 
   describe('renderActualCalendar', () => {
-    let containerStub;
-    let headerStub;
-
     let appendChildSpy;
     let prependSpy;
 
     let calendarContainer;
     let calendarHeader;
+    let calendarTooltip;
 
     beforeEach(() => {
       appendChildSpy = sandbox.spy();
@@ -74,6 +77,7 @@ describe('TeamContributionCalendar', () => {
 
       calendarContainer = {
         prepend: prependSpy,
+        appendChild: appendChildSpy,
         innerHTML: null,
       };
 
@@ -81,25 +85,9 @@ describe('TeamContributionCalendar', () => {
         appendChild: appendChildSpy,
       };
 
-      containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
-      headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
-    });
-
-    it('renders the styled container into the given element', () => {
-      teamContributionCalendar.renderActualCalendar();
-
-      expect(containerStub.calledWithExactly(
-        teamContributionCalendar.configs.container,
-      )).to.equal(true);
-    });
-
-    it('gets the styled calendar header', () => {
-      teamContributionCalendar.renderActualCalendar();
-
-      expect(headerStub.calledWithExactly(
-        teamContributionCalendar.totalContributions,
-        teamContributionCalendar.isLoading,
-      )).to.equal(true);
+      sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
+      sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
+      sandbox.stub(GetStyledCalendarElement, 'tooltip').returns(calendarTooltip);
     });
 
     it('prepends the header to the container', () => {
@@ -107,6 +95,14 @@ describe('TeamContributionCalendar', () => {
 
       expect(calendarContainer.prepend.calledWithExactly(
         calendarHeader,
+      )).to.equal(true);
+    });
+
+    it('appends the tooltip element to the container', () => {
+      teamContributionCalendar.renderActualCalendar();
+
+      expect(calendarContainer.appendChild.calledWithExactly(
+        calendarTooltip,
       )).to.equal(true);
     });
   });

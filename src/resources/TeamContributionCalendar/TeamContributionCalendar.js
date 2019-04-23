@@ -3,6 +3,7 @@ import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
 import * as GitLabUtils from '../../utils/GitLabUtils/GitLabUtils';
 import * as JavaScriptUtils from '../../utils/JavaScriptUtils/JavaScriptUtils';
+import * as Tooltip from '../../utils/Tooltip/Tooltip';
 import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
 import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
 
@@ -57,11 +58,15 @@ export default class TeamContributionCalendar {
   renderActualCalendar() {
     const calendarContainer = GetStyledCalendarElement.container(this.configs.container);
     const calendarHeader = GetStyledCalendarElement.header(this.totalContributions, this.isLoading);
+    const calendarTooltip = GetStyledCalendarElement.tooltip();
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
     calendarContainer.innerHTML = stringifiedHTMLContent;
     calendarContainer.prepend(calendarHeader);
+    calendarContainer.appendChild(calendarTooltip);
+
+    Tooltip.addEventsToRectElements();
   }
 
   aggregateUserCalendars() {
