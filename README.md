@@ -12,7 +12,15 @@ Status and support
 
 ### Usage
 
-Include the script in the desired file.
+#### NPM
+
+```
+npm install --save @c-hive/team-contribution-calendar
+```
+
+#### CDN
+
+
 ```html
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar/dist/team-contribution-calendar.min.js">
 </script>
@@ -31,7 +39,20 @@ Required params:
 Optional param:
 - `proxyServerUrl`: CORS proxy url(we serve one by default).
 
-Examples:
+#### Examples
+
+##### NPM
+
+```script
+import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
+
+const container = document.getElementById('container');
+
+// For further examples, see the CDN section below.
+TeamContributionCalendar(container, ['gh_username'], []);
+```
+
+##### CDN
 
 ```html
 <div class="container"></div>
