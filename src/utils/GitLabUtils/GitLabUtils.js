@@ -49,7 +49,7 @@ export const getJsonFormattedCalendarAsync = async (proxyServerUrl, gitLabUserna
   const url = Proxy.getGitLabProxyUrl(proxyServerUrl, gitLabUsername);
   const responseData = await fetch(url);
 
-  if (JavaScriptUtils.isResponseSucceeded(responseData.status)) {
+  if (JavaScriptUtils.isSuccess(responseData.status)) {
     return responseData.json()
       .then(parsedCalendar => ({
         parsedCalendar,

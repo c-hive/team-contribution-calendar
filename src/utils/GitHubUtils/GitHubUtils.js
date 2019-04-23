@@ -9,7 +9,7 @@ const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
   const userUrl = Proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
   const responseData = await fetch(userUrl);
 
-  if (JavaScriptUtils.isResponseSucceeded(responseData.status)) {
+  if (JavaScriptUtils.isSuccess(responseData.status)) {
     return responseData.text()
       .then((body) => {
         const div = document.createElement('div');
