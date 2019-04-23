@@ -43,7 +43,7 @@ Optional param:
 
 ##### NPM
 
-```script
+```javascript
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
 
 const container = document.getElementById('container');
