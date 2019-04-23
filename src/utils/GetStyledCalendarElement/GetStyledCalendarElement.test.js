@@ -16,10 +16,10 @@ describe('GetStyledCalendarElement', () => {
   });
 
   describe('container', () => {
-    it('returns a 700px width element', () => {
-      const calendarContainer = GetStyledCalendarElement.container('.class');
+    it('returns a 700px element', () => {
+      const containerData = GetStyledCalendarElement.container('.class');
 
-      expect(calendarContainer.style.width).to.equal('700px');
+      expect(containerData.selectedElement.style.width).to.equal('700px');
     });
   });
 

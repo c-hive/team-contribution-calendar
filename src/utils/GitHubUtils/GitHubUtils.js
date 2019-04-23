@@ -9,14 +9,24 @@ const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
   const userUrl = Proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
   const responseData = await fetch(userUrl);
 
-  return responseData.text()
-    .then((body) => {
-      const div = document.createElement('div');
-      div.innerHTML = body;
-      const rawUserSVG = div.querySelector('.js-calendar-graph-svg');
+  if (JavaScriptUtils.isSuccess(responseData.status)) {
+    return responseData.text()
+      .then((body) => {
+        const div = document.createElement('div');
+        div.innerHTML = body;
+        const rawUserSvg = div.querySelector('.js-calendar-graph-svg');
 
-      return rawUserSVG;
-    }).catch(err => console.log(err));
+        return {
+          rawUserSvg,
+          error: false,
+        };
+      });
+  }
+
+  return {
+    rawUserSvg: null,
+    error: true,
+  };
 };
 
 export const setEmptyCalendarValues = (calendar) => {
@@ -72,15 +82,38 @@ export const getLastYearContributions = (userCalendar) => {
 };
 
 export const getJsonFormattedCalendarSync = async (proxyServerUrl, gitHubUsername) => {
-  const userSvg = await getUserSvg(proxyServerUrl, gitHubUsername);
+  const userData = await getUserSvg(proxyServerUrl, gitHubUsername);
 
-  return parseSync(userSvg.outerHTML);
+  if (userData.error) {
+    return {
+      ...userData,
+      errorMessage: 'Could not fetch the calendar of the default user.',
+    };
+  }
+
+  const parsedCalendar = parseSync(userData.rawUserSvg.outerHTML);
+
+  return {
+    parsedCalendar,
+    error: false,
+    errorMessage: null,
+  };
 };
 
 export const getJsonFormattedCalendarAsync = async (proxyServerUrl, gitHubUsername) => {
-  const rawUserSvg = await getUserSvg(proxyServerUrl, gitHubUsername);
+  const userData = await getUserSvg(proxyServerUrl, gitHubUsername);
 
-  return parse(rawUserSvg.outerHTML)
-    .then(parsedGitHubCalendar => parsedGitHubCalendar)
-    .catch(err => console.log(err));
+  if (userData.error) {
+    return {
+      ...userData,
+      errorMessage: `Could not fetch the calendar of ${gitHubUsername}.`,
+    };
+  }
+
+  return parse(userData.rawUserSvg.outerHTML)
+    .then(parsedGitHubCalendar => ({
+      parsedCalendar: parsedGitHubCalendar,
+      error: false,
+      errorMessage: null,
+    }));
 };
