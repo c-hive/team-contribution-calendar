@@ -9,24 +9,24 @@ const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
   const userUrl = Proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
   const responseData = await fetch(userUrl);
 
-  if (responseData.status === 404) {
-    return {
-      rawUserSvg: null,
-      error: true,
-    };
+  if (JavaScriptUtils.isResponseSucceeded(responseData.status)) {
+    return responseData.text()
+      .then((body) => {
+        const div = document.createElement('div');
+        div.innerHTML = body;
+        const rawUserSvg = div.querySelector('.js-calendar-graph-svg');
+
+        return {
+          rawUserSvg,
+          error: false,
+        };
+      });
   }
 
-  return responseData.text()
-    .then((body) => {
-      const div = document.createElement('div');
-      div.innerHTML = body;
-      const rawUserSvg = div.querySelector('.js-calendar-graph-svg');
-
-      return {
-        rawUserSvg,
-        error: false,
-      };
-    });
+  return {
+    rawUserSvg: null,
+    error: true,
+  };
 };
 
 export const setEmptyCalendarValues = (calendar) => {

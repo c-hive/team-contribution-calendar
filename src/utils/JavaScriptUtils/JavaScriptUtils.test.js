@@ -27,4 +27,36 @@ describe('JavaScriptUtils', () => {
       });
     });
   });
+
+  describe('isResponseSucceeded', () => {
+    describe('when `statusCode` is OK', () => {
+      const statusCode = 200;
+
+      it('returns true', () => {
+        const returnedValue = JavaScriptUtils.isResponseSucceeded(statusCode);
+
+        expect(returnedValue).to.equal(true);
+      });
+    });
+
+    describe('when `statusCode` is NO_CONTENT', () => {
+      const statusCode = 204;
+
+      it('returns true', () => {
+        const returnedValue = JavaScriptUtils.isResponseSucceeded(statusCode);
+
+        expect(returnedValue).to.equal(true);
+      });
+    });
+
+    describe('when `statusCode` is neither of the codes above', () => {
+      const statusCode = 404;
+
+      it('returns false', () => {
+        const returnedValue = JavaScriptUtils.isResponseSucceeded(statusCode);
+
+        expect(returnedValue).to.equal(false);
+      });
+    });
+  });
 });
