@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { stringify } from 'svgson';
 import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
 import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
@@ -37,12 +39,12 @@ export default class TeamContributionCalendar {
         contributions: 0,
         updatedActualCalendar: defaultUserEmptyCalendar,
       });
-    } catch {
+    } catch (err) {
       this.updateCalendar({
         isLoading: false,
       });
 
-      throw new Error('Could not load the calendar of the default user. The issue might be related to the cors-proxy server.');
+      throw new Error(`Could not load the calendar of the default user. Error: ${err.message}`);
     }
   }
 
@@ -76,11 +78,15 @@ export default class TeamContributionCalendar {
 
   aggregateUserCalendars() {
     this.users.gitHub.map(async (gitHubUsername) => {
-      const gitHubUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarAsync(
-        this.configs.proxyServerUrl, gitHubUsername,
-      );
+      try {
+        const gitHubUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarAsync(
+          this.configs.proxyServerUrl, gitHubUsername,
+        );
 
-      this.processGitHubCalendar(gitHubUserJsonCalendar);
+        this.processGitHubCalendar(gitHubUserJsonCalendar);
+      } catch (err) {
+        console.error(`Could not fetch the calendar of ${gitHubUsername}. Error: ${err.message}`);
+      }
     });
 
     this.users.gitLab.map(async (gitLabUsername) => {
@@ -88,7 +94,11 @@ export default class TeamContributionCalendar {
         this.configs.proxyServerUrl, gitLabUsername,
       );
 
-      this.processGitLabCalendar(gitLabUserJsonCalendar);
+      if (JavaScriptUtils.isDefined(gitLabUserJsonCalendar.error)) {
+        console.error(`Could not fetch the calendar of ${gitLabUsername}.`);
+      } else {
+        this.processGitLabCalendar(gitLabUserJsonCalendar);
+      }
     });
   }
 
