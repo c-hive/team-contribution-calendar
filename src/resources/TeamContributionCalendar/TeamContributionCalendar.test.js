@@ -89,14 +89,14 @@ describe('TeamContributionCalendar', () => {
 
       let calendarHeader;
 
-      let containerData = null;
+      let containerData;
 
       beforeEach(() => {
         appendChildSpy = sandbox.spy();
         prependSpy = sandbox.spy();
 
         containerData = {
-          domElement: {
+          selectedElement: {
             prepend: prependSpy,
             innerHTML: null,
           },
@@ -132,7 +132,7 @@ describe('TeamContributionCalendar', () => {
       it('prepends the header to the container', () => {
         teamContributionCalendar.renderActualCalendar();
 
-        expect(containerData.domElement.prepend.calledWithExactly(
+        expect(containerData.selectedElement.prepend.calledWithExactly(
           calendarHeader,
         )).to.equal(true);
       });

@@ -79,8 +79,8 @@ export default class TeamContributionCalendar {
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
-    containerData.domElement.innerHTML = stringifiedHTMLContent;
-    containerData.domElement.prepend(calendarHeader);
+    containerData.selectedElement.innerHTML = stringifiedHTMLContent;
+    containerData.selectedElement.prepend(calendarHeader);
   }
 
   aggregateUserCalendars() {

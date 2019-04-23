@@ -19,7 +19,7 @@ describe('GetStyledCalendarElement', () => {
     it('returns a 700px element', () => {
       const containerData = GetStyledCalendarElement.container('.class');
 
-      expect(containerData.domElement.style.width).to.equal('700px');
+      expect(containerData.selectedElement.style.width).to.equal('700px');
     });
   });
 
