@@ -86,3 +86,49 @@ export const header = (totalContributions, isLoading) => {
 
   return calendarHeader;
 };
+
+export const tooltip = () => {
+  const calendarTooltip = document.createElement('DIV');
+
+  calendarTooltip.id = 'tooltip';
+
+  calendarTooltip.style.background = 'rgba(0, 0, 0, 0.8)';
+  calendarTooltip.style.borderRadius = '3px';
+  calendarTooltip.style.fontSize = '12px';
+  calendarTooltip.style.padding = '10px';
+  calendarTooltip.style.textAlign = 'center';
+  calendarTooltip.style.position = 'absolute';
+  calendarTooltip.style.display = 'none';
+  calendarTooltip.style.left = '0px';
+  calendarTooltip.style.top = '0px';
+
+  return calendarTooltip;
+};
+
+const getDateText = (date) => {
+  const dateText = document.createElement('SPAN');
+
+  dateText.style.color = '#959DA5';
+  dateText.style.fontWeight = 'normal';
+  dateText.innerText = ` on ${date}`;
+
+  return dateText;
+};
+
+export const contributionsWithDateText = (contributions, date) => {
+  const tooltipInnerText = document.createElement('SPAN');
+
+  tooltipInnerText.style.color = '#FFFFFF';
+  tooltipInnerText.style.fontWeight = 'bold';
+  tooltipInnerText.innerText = 'No contributions';
+
+  if (contributions > 0) {
+    tooltipInnerText.innerText = `${contributions} contributions`;
+  }
+
+  const dateText = getDateText(date);
+
+  tooltipInnerText.appendChild(dateText);
+
+  return tooltipInnerText;
+};
