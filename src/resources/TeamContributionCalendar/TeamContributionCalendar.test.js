@@ -60,74 +60,125 @@ describe('TeamContributionCalendar', () => {
 
   describe('renderActualCalendar', () => {
     let containerStub;
-    let headerStub;
-
-    let appendChildSpy;
-    let prependSpy;
-
-    let calendarContainer;
-    let calendarHeader;
 
     beforeEach(() => {
-      appendChildSpy = sandbox.spy();
-      prependSpy = sandbox.spy();
+      containerStub = sandbox.stub(GetStyledCalendarElement, 'container');
+    });
 
-      calendarContainer = {
-        prepend: prependSpy,
-        innerHTML: null,
+    describe('when `GetStyledCalendarElement.container` returns an error', () => {
+      const containerData = {
+        error: true,
+        errorMessage: 'Could not find the container element in the DOM.',
       };
 
-      calendarHeader = {
-        appendChild: appendChildSpy,
-      };
+      beforeEach(() => {
+        containerStub.returns(containerData);
+      });
 
-      containerStub = sandbox.stub(GetStyledCalendarElement, 'container').returns(calendarContainer);
-      headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
+      it('throws the error message', () => {
+        expect(() => teamContributionCalendar.renderActualCalendar())
+          .to.throw(containerData.errorMessage);
+      });
     });
 
-    it('renders the styled container into the given element', () => {
-      teamContributionCalendar.renderActualCalendar();
+    describe('when `GetStyledCalendarElement.container` does not return any error', () => {
+      let headerStub;
 
-      expect(containerStub.calledWithExactly(
-        teamContributionCalendar.configs.container,
-      )).to.equal(true);
-    });
+      let appendChildSpy;
+      let prependSpy;
 
-    it('gets the styled calendar header', () => {
-      teamContributionCalendar.renderActualCalendar();
+      let calendarHeader;
 
-      expect(headerStub.calledWithExactly(
-        teamContributionCalendar.totalContributions,
-        teamContributionCalendar.isLoading,
-      )).to.equal(true);
-    });
+      let containerData = null;
 
-    it('prepends the header to the container', () => {
-      teamContributionCalendar.renderActualCalendar();
+      beforeEach(() => {
+        appendChildSpy = sandbox.spy();
+        prependSpy = sandbox.spy();
 
-      expect(calendarContainer.prepend.calledWithExactly(
-        calendarHeader,
-      )).to.equal(true);
+        containerData = {
+          domElement: {
+            prepend: prependSpy,
+            innerHTML: null,
+          },
+          error: false,
+          errorMessage: null,
+        };
+
+        calendarHeader = {
+          appendChild: appendChildSpy,
+        };
+
+        containerStub.returns(containerData);
+        headerStub = sandbox.stub(GetStyledCalendarElement, 'header').returns(calendarHeader);
+      });
+
+      it('renders the styled container into the given element', () => {
+        teamContributionCalendar.renderActualCalendar();
+
+        expect(containerStub.calledWithExactly(
+          teamContributionCalendar.configs.container,
+        )).to.equal(true);
+      });
+
+      it('gets the styled calendar header', () => {
+        teamContributionCalendar.renderActualCalendar();
+
+        expect(headerStub.calledWithExactly(
+          teamContributionCalendar.totalContributions,
+          teamContributionCalendar.isLoading,
+        )).to.equal(true);
+      });
+
+      it('prepends the header to the container', () => {
+        teamContributionCalendar.renderActualCalendar();
+
+        expect(containerData.domElement.prepend.calledWithExactly(
+          calendarHeader,
+        )).to.equal(true);
+      });
     });
   });
 
   describe('renderBasicAppearance', () => {
     let renderActualCalendarStub;
     let getJsonFormattedCalendarSyncStub;
+    let setEmptyCalendarValuesStub;
     let updateCalendarStub;
 
     beforeEach(() => {
+      getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns({
+        error: false,
+      });
+
+      setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues');
+
       renderActualCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'renderActualCalendar');
       updateCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'updateCalendar');
     });
 
+    it('renders the default calendar(`BasicCalendar`)', () => {
+      teamContributionCalendar.renderBasicAppearance();
+
+      expect(renderActualCalendarStub.calledOnce).to.equal(true);
+    });
+
+    it('fetches the default GH user`s calendar synchronously', async () => {
+      await teamContributionCalendar.renderBasicAppearance();
+
+      expect(getJsonFormattedCalendarSyncStub.calledWithExactly(
+        teamContributionCalendar.configs.proxyServerUrl,
+        DefaultUsers.GitHub,
+      )).to.equal(true);
+    });
+
     describe('when an error has occurred', () => {
-      const error = {
-        message: 'Cannot read property outerHTML of null',
+      const defaultUserData = {
+        error: true,
+        errorMessage: 'Could not fetch the calendar of the default user.',
       };
 
       beforeEach(() => {
-        getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').throws(error);
+        getJsonFormattedCalendarSyncStub.returns(defaultUserData);
       });
 
       it('calls `updateCalendar` with `isLoading` false', async () => {
@@ -137,7 +188,7 @@ describe('TeamContributionCalendar', () => {
 
         try {
           await teamContributionCalendar.renderBasicAppearance();
-        } catch (err) {
+        } catch {
           expect(updateCalendarStub.calledWithExactly(
             expectedUpdatedCalendarData,
           )).to.equal(true);
@@ -145,51 +196,37 @@ describe('TeamContributionCalendar', () => {
       });
 
       it('throws the error message', async () => {
-        const expectedErrorMessage = `Could not load the calendar of the default user. Error: ${error.message}`;
-
         try {
           await teamContributionCalendar.renderBasicAppearance();
         } catch (err) {
-          expect(err.message).to.equal(expectedErrorMessage);
+          expect(err.message).to.equal(defaultUserData.errorMessage);
         }
       });
     });
 
     describe('when an error has not occurred', () => {
-      let setEmptyCalendarValuesStub;
+      const defaultUserData = {
+        parsedCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts({
+          '2019-01-20': 12,
+        }),
+        error: false,
+        errorMessage: null,
+      };
 
-      const defaultUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
-        '2019-01-20': 12,
-      });
       const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
         '2019-01-20': 0,
       });
 
       beforeEach(() => {
-        getJsonFormattedCalendarSyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarSync').returns(defaultUserJsonCalendar);
-        setEmptyCalendarValuesStub = sandbox.stub(GitHubUtils, 'setEmptyCalendarValues').returns(defaultUserEmptyCalendar);
-      });
-
-      it('renders the default calendar(`BasicCalendar`)', () => {
-        teamContributionCalendar.renderBasicAppearance();
-
-        expect(renderActualCalendarStub.calledOnce).to.equal(true);
-      });
-
-      it('fetches the default GH user`s calendar synchronously', async () => {
-        await teamContributionCalendar.renderBasicAppearance();
-
-        expect(getJsonFormattedCalendarSyncStub.calledWithExactly(
-          teamContributionCalendar.configs.proxyServerUrl,
-          DefaultUsers.GitHub,
-        )).to.equal(true);
+        getJsonFormattedCalendarSyncStub.returns(defaultUserData);
+        setEmptyCalendarValuesStub.returns(defaultUserEmptyCalendar);
       });
 
       it('sets the fetched default GH user`s calendar values to empty ones', async () => {
         await teamContributionCalendar.renderBasicAppearance();
 
         expect(setEmptyCalendarValuesStub.calledWithExactly(
-          defaultUserJsonCalendar,
+          defaultUserData.parsedCalendar,
         )).to.equal(true);
       });
 
@@ -302,8 +339,8 @@ describe('TeamContributionCalendar', () => {
     let consoleErrorSpy;
 
     beforeEach(() => {
-      gitHubGetJsonFormattedCalendarAsyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarAsync');
-      gitLabGetJsonFormattedCalendarAsyncStub = sandbox.stub(GitLabUtils, 'getJsonFormattedCalendarAsync');
+      gitHubGetJsonFormattedCalendarAsyncStub = sandbox.stub(GitHubUtils, 'getJsonFormattedCalendarAsync').returns({ error: false });
+      gitLabGetJsonFormattedCalendarAsyncStub = sandbox.stub(GitLabUtils, 'getJsonFormattedCalendarAsync').returns({ error: false });
 
       processGitHubCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitHubCalendar');
       processGitLabCalendarStub = sandbox.stub(TeamContributionCalendar.prototype, 'processGitLabCalendar');
@@ -312,104 +349,114 @@ describe('TeamContributionCalendar', () => {
     });
 
     describe('GitHub', () => {
+      it('fetches the GH user calendars asynchronously', () => {
+        const expectedCalledTimes = teamContributionCalendar.users.gitHub.length;
+
+        teamContributionCalendar.aggregateUserCalendars();
+
+        expect(gitHubGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+      });
+
       describe('when an error has occurred', () => {
-        const error = {
-          message: 'Cannot read property outerHTML of null',
+        const gitHubUsername = 'wrongGitHubUserName';
+
+        const gitHubUserData = {
+          error: true,
+          errorMessage: `Could not fetch the calendar of ${gitHubUsername}.`,
         };
 
         beforeEach(() => {
-          teamContributionCalendar.users.gitHubUsers = ['wrongGitHubUserName'];
+          teamContributionCalendar.users.gitHubUsers = [gitHubUsername];
 
-          gitHubGetJsonFormattedCalendarAsyncStub.throws(error);
+          gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserData);
         });
 
         it('logs the error to the console', () => {
-          const expectedErrorMessage = `Could not fetch the calendar of ${teamContributionCalendar.users.gitHubUsers[0]}. Error: ${error.message}`;
-
           try {
             teamContributionCalendar.aggregateUserCalendars();
           } catch (err) {
             expect(consoleErrorSpy.calledWithExactly(
-              expectedErrorMessage,
+              gitHubUserData.errorMessage,
             )).to.equal(true);
           }
         });
       });
 
       describe('when an error has not occurred', () => {
-        const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
-          '2019-03-19': 5,
-          '2019-03-20': 5,
-        });
+        const gitHubUserData = {
+          parsedCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts({
+            '2019-03-19': 5,
+            '2019-03-20': 5,
+          }),
+          error: false,
+          errorMessage: null,
+        };
 
         beforeEach(() => {
-          gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserJsonCalendar);
-        });
-
-        it('fetches the GH user calendars asynchronously', () => {
-          const expectedCalledTimes = teamContributionCalendar.users.gitHub.length;
-
-          teamContributionCalendar.aggregateUserCalendars();
-
-          expect(gitHubGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+          gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserData);
         });
 
         it('processes the fetched GH user calendars', async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(processGitHubCalendarStub.calledWithExactly(
-            gitHubUserJsonCalendar,
+            gitHubUserData.parsedCalendar,
           )).to.equal(true);
         });
       });
     });
 
     describe('GitLab', () => {
-      describe('when the response message contains the `error` property', () => {
-        const gitLabuserJsonCalendar = {
-          error: 'You need to sign in or sign up before continuing',
+      it('fetches the GL user calendars asynchronously', () => {
+        const expectedCalledTimes = teamContributionCalendar.users.gitLab.length;
+
+        teamContributionCalendar.aggregateUserCalendars();
+
+        expect(gitLabGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+      });
+
+      describe('when an error has occurred', () => {
+        const gitLabUsername = 'wrongGitLabUserName';
+
+        const gitLabUserData = {
+          error: true,
+          errorMessage: `Could not fetch the calendar of ${gitLabUsername}.`,
         };
 
         beforeEach(() => {
-          teamContributionCalendar.users.gitLab = ['wrongGitLabUserName'];
+          teamContributionCalendar.users.gitLab = [gitLabUsername];
 
-          gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabuserJsonCalendar);
+          gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserData);
         });
 
         it('logs the error to the console', async () => {
-          const expectedErrorMessage = `Could not fetch the calendar of ${teamContributionCalendar.users.gitLab[0]}.`;
-
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(consoleErrorSpy.calledWithExactly(
-            expectedErrorMessage,
+            gitLabUserData.errorMessage,
           )).to.equal(true);
         });
       });
 
-      describe('when the response message does not contain the `error` property', () => {
-        const gitLabUserJsonCalendar = {
-          '2018-02-03': 7,
-          '2018-02-09': 3,
+      describe('when an error has not occurred', () => {
+        const gitLabUserData = {
+          parsedCalendar: {
+            '2018-02-03': 7,
+            '2018-02-09': 3,
+          },
+          error: false,
+          errorMessage: null,
         };
 
         beforeEach(() => {
-          gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserJsonCalendar);
-        });
-
-        it('fetches the GL user calendars asynchronously', () => {
-          const expectedCalledTimes = teamContributionCalendar.users.gitLab.length;
-
-          teamContributionCalendar.aggregateUserCalendars();
-
-          expect(gitLabGetJsonFormattedCalendarAsyncStub.callCount).to.equal(expectedCalledTimes);
+          gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserData);
         });
 
         it('processes the fetched GL user calendars', async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(processGitLabCalendarStub.calledWithExactly(
-            gitLabUserJsonCalendar,
+            gitLabUserData.parsedCalendar,
           )).to.equal(true);
         });
       });

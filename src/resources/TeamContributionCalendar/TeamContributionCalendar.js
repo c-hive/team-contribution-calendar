@@ -28,23 +28,25 @@ export default class TeamContributionCalendar {
   async renderBasicAppearance() {
     this.renderActualCalendar();
 
-    try {
-      const defaultUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarSync(
-        this.configs.proxyServerUrl, DefaultUsers.GitHub,
-      );
+    const defaultUserData = await GitHubUtils.getJsonFormattedCalendarSync(
+      this.configs.proxyServerUrl, DefaultUsers.GitHub,
+    );
 
-      const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(defaultUserJsonCalendar);
+    if (defaultUserData.error) {
+      this.updateCalendar({
+        isLoading: false,
+      });
+
+      throw new Error(defaultUserData.errorMessage);
+    } else {
+      const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(
+        defaultUserData.parsedCalendar,
+      );
 
       this.updateCalendar({
         contributions: 0,
         updatedActualCalendar: defaultUserEmptyCalendar,
       });
-    } catch (err) {
-      this.updateCalendar({
-        isLoading: false,
-      });
-
-      throw new Error(`Could not load the calendar of the default user. Error: ${err.message}`);
     }
   }
 
@@ -67,37 +69,42 @@ export default class TeamContributionCalendar {
   }
 
   renderActualCalendar() {
-    const calendarContainer = GetStyledCalendarElement.container(this.configs.container);
+    const containerData = GetStyledCalendarElement.container(this.configs.container);
+
+    if (containerData.error) {
+      throw new Error(containerData.errorMessage);
+    }
+
     const calendarHeader = GetStyledCalendarElement.header(this.totalContributions, this.isLoading);
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
-    calendarContainer.innerHTML = stringifiedHTMLContent;
-    calendarContainer.prepend(calendarHeader);
+    containerData.domElement.innerHTML = stringifiedHTMLContent;
+    containerData.domElement.prepend(calendarHeader);
   }
 
   aggregateUserCalendars() {
     this.users.gitHub.map(async (gitHubUsername) => {
-      try {
-        const gitHubUserJsonCalendar = await GitHubUtils.getJsonFormattedCalendarAsync(
-          this.configs.proxyServerUrl, gitHubUsername,
-        );
+      const gitHubUserData = await GitHubUtils.getJsonFormattedCalendarAsync(
+        this.configs.proxyServerUrl, gitHubUsername,
+      );
 
-        this.processGitHubCalendar(gitHubUserJsonCalendar);
-      } catch (err) {
-        console.error(`Could not fetch the calendar of ${gitHubUsername}. Error: ${err.message}`);
+      if (gitHubUserData.error) {
+        console.error(gitHubUserData.errorMessage);
+      } else {
+        this.processGitHubCalendar(gitHubUserData.parsedCalendar);
       }
     });
 
     this.users.gitLab.map(async (gitLabUsername) => {
-      const gitLabUserJsonCalendar = await GitLabUtils.getJsonFormattedCalendarAsync(
+      const gitLabUserData = await GitLabUtils.getJsonFormattedCalendarAsync(
         this.configs.proxyServerUrl, gitLabUsername,
       );
 
-      if (JavaScriptUtils.isDefined(gitLabUserJsonCalendar.error)) {
-        console.error(`Could not fetch the calendar of ${gitLabUsername}.`);
+      if (gitLabUserData.error) {
+        console.error(gitLabUserData.errorMessage);
       } else {
-        this.processGitLabCalendar(gitLabUserJsonCalendar);
+        this.processGitLabCalendar(gitLabUserData.parsedCalendar);
       }
     });
   }

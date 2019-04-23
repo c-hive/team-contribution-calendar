@@ -47,9 +47,19 @@ export const getLastYearContributions = (userJsonCalendar) => {
 
 export const getJsonFormattedCalendarAsync = async (proxyServerUrl, gitLabUsername) => {
   const url = Proxy.getGitLabProxyUrl(proxyServerUrl, gitLabUsername);
-  const userCalendar = await fetch(url);
+  const responseData = await fetch(url);
 
-  return userCalendar.json()
-    .then(parsedUserCalendar => parsedUserCalendar)
-    .catch(err => console.log(err));
+  if (responseData.status === 401) {
+    return {
+      error: true,
+      errorMessage: `Could not fetch the calendar of ${gitLabUsername}.`,
+    };
+  }
+
+  return responseData.json()
+    .then(parsedCalendar => ({
+      parsedCalendar,
+      error: false,
+      errorMessage: null,
+    }));
 };
