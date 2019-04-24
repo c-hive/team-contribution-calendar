@@ -23,4 +23,5 @@ jobs:
       script:
         - yarn run build
         - bash ./scripts/distify.sh
-  after_success: yarn run coveralls
+after_success:
+  - yarn run coveralls
