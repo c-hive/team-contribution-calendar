@@ -6,7 +6,7 @@
 
 Status and support
 
-- &#x2716; work in progress
+- &#x2716; not stable
 - &#x2714; supported
 - &#x2714; ongoing development
 
