@@ -10,7 +10,9 @@ Status and support
 - &#x2714; supported
 - &#x2714; ongoing development
 
+<!--- Version information -->
 *You are viewing the README of the development version. There are no releases yet.*
+<!--- Version information end -->
 
 | Branch | Status |
 | ------ | ------ |
