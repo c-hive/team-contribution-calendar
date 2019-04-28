@@ -47,7 +47,6 @@
     "ignore-styles": "^5.0.1",
     "mocha": "^6.1.2",
     "mocha-jsdom": "^2.0.0",
-    "node-hook": "^1.0.0",
     "npm": "^6.9.0",
     "nyc": "^13.3.0",
     "pre-commit": "^1.2.2",
