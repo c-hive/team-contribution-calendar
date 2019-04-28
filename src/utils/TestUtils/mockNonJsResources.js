@@ -3,4 +3,4 @@
 
 const noop = () => 1;
 
-require.extensions['.svg'] = noop;
+require.extensions[".svg"] = noop;
