@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 
 import { stringify } from "svgson";
-import * as GetStyledCalendarElement from "../../utils/GetStyledCalendarElement/GetStyledCalendarElement";
-import * as GitHubUtils from "../../utils/GitHubUtils/GitHubUtils";
-import * as GitLabUtils from "../../utils/GitLabUtils/GitLabUtils";
-import * as JavaScriptUtils from "../../utils/JavaScriptUtils/JavaScriptUtils";
-import * as Tooltip from "../../utils/Tooltip/Tooltip";
-import BasicCalendar from "../BasicCalendar/BasicCalendar.json";
-import * as DefaultUsers from "../DefaultUsers/DefaultUsers";
+import * as GetStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
+import * as GitHubUtils from "../utils/GitHubUtils/GitHubUtils";
+import * as GitLabUtils from "../utils/GitLabUtils/GitLabUtils";
+import * as JavaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
+import * as Tooltip from "../utils/Tooltip/Tooltip";
+import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
+import * as DefaultUsers from "../resources/DefaultUsers/DefaultUsers";
 
 export default class TeamContributionCalendar {
   constructor(container, gitHubUsers, gitLabUsers, proxyServerUrl) {
