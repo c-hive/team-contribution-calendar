@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import * as Main from "./Main";
-import TeamContributionCalendar from "../resources/TeamContributionCalendar/TeamContributionCalendar";
+import TeamContributionCalendar from "../TeamContributionCalendar/TeamContributionCalendar";
 import * as TestUtils from "../utils/TestUtils/TestUtils";
 
 describe("Main", () => {

@@ -1,6 +1,6 @@
 import $ from "elly";
 import * as ColorSchemas from "../../resources/ColorSchemas/ColorSchemas";
-import LoaderIcon from "../../resources/assets/SVG/LoaderIcon/LoaderIcon.svg";
+import LoaderIcon from "../../resources/LoaderIcon/LoaderIcon.svg";
 
 export const container = containerSelector => {
   const selectedElement = $(containerSelector);

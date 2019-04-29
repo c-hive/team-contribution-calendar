@@ -2,12 +2,12 @@ import { expect } from "chai";
 import sinon from "sinon";
 import jsdom from "mocha-jsdom";
 import TeamContributionCalendar from "./TeamContributionCalendar";
-import * as GetStyledCalendarElement from "../../utils/GetStyledCalendarElement/GetStyledCalendarElement";
-import * as GitHubUtils from "../../utils/GitHubUtils/GitHubUtils";
-import * as GitLabUtils from "../../utils/GitLabUtils/GitLabUtils";
-import * as TestUtils from "../../utils/TestUtils/TestUtils";
-import BasicCalendar from "../BasicCalendar/BasicCalendar.json";
-import * as DefaultUsers from "../DefaultUsers/DefaultUsers";
+import * as GetStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
+import * as GitHubUtils from "../utils/GitHubUtils/GitHubUtils";
+import * as GitLabUtils from "../utils/GitLabUtils/GitLabUtils";
+import * as TestUtils from "../utils/TestUtils/TestUtils";
+import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
+import * as DefaultUsers from "../resources/DefaultUsers/DefaultUsers";
 
 describe("TeamContributionCalendar", () => {
   jsdom({

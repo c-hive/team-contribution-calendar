@@ -1,4 +1,4 @@
-import TeamContributionCalendar from "../resources/TeamContributionCalendar/TeamContributionCalendar";
+import TeamContributionCalendar from "../TeamContributionCalendar/TeamContributionCalendar";
 
 export const processParams = async (
   container,
