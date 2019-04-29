@@ -1,24 +1,24 @@
 /* eslint-disable no-console */
 
-import { stringify } from 'svgson';
-import * as GetStyledCalendarElement from '../../utils/GetStyledCalendarElement/GetStyledCalendarElement';
-import * as GitHubUtils from '../../utils/GitHubUtils/GitHubUtils';
-import * as GitLabUtils from '../../utils/GitLabUtils/GitLabUtils';
-import * as JavaScriptUtils from '../../utils/JavaScriptUtils/JavaScriptUtils';
-import * as Tooltip from '../../utils/Tooltip/Tooltip';
-import BasicCalendar from '../BasicCalendar/BasicCalendar.json';
-import * as DefaultUsers from '../DefaultUsers/DefaultUsers';
+import { stringify } from "svgson";
+import * as GetStyledCalendarElement from "../../utils/GetStyledCalendarElement/GetStyledCalendarElement";
+import * as GitHubUtils from "../../utils/GitHubUtils/GitHubUtils";
+import * as GitLabUtils from "../../utils/GitLabUtils/GitLabUtils";
+import * as JavaScriptUtils from "../../utils/JavaScriptUtils/JavaScriptUtils";
+import * as Tooltip from "../../utils/Tooltip/Tooltip";
+import BasicCalendar from "../BasicCalendar/BasicCalendar.json";
+import * as DefaultUsers from "../DefaultUsers/DefaultUsers";
 
 export default class TeamContributionCalendar {
   constructor(container, gitHubUsers, gitLabUsers, proxyServerUrl) {
     this.configs = {
       container,
-      proxyServerUrl,
+      proxyServerUrl
     };
 
     this.users = {
       gitHub: [...gitHubUsers],
-      gitLab: [...gitLabUsers],
+      gitLab: [...gitLabUsers]
     };
 
     this.actualCalendar = BasicCalendar;
@@ -30,23 +30,24 @@ export default class TeamContributionCalendar {
     this.renderActualCalendar();
 
     const defaultUserData = await GitHubUtils.getJsonFormattedCalendarSync(
-      this.configs.proxyServerUrl, DefaultUsers.GitHub,
+      this.configs.proxyServerUrl,
+      DefaultUsers.GitHub
     );
 
     if (defaultUserData.error) {
       this.updateCalendar({
-        isLoading: false,
+        isLoading: false
       });
 
       throw new Error(defaultUserData.errorMessage);
     } else {
       const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(
-        defaultUserData.parsedCalendar,
+        defaultUserData.parsedCalendar
       );
 
       this.updateCalendar({
         contributions: 0,
-        updatedActualCalendar: defaultUserEmptyCalendar,
+        updatedActualCalendar: defaultUserEmptyCalendar
       });
     }
   }
@@ -60,7 +61,7 @@ export default class TeamContributionCalendar {
       const { contributions, updatedActualCalendar } = data;
 
       this.actualCalendar = {
-        ...updatedActualCalendar,
+        ...updatedActualCalendar
       };
 
       this.totalContributions = this.totalContributions + contributions;
@@ -70,13 +71,18 @@ export default class TeamContributionCalendar {
   }
 
   renderActualCalendar() {
-    const containerData = GetStyledCalendarElement.container(this.configs.container);
+    const containerData = GetStyledCalendarElement.container(
+      this.configs.container
+    );
 
     if (containerData.error) {
       throw new Error(containerData.errorMessage);
     }
 
-    const calendarHeader = GetStyledCalendarElement.header(this.totalContributions, this.isLoading);
+    const calendarHeader = GetStyledCalendarElement.header(
+      this.totalContributions,
+      this.isLoading
+    );
     const calendarTooltip = GetStyledCalendarElement.tooltip();
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
@@ -89,9 +95,10 @@ export default class TeamContributionCalendar {
   }
 
   aggregateUserCalendars() {
-    this.users.gitHub.map(async (gitHubUsername) => {
+    this.users.gitHub.map(async gitHubUsername => {
       const gitHubUserData = await GitHubUtils.getJsonFormattedCalendarAsync(
-        this.configs.proxyServerUrl, gitHubUsername,
+        this.configs.proxyServerUrl,
+        gitHubUsername
       );
 
       if (gitHubUserData.error) {
@@ -101,9 +108,10 @@ export default class TeamContributionCalendar {
       }
     });
 
-    this.users.gitLab.map(async (gitLabUsername) => {
+    this.users.gitLab.map(async gitLabUsername => {
       const gitLabUserData = await GitLabUtils.getJsonFormattedCalendarAsync(
-        this.configs.proxyServerUrl, gitLabUsername,
+        this.configs.proxyServerUrl,
+        gitLabUsername
       );
 
       if (gitLabUserData.error) {
@@ -116,29 +124,35 @@ export default class TeamContributionCalendar {
 
   processGitHubCalendar(gitHubUserJsonCalendar) {
     const updatedActualCalendar = GitHubUtils.mergeCalendarsContributions(
-      this.actualCalendar, gitHubUserJsonCalendar,
+      this.actualCalendar,
+      gitHubUserJsonCalendar
     );
 
-    const lastYearContributions = GitHubUtils.getLastYearContributions(gitHubUserJsonCalendar);
+    const lastYearContributions = GitHubUtils.getLastYearContributions(
+      gitHubUserJsonCalendar
+    );
 
     this.updateCalendar({
       updatedActualCalendar,
       contributions: lastYearContributions,
-      isLoading: false,
+      isLoading: false
     });
   }
 
   processGitLabCalendar(gitLabUserJsonCalendar) {
     const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
-      this.actualCalendar, gitLabUserJsonCalendar,
+      this.actualCalendar,
+      gitLabUserJsonCalendar
     );
 
-    const lastYearContributions = GitLabUtils.getLastYearContributions(gitLabUserJsonCalendar);
+    const lastYearContributions = GitLabUtils.getLastYearContributions(
+      gitLabUserJsonCalendar
+    );
 
     this.updateCalendar({
       updatedActualCalendar,
       contributions: lastYearContributions,
-      isLoading: false,
+      isLoading: false
     });
   }
 }
