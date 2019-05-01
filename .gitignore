@@ -10,3 +10,5 @@
 
 # npm package lock
 /package-lock.json
+
+/*.tgz
