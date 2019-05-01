@@ -17,3 +17,9 @@
 .eslintrc
 .babelrc
 .gitignore
+/src/**/*.test.js
+.vscode
+/dist
+/scripts
+.editorconfig
+.travis.yml
