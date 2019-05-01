@@ -11,6 +11,8 @@ stages:
     - test
     - name: distify
       if: branch = master
+    - name: release
+      if: tag IS present AND (TODO?) branch = release
 jobs:
   include:
     - stage: lint
@@ -23,5 +25,9 @@ jobs:
       script:
         - yarn run build
         - bash ./scripts/distify.sh
+    - stage: release
+      script:
+        - yarn run build
+        - bash ./scripts/release.sh
 after_success:
   - yarn run coveralls
