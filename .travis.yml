@@ -13,7 +13,7 @@ stages:
       if: branch = master
     - name: release
       if: branch = release AND tag =~ /^v[0-9]\.[0-9]\.[0-9]$/
-    - test
+    - token_test
 jobs:
   include:
     - stage: lint
@@ -30,7 +30,7 @@ jobs:
       script:
         - yarn run build
         - bash ./scripts/release.sh
-    - stage: test
+    - stage: token_test
       script:
         - npm config set '//registry.npmjs.org/:_authToken' "${NPM_TOKEN}"
         - npm token list
