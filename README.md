@@ -6,9 +6,9 @@
 
 Status and support
 
-- &#x2716; not stable
+- &#x2714; stable
 - &#x2714; supported
-- &#x2714; ongoing development
+- &#x2716; no ongoing development
 
 <!--- Version information -->
 *You are viewing the README of the development version. There are no releases yet.*
