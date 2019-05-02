@@ -11,7 +11,7 @@ Status and support
 - &#x2716; no ongoing development
 
 <!--- Version information -->
-*You are viewing the README of the development version. There are no releases yet.*
+*You are viewing the README of the development version. You can find the README of the latest release (v0.2.0) [here](https://github.com/c-hive/team-contribution-calendar/releases/tag/v0.2.0).*
 <!--- Version information end -->
 
 | Branch | Status |
@@ -31,7 +31,7 @@ npm install --save @c-hive/team-contribution-calendar
 
 
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar/dist/team-contribution-calendar.min.js">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar@0.2.0/dist/team-contribution-calendar.min.js">
 </script>
 ```
 
