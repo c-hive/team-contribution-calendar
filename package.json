@@ -15,7 +15,7 @@
     "lint": "eslint src",
     "test": "nyc --reporter=html --reporter=text mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
     "test:only": "mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
-    "prepublishOnly": "npm run clean:lib && npm run lint && npm run test && npm run build",
+    "prepublishOnly": "npm run clean:lib && npm run lint && npm run test",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
