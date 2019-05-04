@@ -2,7 +2,7 @@
   "name": "@c-hive/team-contribution-calendar",
   "version": "0.1.0",
   "description": "GitHub-like contribution calendar for the whole team. Supports GitHub and GitLab.",
-  "main": "./lib/index.js",
+  "main": "./src/index.js",
   "files": [
     "/lib/**/*.js",
     "!/lib/**/*.test.js",
