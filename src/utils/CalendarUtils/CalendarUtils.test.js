@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import * as CalendarUtils from "./CalendarUtils";
+import * as calendarUtils from "./CalendarUtils";
 import * as TestUtils from "../TestUtils/TestUtils";
 
 describe("CalendarUtils", () => {
@@ -8,7 +8,7 @@ describe("CalendarUtils", () => {
       it("returns false", () => {
         const expectedReturnedValue = false;
 
-        const actualReturnedValue = CalendarUtils.requiredParamsExist();
+        const actualReturnedValue = calendarUtils.requiredParamsExist();
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
@@ -18,7 +18,7 @@ describe("CalendarUtils", () => {
       it("returns false", () => {
         const expectedReturnedValue = false;
 
-        const actualReturnedValue = CalendarUtils.requiredParamsExist(
+        const actualReturnedValue = calendarUtils.requiredParamsExist(
           "div",
           [],
           []
@@ -33,7 +33,7 @@ describe("CalendarUtils", () => {
         it("returns true", () => {
           const expectedReturnedValue = true;
 
-          const actualReturnedValue = CalendarUtils.requiredParamsExist("div", [
+          const actualReturnedValue = calendarUtils.requiredParamsExist("div", [
             "gitHubUsername"
           ]);
 
@@ -45,7 +45,7 @@ describe("CalendarUtils", () => {
         it("returns true", () => {
           const expectedReturnedValue = true;
 
-          const actualReturnedValue = CalendarUtils.requiredParamsExist(
+          const actualReturnedValue = calendarUtils.requiredParamsExist(
             "div",
             [],
             ["gitLabUsername"]
@@ -59,7 +59,7 @@ describe("CalendarUtils", () => {
         it("returns true", () => {
           const expectedReturnedValue = true;
 
-          const actualReturnedValue = CalendarUtils.requiredParamsExist(
+          const actualReturnedValue = calendarUtils.requiredParamsExist(
             "div",
             ["gitHubUsername"],
             ["gitLabUsername"]
@@ -78,7 +78,7 @@ describe("CalendarUtils", () => {
       it("returns the default color", () => {
         const expectedFillColor = "#ebedf0";
 
-        const actualFillColor = CalendarUtils.getFillColor(
+        const actualFillColor = calendarUtils.getFillColor(
           totalDailyContributions
         );
 
@@ -92,7 +92,7 @@ describe("CalendarUtils", () => {
       it("returns the `#c6e48b` color", () => {
         const expectedFillColor = "#c6e48b";
 
-        const actualFillColor = CalendarUtils.getFillColor(
+        const actualFillColor = calendarUtils.getFillColor(
           totalDailyContributions
         );
 
@@ -106,7 +106,7 @@ describe("CalendarUtils", () => {
       it("returns the `#7bc96f` color", () => {
         const expectedFillColor = "#7bc96f";
 
-        const actualFillColor = CalendarUtils.getFillColor(
+        const actualFillColor = calendarUtils.getFillColor(
           totalDailyContributions
         );
 
@@ -120,7 +120,7 @@ describe("CalendarUtils", () => {
       it("returns the `#239a3b` color", () => {
         const expectedFillColor = "#239a3b";
 
-        const actualFillColor = CalendarUtils.getFillColor(
+        const actualFillColor = calendarUtils.getFillColor(
           totalDailyContributions
         );
 
@@ -134,7 +134,7 @@ describe("CalendarUtils", () => {
       it("returns the `#196127` color", () => {
         const expectedFillColor = "#196127";
 
-        const actualFillColor = CalendarUtils.getFillColor(
+        const actualFillColor = calendarUtils.getFillColor(
           totalDailyContributions
         );
 
@@ -156,7 +156,7 @@ describe("CalendarUtils", () => {
         const expectedDailyData =
           calendarData.children[0].children[weekIndex].children[dayIndex];
 
-        const actualDailyData = CalendarUtils.getCalendarDataByIndexes(
+        const actualDailyData = calendarUtils.getCalendarDataByIndexes(
           calendarData,
           weekIndex,
           dayIndex
@@ -170,7 +170,7 @@ describe("CalendarUtils", () => {
       it("returns the weekly data", () => {
         const expectedWeeklyData = calendarData.children[0].children[weekIndex];
 
-        const actualWeeklyData = CalendarUtils.getCalendarDataByIndexes(
+        const actualWeeklyData = calendarUtils.getCalendarDataByIndexes(
           calendarData,
           weekIndex
         );

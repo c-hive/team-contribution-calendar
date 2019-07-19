@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 
 import { stringify } from "svgson";
-import * as GetStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
-import * as GitHubUtils from "../utils/GitHubUtils/GitHubUtils";
-import * as GitLabUtils from "../utils/GitLabUtils/GitLabUtils";
-import * as JavaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
-import * as Tooltip from "../utils/Tooltip/Tooltip";
+import * as getStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
+import * as gitHubUtils from "../utils/GitHubUtils/GitHubUtils";
+import * as gitLabUtils from "../utils/GitLabUtils/GitLabUtils";
+import * as javaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
+import * as tooltip from "../utils/Tooltip/Tooltip";
 import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
-import * as DefaultUsers from "../resources/DefaultUsers/DefaultUsers";
+import * as defaultUsers from "../resources/DefaultUsers/DefaultUsers";
 
 export default class TeamContributionCalendar {
   constructor(container, gitHubUsers, gitLabUsers, proxyServerUrl) {
@@ -29,9 +29,9 @@ export default class TeamContributionCalendar {
   async renderBasicAppearance() {
     this.renderActualCalendar();
 
-    const defaultUserData = await GitHubUtils.getJsonFormattedCalendarSync(
+    const defaultUserData = await gitHubUtils.getJsonFormattedCalendarSync(
       this.configs.proxyServerUrl,
-      DefaultUsers.GitHub
+      defaultUsers.gitHub
     );
 
     if (defaultUserData.error) {
@@ -41,7 +41,7 @@ export default class TeamContributionCalendar {
 
       throw new Error(defaultUserData.errorMessage);
     } else {
-      const defaultUserEmptyCalendar = GitHubUtils.setEmptyCalendarValues(
+      const defaultUserEmptyCalendar = gitHubUtils.setEmptyCalendarValues(
         defaultUserData.parsedCalendar
       );
 
@@ -53,11 +53,11 @@ export default class TeamContributionCalendar {
   }
 
   updateCalendar(data) {
-    if (JavaScriptUtils.isDefined(data.isLoading)) {
+    if (javaScriptUtils.isDefined(data.isLoading)) {
       this.isLoading = data.isLoading;
     }
 
-    if (JavaScriptUtils.isDefined(data.updatedActualCalendar)) {
+    if (javaScriptUtils.isDefined(data.updatedActualCalendar)) {
       const { contributions, updatedActualCalendar } = data;
 
       this.actualCalendar = {
@@ -71,7 +71,7 @@ export default class TeamContributionCalendar {
   }
 
   renderActualCalendar() {
-    const containerData = GetStyledCalendarElement.container(
+    const containerData = getStyledCalendarElement.container(
       this.configs.container
     );
 
@@ -79,11 +79,11 @@ export default class TeamContributionCalendar {
       throw new Error(containerData.errorMessage);
     }
 
-    const calendarHeader = GetStyledCalendarElement.header(
+    const calendarHeader = getStyledCalendarElement.header(
       this.totalContributions,
       this.isLoading
     );
-    const calendarTooltip = GetStyledCalendarElement.tooltip();
+    const calendarTooltip = getStyledCalendarElement.tooltip();
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
@@ -91,12 +91,12 @@ export default class TeamContributionCalendar {
     containerData.selectedElement.prepend(calendarHeader);
     containerData.selectedElement.appendChild(calendarTooltip);
 
-    Tooltip.addEventsToRectElements();
+    tooltip.addEventsToRectElements();
   }
 
   aggregateUserCalendars() {
     this.users.gitHub.map(async gitHubUsername => {
-      const gitHubUserData = await GitHubUtils.getJsonFormattedCalendarAsync(
+      const gitHubUserData = await gitHubUtils.getJsonFormattedCalendarAsync(
         this.configs.proxyServerUrl,
         gitHubUsername
       );
@@ -109,7 +109,7 @@ export default class TeamContributionCalendar {
     });
 
     this.users.gitLab.map(async gitLabUsername => {
-      const gitLabUserData = await GitLabUtils.getJsonFormattedCalendarAsync(
+      const gitLabUserData = await gitLabUtils.getJsonFormattedCalendarAsync(
         this.configs.proxyServerUrl,
         gitLabUsername
       );
@@ -123,12 +123,12 @@ export default class TeamContributionCalendar {
   }
 
   processGitHubCalendar(gitHubUserJsonCalendar) {
-    const updatedActualCalendar = GitHubUtils.mergeCalendarsContributions(
+    const updatedActualCalendar = gitHubUtils.mergeCalendarsContributions(
       this.actualCalendar,
       gitHubUserJsonCalendar
     );
 
-    const lastYearContributions = GitHubUtils.getLastYearContributions(
+    const lastYearContributions = gitHubUtils.getLastYearContributions(
       gitHubUserJsonCalendar
     );
 
@@ -140,12 +140,12 @@ export default class TeamContributionCalendar {
   }
 
   processGitLabCalendar(gitLabUserJsonCalendar) {
-    const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
+    const updatedActualCalendar = gitLabUtils.mergeCalendarsContributions(
       this.actualCalendar,
       gitLabUserJsonCalendar
     );
 
-    const lastYearContributions = GitLabUtils.getLastYearContributions(
+    const lastYearContributions = gitLabUtils.getLastYearContributions(
       gitLabUserJsonCalendar
     );
 

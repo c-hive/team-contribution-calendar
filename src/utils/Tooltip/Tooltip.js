@@ -1,4 +1,4 @@
-import * as GetStyledCalendarElement from "../GetStyledCalendarElement/GetStyledCalendarElement";
+import * as getStyledCalendarElement from "../GetStyledCalendarElement/GetStyledCalendarElement";
 
 const showTooltip = event => {
   const hoveredDay = event.target;
@@ -8,7 +8,7 @@ const showTooltip = event => {
 
   const tooltipElement = document.getElementById("tooltip");
 
-  const tooltipInnerText = GetStyledCalendarElement.contributionsWithDateText(
+  const tooltipInnerText = getStyledCalendarElement.contributionsWithDateText(
     contributions,
     date
   );

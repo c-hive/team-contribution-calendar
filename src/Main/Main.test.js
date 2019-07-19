@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import * as Main from "./Main";
+import * as main from "./Main";
 import TeamContributionCalendar from "../TeamContributionCalendar/TeamContributionCalendar";
-import * as TestUtils from "../utils/TestUtils/TestUtils";
+import * as testUtils from "../utils/TestUtils/TestUtils";
 
 describe("Main", () => {
   const sandbox = sinon.createSandbox();
@@ -11,7 +11,7 @@ describe("Main", () => {
     let renderBasicAppearanceStub;
     let aggregateUserCalendarsStub;
 
-    const testParams = TestUtils.getTestParams();
+    const testParams = testUtils.getTestParams();
 
     beforeEach(() => {
       renderBasicAppearanceStub = sandbox.stub(
@@ -29,7 +29,7 @@ describe("Main", () => {
     });
 
     it("renders the basic appearance", async () => {
-      await Main.processParams(
+      await main.processParams(
         testParams.container,
         testParams.gitHubUsers,
         testParams.gitLabUsers,
@@ -40,7 +40,7 @@ describe("Main", () => {
     });
 
     it("aggregates the user calendars", async () => {
-      await Main.processParams(
+      await main.processParams(
         testParams.container,
         testParams.gitHubUsers,
         testParams.gitLabUsers,

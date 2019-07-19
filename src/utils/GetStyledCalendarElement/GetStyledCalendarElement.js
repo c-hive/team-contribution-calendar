@@ -1,5 +1,5 @@
 import $ from "elly";
-import * as ColorSchemas from "../../resources/ColorSchemas/ColorSchemas";
+import * as colorSchemas from "../../resources/ColorSchemas/ColorSchemas";
 import LoaderIcon from "../../resources/LoaderIcon/LoaderIcon.svg";
 
 export const container = containerSelector => {
@@ -43,7 +43,7 @@ const getColorsList = () => {
 
   calendarColorsList.style.listStyle = "none";
 
-  ColorSchemas.GitHub.forEach(color => {
+  colorSchemas.gitHub.forEach(color => {
     const colorElement = getColorElement(color);
 
     calendarColorsList.appendChild(colorElement);

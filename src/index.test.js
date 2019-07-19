@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import Index from "./index";
-import * as Main from "./Main/Main";
-import * as CalendarUtils from "./utils/CalendarUtils/CalendarUtils";
-import * as TestUtils from "./utils/TestUtils/TestUtils";
+import * as main from "./Main/Main";
+import * as calendarUtils from "./utils/CalendarUtils/CalendarUtils";
+import * as testUtils from "./utils/TestUtils/TestUtils";
 
 describe("Index", () => {
   const sandbox = sinon.createSandbox();
@@ -12,7 +12,7 @@ describe("Index", () => {
 
   beforeEach(() => {
     requiredParamsExistStub = sandbox.stub(
-      CalendarUtils,
+      calendarUtils,
       "requiredParamsExist"
     );
   });
@@ -37,10 +37,10 @@ describe("Index", () => {
   describe("when the required params exist", () => {
     let processParamsStub;
 
-    const testParams = TestUtils.getTestParams();
+    const testParams = testUtils.getTestParams();
 
     beforeEach(() => {
-      processParamsStub = sandbox.stub(Main, "processParams");
+      processParamsStub = sandbox.stub(main, "processParams");
 
       requiredParamsExistStub.callsFake(() => true);
     });
