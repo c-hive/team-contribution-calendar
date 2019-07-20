@@ -53,10 +53,11 @@ npm install --save @c-hive/team-contribution-calendar
 ```javascript
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
 
-const container = document.getElementById('container');
+const container = document.getElementById("container");
+const ghUsernames = ["tenderlove", "gaearon"]
+const glUsernames = ["sytses", "gnachman"]
 
-// For further examples, see the CDN section below.
-TeamContributionCalendar(container, ['gh_username'], [], "https://proxy-server.com/");
+TeamContributionCalendar(container, ghUsernames, glUsernames, "https://your-proxy-server.com/");
 ```
 
 ##### CDN
@@ -64,24 +65,9 @@ TeamContributionCalendar(container, ['gh_username'], [], "https://proxy-server.c
 ```html
 <div class="container"></div>
 <script>
-   // Empty GitLab users, without the optional param.
-   TeamContributionCalendar('.container', ['gh_username'], [], https://proxy-server.com/);
-</script>
-```
-
-```html
-<div class="container"></div>
-<script>
-   // Empty GitHub users, without the optional param.
-   TeamContributionCalendar('.container', [], ['gl_username_one', 'gl_username_two'], https://proxy-server.com/);
-</script>
-```
-
-```html
-<div class="container"></div>
-<script>
-   // Passing both GitHub and GitLab users along with a cors-proxy url.
-   TeamContributionCalendar('.container', ['gh_username_one', 'gh_username_two'], ['gl_username'], 'https://proxy-server.com');
+   const ghUsernames = ["tenderlove", "gaearon"]
+   const glUsernames = ["sytses", "gnachman"]
+   TeamContributionCalendar(".container", ghUsernames, glUsernames, "https://your-proxy-server.com/");
 </script>
 ```
 
