@@ -54,8 +54,8 @@ npm install --save @c-hive/team-contribution-calendar
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
 
 const container = document.getElementById("container");
-const ghUsernames = ["tenderlove", "gaearon"]
-const glUsernames = ["sytses", "gnachman"]
+const ghUsernames = ["tenderlove", "gaearon"];
+const glUsernames = ["sytses", "gnachman"];
 
 TeamContributionCalendar(container, ghUsernames, glUsernames, "https://your-proxy-server.com/");
 ```
@@ -65,8 +65,8 @@ TeamContributionCalendar(container, ghUsernames, glUsernames, "https://your-prox
 ```html
 <div class="container"></div>
 <script>
-   const ghUsernames = ["tenderlove", "gaearon"]
-   const glUsernames = ["sytses", "gnachman"]
+   const ghUsernames = ["tenderlove", "gaearon"];
+   const glUsernames = ["sytses", "gnachman"];
    TeamContributionCalendar(".container", ghUsernames, glUsernames, "https://your-proxy-server.com/");
 </script>
 ```
