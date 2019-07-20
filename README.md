@@ -41,8 +41,8 @@ npm install --save @c-hive/team-contribution-calendar
 <b>TeamContributionCalendar(container, gitHubUsers, gitLabUsers, proxyServerUrl)</b>
 </pre>
 
-- `container`: a DOM element in which the calendar will be rendered,
-- `gitHubUsers` / `gitLabUsers`: array of users(at least one user should be presented in either of them).
+- `container`: a DOM element in which the calendar will be rendered
+- `gitHubUsers` / `gitLabUsers`: array of user names
 - `proxyServerUrl`: CORS proxy url
   - We serve one by default for _development purposes only_, no uptime guaranteed. Consider using your [own server](https://github.com/c-hive/cors-proxy). Keep it in mind, **otherwise you will most likely get 403 on production**.
 
