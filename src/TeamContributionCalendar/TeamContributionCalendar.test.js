@@ -2,12 +2,12 @@ import { expect } from "chai";
 import sinon from "sinon";
 import jsdom from "mocha-jsdom";
 import TeamContributionCalendar from "./TeamContributionCalendar";
-import * as GetStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
-import * as GitHubUtils from "../utils/GitHubUtils/GitHubUtils";
-import * as GitLabUtils from "../utils/GitLabUtils/GitLabUtils";
-import * as TestUtils from "../utils/TestUtils/TestUtils";
+import * as getStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
+import * as gitHubUtils from "../utils/GitHubUtils/GitHubUtils";
+import * as gitLabUtils from "../utils/GitLabUtils/GitLabUtils";
+import * as testUtils from "../utils/TestUtils/TestUtils";
 import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
-import * as DefaultUsers from "../resources/DefaultUsers/DefaultUsers";
+import * as defaultUsers from "../resources/DefaultUsers/DefaultUsers";
 
 describe("TeamContributionCalendar", () => {
   jsdom({
@@ -18,7 +18,7 @@ describe("TeamContributionCalendar", () => {
 
   let teamContributionCalendar;
 
-  const testParams = TestUtils.getTestParams();
+  const testParams = testUtils.getTestParams();
 
   beforeEach(() => {
     teamContributionCalendar = new TeamContributionCalendar(
@@ -67,10 +67,10 @@ describe("TeamContributionCalendar", () => {
     let containerStub;
 
     beforeEach(() => {
-      containerStub = sandbox.stub(GetStyledCalendarElement, "container");
+      containerStub = sandbox.stub(getStyledCalendarElement, "container");
     });
 
-    describe("when `GetStyledCalendarElement.container` returns an error", () => {
+    describe("when `getStyledCalendarElement.container` returns an error", () => {
       const containerData = {
         error: true,
         errorMessage: "Could not find the container element in the DOM."
@@ -87,7 +87,7 @@ describe("TeamContributionCalendar", () => {
       });
     });
 
-    describe("when `GetStyledCalendarElement.container` does not return any error", () => {
+    describe("when `getStyledCalendarElement.container` does not return any error", () => {
       let appendChildSpy;
       let prependSpy;
 
@@ -112,10 +112,10 @@ describe("TeamContributionCalendar", () => {
 
         containerStub.returns(containerData);
         sandbox
-          .stub(GetStyledCalendarElement, "header")
+          .stub(getStyledCalendarElement, "header")
           .returns(calendarHeader);
         sandbox
-          .stub(GetStyledCalendarElement, "tooltip")
+          .stub(getStyledCalendarElement, "tooltip")
           .returns(calendarTooltip);
       });
 
@@ -149,13 +149,13 @@ describe("TeamContributionCalendar", () => {
 
     beforeEach(() => {
       getJsonFormattedCalendarSyncStub = sandbox
-        .stub(GitHubUtils, "getJsonFormattedCalendarSync")
+        .stub(gitHubUtils, "getJsonFormattedCalendarSync")
         .returns({
           error: false
         });
 
       setEmptyCalendarValuesStub = sandbox.stub(
-        GitHubUtils,
+        gitHubUtils,
         "setEmptyCalendarValues"
       );
 
@@ -181,12 +181,12 @@ describe("TeamContributionCalendar", () => {
       expect(
         getJsonFormattedCalendarSyncStub.calledWithExactly(
           teamContributionCalendar.configs.proxyServerUrl,
-          DefaultUsers.GitHub
+          defaultUsers.gitHub
         )
       ).to.equal(true);
     });
 
-    describe("when `GitHubUtils.getJsonFormattedCalendarSync` returns an error", () => {
+    describe("when `gitHubUtils.getJsonFormattedCalendarSync` returns an error", () => {
       const defaultUserData = {
         error: true,
         errorMessage: "Could not fetch the calendar of the default user."
@@ -219,16 +219,16 @@ describe("TeamContributionCalendar", () => {
       });
     });
 
-    describe("when `GitHubUtils.getJsonFormattedCalendarSync` does not return any error", () => {
+    describe("when `gitHubUtils.getJsonFormattedCalendarSync` does not return any error", () => {
       const defaultUserData = {
-        parsedCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts({
+        parsedCalendar: testUtils.getFakeContributionsObjectWithDailyCounts({
           "2019-01-20": 12
         }),
         error: false,
         errorMessage: null
       };
 
-      const defaultUserEmptyCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts(
+      const defaultUserEmptyCalendar = testUtils.getFakeContributionsObjectWithDailyCounts(
         {
           "2019-01-20": 0
         }
@@ -330,7 +330,7 @@ describe("TeamContributionCalendar", () => {
     describe("when `updatedActualCalendar` is defined", () => {
       const data = {
         contributions: 1024,
-        updatedActualCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts(
+        updatedActualCalendar: testUtils.getFakeContributionsObjectWithDailyCounts(
           {
             "2018-10-10": 12
           }
@@ -377,10 +377,10 @@ describe("TeamContributionCalendar", () => {
 
     beforeEach(() => {
       gitHubGetJsonFormattedCalendarAsyncStub = sandbox
-        .stub(GitHubUtils, "getJsonFormattedCalendarAsync")
+        .stub(gitHubUtils, "getJsonFormattedCalendarAsync")
         .returns({ error: false });
       gitLabGetJsonFormattedCalendarAsyncStub = sandbox
-        .stub(GitLabUtils, "getJsonFormattedCalendarAsync")
+        .stub(gitLabUtils, "getJsonFormattedCalendarAsync")
         .returns({ error: false });
 
       processGitHubCalendarStub = sandbox.stub(
@@ -407,7 +407,7 @@ describe("TeamContributionCalendar", () => {
         );
       });
 
-      describe("when `GitHubUtils.getJsonFormattedCalendarAsync` returns an error", () => {
+      describe("when `gitHubUtils.getJsonFormattedCalendarAsync` returns an error", () => {
         const gitHubUsername = "wrongGitHubUserName";
 
         const gitHubUserData = {
@@ -432,9 +432,9 @@ describe("TeamContributionCalendar", () => {
         });
       });
 
-      describe("when `GitHubUtils.getJsonFormattedCalendarAsync` does not return any error", () => {
+      describe("when `gitHubUtils.getJsonFormattedCalendarAsync` does not return any error", () => {
         const gitHubUserData = {
-          parsedCalendar: TestUtils.getFakeContributionsObjectWithDailyCounts({
+          parsedCalendar: testUtils.getFakeContributionsObjectWithDailyCounts({
             "2019-03-19": 5,
             "2019-03-20": 5
           }),
@@ -470,7 +470,7 @@ describe("TeamContributionCalendar", () => {
         );
       });
 
-      describe("when `GitLabUtils.getJsonFormattedCalendarAsync` returns an error", () => {
+      describe("when `gitLabUtils.getJsonFormattedCalendarAsync` returns an error", () => {
         const gitLabUsername = "wrongGitLabUserName";
 
         const gitLabUserData = {
@@ -493,7 +493,7 @@ describe("TeamContributionCalendar", () => {
         });
       });
 
-      describe("when `GitLabUtils.getJsonFormattedCalendarAsync` does not return any error", () => {
+      describe("when `gitLabUtils.getJsonFormattedCalendarAsync` does not return any error", () => {
         const gitLabUserData = {
           parsedCalendar: {
             "2018-02-03": 7,
@@ -525,13 +525,13 @@ describe("TeamContributionCalendar", () => {
     let getLastYearContributionsStub;
     let updateCalendarStub;
 
-    const gitHubUserJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts(
+    const gitHubUserJsonCalendar = testUtils.getFakeContributionsObjectWithDailyCounts(
       {
         "2019-03-10": 15,
         "2019-03-12": 5
       }
     );
-    const updatedActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts(
+    const updatedActualCalendar = testUtils.getFakeContributionsObjectWithDailyCounts(
       {
         "2019-03-10": 18,
         "2019-03-11": 15,
@@ -542,10 +542,10 @@ describe("TeamContributionCalendar", () => {
 
     beforeEach(() => {
       mergeCalendarsContributionsStub = sandbox
-        .stub(GitHubUtils, "mergeCalendarsContributions")
+        .stub(gitHubUtils, "mergeCalendarsContributions")
         .returns(updatedActualCalendar);
       getLastYearContributionsStub = sandbox
-        .stub(GitHubUtils, "getLastYearContributions")
+        .stub(gitHubUtils, "getLastYearContributions")
         .returns(lastYearContributions);
 
       updateCalendarStub = sandbox.stub(
@@ -598,7 +598,7 @@ describe("TeamContributionCalendar", () => {
       "2018-02-09": 3
     };
 
-    const updatedActualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts(
+    const updatedActualCalendar = testUtils.getFakeContributionsObjectWithDailyCounts(
       {
         "2018-02-03": 11,
         "2018-02-09": 20
@@ -609,10 +609,10 @@ describe("TeamContributionCalendar", () => {
 
     beforeEach(() => {
       mergeCalendarsContributionsStub = sandbox
-        .stub(GitLabUtils, "mergeCalendarsContributions")
+        .stub(gitLabUtils, "mergeCalendarsContributions")
         .returns(updatedActualCalendar);
       getLastYearContributionsStub = sandbox
-        .stub(GitLabUtils, "getLastYearContributions")
+        .stub(gitLabUtils, "getLastYearContributions")
         .returns(lastYearContributions);
 
       updateCalendarStub = sandbox.stub(

@@ -1,17 +1,17 @@
 import { expect } from "chai";
-import * as GitHubUtils from "./GitHubUtils";
-import * as TestUtils from "../TestUtils/TestUtils";
+import * as gitHubUtils from "./GitHubUtils";
+import * as testUtils from "../TestUtils/TestUtils";
 
 describe("GitHubUtils", () => {
   describe("setEmptyCalendarValues", () => {
-    const calendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+    const calendar = testUtils.getFakeContributionsObjectWithDailyCounts({
       "2019-03-21": 5
     });
 
     it("sets the daily contributions to zero", () => {
       const expectedContributionsValue = 0;
 
-      const restoredCalendar = GitHubUtils.setEmptyCalendarValues(calendar);
+      const restoredCalendar = gitHubUtils.setEmptyCalendarValues(calendar);
       const actualContributionsValue = Number(
         restoredCalendar.children[0].children[0].children[0].attributes[
           "data-count"
@@ -24,7 +24,7 @@ describe("GitHubUtils", () => {
     it("sets the fill colors to `#ebedf0`", () => {
       const expectedFillColor = "#ebedf0";
 
-      const restoredCalendar = GitHubUtils.setEmptyCalendarValues(calendar);
+      const restoredCalendar = gitHubUtils.setEmptyCalendarValues(calendar);
       const actualFillColor =
         restoredCalendar.children[0].children[0].children[0].attributes.fill;
 
@@ -33,10 +33,10 @@ describe("GitHubUtils", () => {
   });
 
   describe("mergeCalendarsContributions", () => {
-    const actualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+    const actualCalendar = testUtils.getFakeContributionsObjectWithDailyCounts({
       "2019-04-19": 5
     });
-    const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts(
+    const userJsonCalendar = testUtils.getFakeContributionsObjectWithDailyCounts(
       {
         "2019-04-19": 6
       }
@@ -46,7 +46,7 @@ describe("GitHubUtils", () => {
       // Because of the previously created 5 and 6 contribution calendars.
       const expectedDataCountValue = 11;
 
-      const mergedCalendar = GitHubUtils.mergeCalendarsContributions(
+      const mergedCalendar = gitHubUtils.mergeCalendarsContributions(
         actualCalendar,
         userJsonCalendar
       );
@@ -62,7 +62,7 @@ describe("GitHubUtils", () => {
   });
 
   describe("getLastYearContributions", () => {
-    const userJsonCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts(
+    const userJsonCalendar = testUtils.getFakeContributionsObjectWithDailyCounts(
       {
         "2019-01-20": 5,
         "2019-01-25": 12,
@@ -73,7 +73,7 @@ describe("GitHubUtils", () => {
     it("returns the given user last year contributions", () => {
       const expectedLastYearContributions = 32;
 
-      const actualLastYearContributions = GitHubUtils.getLastYearContributions(
+      const actualLastYearContributions = gitHubUtils.getLastYearContributions(
         userJsonCalendar
       );
 

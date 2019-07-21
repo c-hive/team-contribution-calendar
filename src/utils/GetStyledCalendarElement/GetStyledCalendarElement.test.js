@@ -2,7 +2,7 @@ import { expect } from "chai";
 import jsdom from "mocha-jsdom";
 import proxyquire from "proxyquire";
 
-const GetStyledCalendarElement = proxyquire("./GetStyledCalendarElement.js", {
+const getStyledCalendarElement = proxyquire("./GetStyledCalendarElement.js", {
   elly: () => ({
     style: {}
   })
@@ -17,7 +17,7 @@ describe("GetStyledCalendarElement", () => {
 
   describe("container", () => {
     it("returns a 700px element", () => {
-      const containerData = GetStyledCalendarElement.container(".class");
+      const containerData = getStyledCalendarElement.container(".class");
 
       expect(containerData.selectedElement.style.width).to.equal("700px");
     });
@@ -27,7 +27,7 @@ describe("GetStyledCalendarElement", () => {
     const totalContributions = 1024;
 
     it("returns a `div` element", () => {
-      const calendarHeader = GetStyledCalendarElement.header(
+      const calendarHeader = getStyledCalendarElement.header(
         totalContributions
       );
 
@@ -38,7 +38,7 @@ describe("GetStyledCalendarElement", () => {
       const isLoading = true;
 
       it("does not render the total contributions text", () => {
-        const calendarHeader = GetStyledCalendarElement.header(
+        const calendarHeader = getStyledCalendarElement.header(
           totalContributions,
           isLoading
         );
@@ -53,7 +53,7 @@ describe("GetStyledCalendarElement", () => {
       it("renders the total contributions text", () => {
         const expectedTotalContributionsText = `${totalContributions} contributions in the last year`;
 
-        const calendarHeader = GetStyledCalendarElement.header(
+        const calendarHeader = getStyledCalendarElement.header(
           totalContributions,
           isLoading
         );
@@ -65,13 +65,13 @@ describe("GetStyledCalendarElement", () => {
     });
 
     it("appends a paragraph to the header", () => {
-      const calendarHeader = GetStyledCalendarElement.header();
+      const calendarHeader = getStyledCalendarElement.header();
 
       expect(calendarHeader.childNodes[0].nodeName).to.equal("P");
     });
 
     it("appends the colors list to the header", () => {
-      const calendarHeader = GetStyledCalendarElement.header();
+      const calendarHeader = getStyledCalendarElement.header();
 
       expect(calendarHeader.childNodes[1].nodeName).to.equal("UL");
     });
@@ -79,13 +79,13 @@ describe("GetStyledCalendarElement", () => {
 
   describe("tooltip", () => {
     it("sets the `id` attribute to `tooltip`", () => {
-      const calendarTooltip = GetStyledCalendarElement.tooltip();
+      const calendarTooltip = getStyledCalendarElement.tooltip();
 
       expect(calendarTooltip.id).to.equal("tooltip");
     });
 
     it("returns a `div` element", () => {
-      const calendarTooltip = GetStyledCalendarElement.tooltip();
+      const calendarTooltip = getStyledCalendarElement.tooltip();
 
       expect(calendarTooltip.nodeName).to.equal("DIV");
     });
@@ -95,7 +95,7 @@ describe("GetStyledCalendarElement", () => {
     const date = "2019-01-23";
 
     it("returns a `span` element", () => {
-      const tooltipInnerText = GetStyledCalendarElement.contributionsWithDateText(
+      const tooltipInnerText = getStyledCalendarElement.contributionsWithDateText(
         50,
         date
       );
@@ -104,7 +104,7 @@ describe("GetStyledCalendarElement", () => {
     });
 
     it("appends a `span` to the tooltip element", () => {
-      const tooltipInnerText = GetStyledCalendarElement.contributionsWithDateText(
+      const tooltipInnerText = getStyledCalendarElement.contributionsWithDateText(
         50,
         date
       );
@@ -115,7 +115,7 @@ describe("GetStyledCalendarElement", () => {
     it("sets the appended span`s text to the given date", () => {
       const expectedDateText = ` on ${date}`;
 
-      const tooltipInnerText = GetStyledCalendarElement.contributionsWithDateText(
+      const tooltipInnerText = getStyledCalendarElement.contributionsWithDateText(
         50,
         date
       );
@@ -131,7 +131,7 @@ describe("GetStyledCalendarElement", () => {
       it("renders `No contributions`", () => {
         const expectedContributionsText = "No contributions";
 
-        const tooltipInnerText = GetStyledCalendarElement.contributionsWithDateText(
+        const tooltipInnerText = getStyledCalendarElement.contributionsWithDateText(
           contributions,
           date
         );
@@ -146,7 +146,7 @@ describe("GetStyledCalendarElement", () => {
       it("renders the given `contributions`", () => {
         const expectedContributionsText = `${contributions} contributions`;
 
-        const tooltipText = GetStyledCalendarElement.contributionsWithDateText(
+        const tooltipText = getStyledCalendarElement.contributionsWithDateText(
           contributions,
           date
         );
