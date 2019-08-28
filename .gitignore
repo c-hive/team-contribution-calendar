@@ -10,3 +10,7 @@
 
 # npm package lock
 /package-lock.json
+
+# parcel
+.cache/
+/dist
