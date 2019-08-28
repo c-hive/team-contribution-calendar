@@ -15,14 +15,6 @@ describe("GetStyledCalendarElement", () => {
     url: "https://example.org/"
   });
 
-  describe("container", () => {
-    it("returns a 700px element", () => {
-      const containerData = getStyledCalendarElement.container(".class");
-
-      expect(containerData.selectedElement.style.width).to.equal("700px");
-    });
-  });
-
   describe("header", () => {
     const totalContributions = 1024;
 

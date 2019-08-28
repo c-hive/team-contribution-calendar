@@ -12,11 +12,11 @@ export const container = containerSelector => {
     };
   }
 
-  selectedElement.style.width = "700px";
+  selectedElement.style.display = "inline-block";
   selectedElement.style.borderTopLeftRadius = "3px";
   selectedElement.style.borderTopRightRadius = "3px";
   selectedElement.style.border = "1px solid #E1E4E8";
-  selectedElement.style.padding = "10px 0 10px 20px";
+  selectedElement.style.padding = "10px 20px";
   selectedElement.style.margin = "20px auto";
   selectedElement.style.fontSize = "10px";
 
@@ -82,7 +82,6 @@ export const header = (totalContributions, isLoading) => {
   calendarHeader.style.display = "flex";
   calendarHeader.style.justifyContent = "space-between";
   calendarHeader.style.alignItems = "center";
-  calendarHeader.style.width = "670px";
 
   return calendarHeader;
 };
