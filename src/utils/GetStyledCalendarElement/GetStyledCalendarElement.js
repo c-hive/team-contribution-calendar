@@ -13,12 +13,15 @@ export const container = containerSelector => {
   }
 
   selectedElement.style.display = "inline-block";
+  selectedElement.style.width = "700px";
   selectedElement.style.borderTopLeftRadius = "3px";
   selectedElement.style.borderTopRightRadius = "3px";
   selectedElement.style.border = "1px solid #E1E4E8";
   selectedElement.style.padding = "10px 20px";
-  selectedElement.style.margin = "20px auto";
-  selectedElement.style.fontSize = "10px";
+  selectedElement.style.minWidth = "350px";
+  selectedElement.style.fontSize = "12px";
+  selectedElement.style.fontSize =
+    "calc(12px + (14 - 12) * ((100vw - 350px) / (1800 - 350)))";
 
   return {
     selectedElement,
@@ -67,7 +70,7 @@ export const header = (totalContributions, isLoading) => {
   const calendarHeader = document.createElement("DIV");
   const calendarColorsList = getColorsList();
 
-  calendarHeader.style.fontSize = "12px";
+  calendarHeader.style.fontSize = "1em";
 
   const contributionsValueDisplayer = document.createElement("P");
   contributionsValueDisplayer.innerHTML = LoaderIcon;
