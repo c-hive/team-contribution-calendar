@@ -72,6 +72,10 @@ export const header = (totalContributions, isLoading) => {
   const contributionsValueDisplayer = document.createElement("P");
   contributionsValueDisplayer.innerHTML = LoaderIcon;
 
+  if (isLoading) {
+    contributionsValueDisplayer.style.height = "15px";
+  }
+
   if (!isLoading) {
     contributionsValueDisplayer.innerText = `${totalContributions} contributions in the last year`;
   }
