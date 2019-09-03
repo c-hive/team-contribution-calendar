@@ -4,6 +4,7 @@
   "description": "GitHub-like contribution calendar for the whole team. Supports GitHub and GitLab.",
   "main": "./lib/index.js",
   "scripts": {
+    "dev": "parcel ./dev/index.html --global TeamContributionCalendar -d ./dev/parcel",
     "build": "cross-env BABEL_ENV=production babel src --out-dir lib --copy-files",
     "clean:lib": "rimraf lib",
     "lint": "eslint src",
@@ -24,6 +25,8 @@
   },
   "homepage": "https://github.com/c-hive/team-contribution-calendar#readme",
   "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "parcel-plugin-inlinesvg": "^0.1.1",
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/plugin-transform-runtime": "^7.4.3",
@@ -63,5 +66,12 @@
   "dependencies": {
     "elly": "^1.1.10",
     "svgson": "^3.1.0"
-  }
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "last 2 Opera versions"
+  ]
 }
