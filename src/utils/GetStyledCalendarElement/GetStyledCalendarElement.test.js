@@ -37,6 +37,15 @@ describe("GetStyledCalendarElement", () => {
 
         expect(calendarHeader.childNodes[0].innerText).to.be.an("undefined");
       });
+
+      it("header p returns a 15px height", () => {
+        const calendarHeader = getStyledCalendarElement.header(
+          totalContributions,
+          isLoading
+        );
+
+        expect(calendarHeader.childNodes[0].style.height).to.equal("15px");
+      });
     });
 
     describe("when `isLoading` is false", () => {

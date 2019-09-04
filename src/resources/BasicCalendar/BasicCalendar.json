@@ -6,7 +6,7 @@
       "viewBox": "0 0 828 128",
       "preserveAspectRatio": "xMidYMin slice",
       "class": "js-calendar-graph-svg",
-      "style": "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: .8em"
+      "style": "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: 1em"
     },
     "children": [
       {
@@ -6434,7 +6434,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Sep",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6453,7 +6453,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Oct",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6472,7 +6472,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Nov",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6491,7 +6491,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Dec",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6510,7 +6510,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Jan",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6529,7 +6529,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Feb",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6548,7 +6548,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Mar",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6567,7 +6567,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Apr",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6586,7 +6586,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "May",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6605,7 +6605,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Jun",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6624,7 +6624,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Jul",
+                "value": "",
                 "attributes": {},
                 "children": []
               }
@@ -6643,7 +6643,7 @@
               {
                 "name": "",
                 "type": "text",
-                "value": "Aug",
+                "value": "",
                 "attributes": {},
                 "children": []
               }

@@ -36,7 +36,7 @@ export const setEmptyCalendarValues = calendar => {
     preserveAspectRatio: "xMidYMin slice",
     class: "js-calendar-graph-svg",
     style:
-      "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: .8em"
+      "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: 1em"
   };
 
   copiedCalendar.children[0].children.forEach((weeklyData, weekIndex) => {

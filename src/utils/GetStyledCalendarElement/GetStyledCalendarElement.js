@@ -19,7 +19,6 @@ export const container = containerSelector => {
   selectedElement.style.border = "1px solid #E1E4E8";
   selectedElement.style.padding = "10px 20px";
   selectedElement.style.minWidth = "350px";
-  selectedElement.style.fontSize = "12px";
   selectedElement.style.fontSize =
     "calc(12px + (14 - 12) * ((100vw - 350px) / (1800 - 350)))";
 
