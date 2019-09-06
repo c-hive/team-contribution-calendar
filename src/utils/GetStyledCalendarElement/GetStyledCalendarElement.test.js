@@ -38,7 +38,7 @@ describe("GetStyledCalendarElement", () => {
         expect(calendarHeader.childNodes[0].innerText).to.be.an("undefined");
       });
 
-      it("header p returns a 15px height", () => {
+      it("sets the height of <p /> to 15px", () => {
         const calendarHeader = getStyledCalendarElement.header(
           totalContributions,
           isLoading
