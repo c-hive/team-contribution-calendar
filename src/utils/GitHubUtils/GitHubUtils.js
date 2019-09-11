@@ -31,6 +31,14 @@ const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
 export const setEmptyCalendarValues = calendar => {
   const copiedCalendar = javaScriptUtils.deepCopyObject(calendar);
 
+  copiedCalendar.attributes = {
+    viewBox: "0 0 828 128",
+    preserveAspectRatio: "xMidYMin slice",
+    class: "js-calendar-graph-svg",
+    style:
+      "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: .8em"
+  };
+
   copiedCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
       copiedCalendar.children[0].children[weekIndex].children[

@@ -12,13 +12,14 @@ export const container = containerSelector => {
     };
   }
 
+  selectedElement.style.display = "inline-block";
   selectedElement.style.width = "700px";
   selectedElement.style.borderTopLeftRadius = "3px";
   selectedElement.style.borderTopRightRadius = "3px";
   selectedElement.style.border = "1px solid #E1E4E8";
-  selectedElement.style.padding = "10px 0 10px 20px";
-  selectedElement.style.margin = "20px auto";
-  selectedElement.style.fontSize = "10px";
+  selectedElement.style.padding = "10px 20px";
+  selectedElement.style.minWidth = "350px";
+  selectedElement.style.fontSize = "14px";
 
   return {
     selectedElement,
@@ -67,10 +68,14 @@ export const header = (totalContributions, isLoading) => {
   const calendarHeader = document.createElement("DIV");
   const calendarColorsList = getColorsList();
 
-  calendarHeader.style.fontSize = "12px";
+  calendarHeader.style.fontSize = ".9em";
 
   const contributionsValueDisplayer = document.createElement("P");
   contributionsValueDisplayer.innerHTML = LoaderIcon;
+
+  if (isLoading) {
+    contributionsValueDisplayer.style.height = "15px";
+  }
 
   if (!isLoading) {
     contributionsValueDisplayer.innerText = `${totalContributions} contributions in the last year`;
@@ -82,7 +87,6 @@ export const header = (totalContributions, isLoading) => {
   calendarHeader.style.display = "flex";
   calendarHeader.style.justifyContent = "space-between";
   calendarHeader.style.alignItems = "center";
-  calendarHeader.style.width = "670px";
 
   return calendarHeader;
 };
