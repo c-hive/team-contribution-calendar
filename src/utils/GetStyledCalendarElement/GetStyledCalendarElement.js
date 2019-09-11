@@ -68,7 +68,7 @@ export const header = (totalContributions, isLoading) => {
   const calendarHeader = document.createElement("DIV");
   const calendarColorsList = getColorsList();
 
-  calendarHeader.style.fontSize = "1em";
+  calendarHeader.style.fontSize = ".9em";
 
   const contributionsValueDisplayer = document.createElement("P");
   contributionsValueDisplayer.innerHTML = LoaderIcon;
