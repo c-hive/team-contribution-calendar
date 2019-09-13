@@ -11,7 +11,7 @@ Status and support
 - &#x2714; ongoing development
 
 <!--- Version information -->
-*You are viewing the README of the development version. You can find the README of the latest release (v0.2.0) [here](https://github.com/c-hive/team-contribution-calendar/releases/tag/v0.2.0).*
+*You are viewing the README of version [v0.1.1](/../../releases/tag/v0.1.1). You can find other releases [here](/../../releases).*
 <!--- Version information end -->
 
 [![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=master)](https://travis-ci.org/c-hive/team-contribution-calendar)
