@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import * as JavaScriptUtils from "./JavaScriptUtils";
+import * as javaScriptUtils from "./JavaScriptUtils";
 
 describe("JavaScriptUtils", () => {
   describe("isDefined", () => {
@@ -9,7 +9,7 @@ describe("JavaScriptUtils", () => {
       it("returns false", () => {
         const expectedReturnedValue = false;
 
-        const actualReturnedValue = JavaScriptUtils.isDefined(value);
+        const actualReturnedValue = javaScriptUtils.isDefined(value);
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
@@ -21,7 +21,7 @@ describe("JavaScriptUtils", () => {
       it("returns true", () => {
         const expectedReturnedValue = true;
 
-        const actualReturnedValue = JavaScriptUtils.isDefined(value);
+        const actualReturnedValue = javaScriptUtils.isDefined(value);
 
         expect(actualReturnedValue).to.equal(expectedReturnedValue);
       });
@@ -33,7 +33,7 @@ describe("JavaScriptUtils", () => {
       const statusCode = 200;
 
       it("returns true", () => {
-        const returnedValue = JavaScriptUtils.isSuccess(statusCode);
+        const returnedValue = javaScriptUtils.isSuccess(statusCode);
 
         expect(returnedValue).to.equal(true);
       });
@@ -43,7 +43,7 @@ describe("JavaScriptUtils", () => {
       const statusCode = 204;
 
       it("returns true", () => {
-        const returnedValue = JavaScriptUtils.isSuccess(statusCode);
+        const returnedValue = javaScriptUtils.isSuccess(statusCode);
 
         expect(returnedValue).to.equal(true);
       });
@@ -53,7 +53,7 @@ describe("JavaScriptUtils", () => {
       const statusCode = 404;
 
       it("returns false", () => {
-        const returnedValue = JavaScriptUtils.isSuccess(statusCode);
+        const returnedValue = javaScriptUtils.isSuccess(statusCode);
 
         expect(returnedValue).to.equal(false);
       });

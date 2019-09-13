@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
-import * as Proxy from "../Proxy/Proxy";
-import * as CalendarUtils from "../CalendarUtils/CalendarUtils";
-import * as JavaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
+import * as proxy from "../Proxy/Proxy";
+import * as calendarUtils from "../CalendarUtils/CalendarUtils";
+import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
 const getDailyContributions = (gitLabCalendar, date) => {
   if (gitLabCalendar[date]) {
@@ -16,12 +16,12 @@ export const mergeCalendarsContributions = (
   actualCalendar,
   gitLabUserJsonCalendar
 ) => {
-  const copiedActualCalendar = JavaScriptUtils.deepCopyObject(actualCalendar);
+  const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
   copiedActualCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
       if (dailyData.attributes["data-count"]) {
-        const actualCalendarDailyData = CalendarUtils.getCalendarDataByIndexes(
+        const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
           actualCalendar,
           weekIndex,
           dayIndex
@@ -38,7 +38,7 @@ export const mergeCalendarsContributions = (
         ].attributes = {
           ...actualCalendarDailyData.attributes,
           "data-count": String(totalDailyContributions),
-          fill: CalendarUtils.getFillColor(totalDailyContributions)
+          fill: calendarUtils.getFillColor(totalDailyContributions)
         };
       }
     });
@@ -61,10 +61,10 @@ export const getJsonFormattedCalendarAsync = async (
   proxyServerUrl,
   gitLabUsername
 ) => {
-  const url = Proxy.getGitLabProxyUrl(proxyServerUrl, gitLabUsername);
+  const url = proxy.getGitLabProxyUrl(proxyServerUrl, gitLabUsername);
   const responseData = await fetch(url);
 
-  if (JavaScriptUtils.isSuccess(responseData.status)) {
+  if (javaScriptUtils.isSuccess(responseData.status)) {
     return responseData.json().then(parsedCalendar => ({
       parsedCalendar,
       error: false,

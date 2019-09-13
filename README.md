@@ -41,12 +41,10 @@ npm install --save @c-hive/team-contribution-calendar
 <b>TeamContributionCalendar(container, gitHubUsers, gitLabUsers, proxyServerUrl)</b>
 </pre>
 
-Required params:
-- `container`: a DOM element in which the calendar will be rendered,
-- `gitHubUsers` / `gitLabUsers`: array of users(at least one user should be presented in either of them).
-
-Optional param:
-- `proxyServerUrl`: CORS proxy url(we serve one by default).
+- `container`: a DOM element in which the calendar will be rendered
+- `gitHubUsers` / `gitLabUsers`: array of user names
+- `proxyServerUrl`: CORS proxy url
+  - We serve one by default for _development purposes only_, no uptime guaranteed. Consider using your [own server](https://github.com/c-hive/cors-proxy). Keep it in mind, **otherwise you will most likely get 403 on production**.
 
 #### Examples
 
@@ -55,10 +53,11 @@ Optional param:
 ```javascript
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
 
-const container = document.getElementById('container');
+const container = document.getElementById("container");
+const ghUsernames = ["tenderlove", "gaearon"];
+const glUsernames = ["sytses", "gnachman"];
 
-// For further examples, see the CDN section below.
-TeamContributionCalendar(container, ['gh_username'], []);
+TeamContributionCalendar(container, ghUsernames, glUsernames, "https://your-proxy-server.com/");
 ```
 
 ##### CDN
@@ -66,24 +65,9 @@ TeamContributionCalendar(container, ['gh_username'], []);
 ```html
 <div class="container"></div>
 <script>
-   // Empty GitLab users, without the optional param.
-   TeamContributionCalendar('.container', ['gh_username']);
-</script>
-```
-
-```html
-<div class="container"></div>
-<script>
-   // Empty GitHub users, without the optional param.
-   TeamContributionCalendar('.container', [], ['gl_username_one', 'gl_username_two']);
-</script>
-```
-
-```html
-<div class="container"></div>
-<script>
-   // Passing both GitHub and GitLab users along with a cors-proxy url.
-   TeamContributionCalendar('.container', ['gh_username_one', 'gh_username_two'], ['gl_username'], 'https://proxy-server-url.com');
+   const ghUsernames = ["tenderlove", "gaearon"];
+   const glUsernames = ["sytses", "gnachman"];
+   TeamContributionCalendar(".container", ghUsernames, glUsernames, "https://your-proxy-server.com/");
 </script>
 ```
 

@@ -1,7 +1,7 @@
-import * as JavaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
+import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
 export const requiredParamsExist = (container, gitHubUsers, gitLabUsers) => {
-  if (!JavaScriptUtils.isDefined(container)) {
+  if (!javaScriptUtils.isDefined(container)) {
     return false;
   }
 
@@ -38,7 +38,7 @@ export const getFillColor = totalDailyContributions => {
 };
 
 export const getCalendarDataByIndexes = (calendarData, weekIndex, dayIndex) => {
-  if (JavaScriptUtils.isDefined(dayIndex)) {
+  if (javaScriptUtils.isDefined(dayIndex)) {
     return calendarData.children[0].children[weekIndex].children[dayIndex];
   }
 

@@ -1,10 +1,10 @@
 import { expect } from "chai";
-import * as GitLabUtils from "./GitLabUtils";
-import * as TestUtils from "../TestUtils/TestUtils";
+import * as gitLabUtils from "./GitLabUtils";
+import * as testUtils from "../TestUtils/TestUtils";
 
 describe("GitLabUtils", () => {
   describe("mergeCalendarsContributions", () => {
-    const actualCalendar = TestUtils.getFakeContributionsObjectWithDailyCounts({
+    const actualCalendar = testUtils.getFakeContributionsObjectWithDailyCounts({
       "2019-04-20": 10
     });
 
@@ -16,7 +16,7 @@ describe("GitLabUtils", () => {
       it("increments the `data-count` property by the user contributions on that date", () => {
         const expectedContributions = 32;
 
-        const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
+        const updatedActualCalendar = gitLabUtils.mergeCalendarsContributions(
           actualCalendar,
           gitLabUserJsonCalendar
         );
@@ -38,7 +38,7 @@ describe("GitLabUtils", () => {
       it("increments the actual calendar`s `data-count` property by 0", () => {
         const expectedContributions = 10;
 
-        const updatedActualCalendar = GitLabUtils.mergeCalendarsContributions(
+        const updatedActualCalendar = gitLabUtils.mergeCalendarsContributions(
           actualCalendar,
           gitLabUserJsonCalendar
         );
@@ -62,7 +62,7 @@ describe("GitLabUtils", () => {
     it("returns the given user last year contributions", () => {
       const expectedLastYearContributions = 10;
 
-      const actualLastYearContributions = GitLabUtils.getLastYearContributions(
+      const actualLastYearContributions = gitLabUtils.getLastYearContributions(
         userJsonCalendar
       );
 

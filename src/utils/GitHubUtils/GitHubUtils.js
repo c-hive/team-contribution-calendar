@@ -1,15 +1,15 @@
 /* eslint-disable no-console */
 
 import { parse, parseSync } from "svgson";
-import * as Proxy from "../Proxy/Proxy";
-import * as CalendarUtils from "../CalendarUtils/CalendarUtils";
-import * as JavaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
+import * as proxy from "../Proxy/Proxy";
+import * as calendarUtils from "../CalendarUtils/CalendarUtils";
+import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
 const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
-  const userUrl = Proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
+  const userUrl = proxy.getGitHubProxyUrl(proxyServerUrl, gitHubUsername);
   const responseData = await fetch(userUrl);
 
-  if (JavaScriptUtils.isSuccess(responseData.status)) {
+  if (javaScriptUtils.isSuccess(responseData.status)) {
     return responseData.text().then(body => {
       const div = document.createElement("div");
       div.innerHTML = body;
@@ -29,7 +29,15 @@ const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
 };
 
 export const setEmptyCalendarValues = calendar => {
-  const copiedCalendar = JavaScriptUtils.deepCopyObject(calendar);
+  const copiedCalendar = javaScriptUtils.deepCopyObject(calendar);
+
+  copiedCalendar.attributes = {
+    viewBox: "0 0 828 128",
+    preserveAspectRatio: "xMidYMin slice",
+    class: "js-calendar-graph-svg",
+    style:
+      "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: .8em"
+  };
 
   copiedCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
@@ -50,13 +58,13 @@ export const mergeCalendarsContributions = (
   actualCalendar,
   gitHubUserJsonCalendar
 ) => {
-  const copiedActualCalendar = JavaScriptUtils.deepCopyObject(actualCalendar);
+  const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
   gitHubUserJsonCalendar.children[0].children.forEach(
     (weeklyData, weekIndex) => {
       weeklyData.children.forEach((dailyData, dayIndex) => {
         if (dailyData.attributes["data-count"]) {
-          const actualCalendarDailyData = CalendarUtils.getCalendarDataByIndexes(
+          const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
             copiedActualCalendar,
             weekIndex,
             dayIndex
@@ -70,7 +78,7 @@ export const mergeCalendarsContributions = (
           ].attributes = {
             ...actualCalendarDailyData.attributes,
             "data-count": String(totalDailyContributions),
-            fill: CalendarUtils.getFillColor(totalDailyContributions)
+            fill: calendarUtils.getFillColor(totalDailyContributions)
           };
         }
       });
