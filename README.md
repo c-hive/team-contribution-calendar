@@ -14,10 +14,10 @@ Status and support
 *You are viewing the README of the development version. You can find the README of the latest release (v0.2.0) [here](https://github.com/c-hive/team-contribution-calendar/releases/tag/v0.2.0).*
 <!--- Version information end -->
 
-| Branch | Status |
-| ------ | ------ |
-| Release | [![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=release)](https://travis-ci.org/c-hive/team-contribution-calendar)   [![Coverage Status](https://coveralls.io/repos/github/c-hive/team-contributio-calendar/badge.svg?branch=release)](https://coveralls.io/github/c-hive/team-contribution-calendar?branch=release)   [![npm version](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar.svg)](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar)   [![Total Downloads](https://img.shields.io/npm/dw/@c-hive/team-contribution-calendar.svg)](https://www.npmjs.com/package/@c-hive/team-contribution-calendar) |
-| Development | [![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=master)](https://travis-ci.org/c-hive/team-contribution-calendar)   [![Coverage Status](https://coveralls.io/repos/github/c-hive/team-contribution-calendar/badge.svg?branch=master)](https://coveralls.io/github/c-hive/team-contribution-calendar?branch=master) |
+[![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=master)](https://travis-ci.org/c-hive/team-contribution-calendar)
+[![Coverage Status](https://coveralls.io/repos/github/c-hive/team-contribution-calendar/badge.svg?branch=master)](https://coveralls.io/github/c-hive/team-contribution-calendar?branch=master)
+[![npm version](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar.svg)](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar)
+[![Total Downloads](https://img.shields.io/npm/dw/@c-hive/team-contribution-calendar.svg)](https://www.npmjs.com/package/@c-hive/team-contribution-calendar)
 
 ### Usage
 
