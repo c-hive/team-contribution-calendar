@@ -8,7 +8,7 @@ Status and support
 
 - &#x2714; stable
 - &#x2714; supported
-- &#x2716; no ongoing development
+- &#x2714; ongoing development
 
 <!--- Version information -->
 *You are viewing the README of the development version. You can find the README of the latest release (v0.2.0) [here](https://github.com/c-hive/team-contribution-calendar/releases/tag/v0.2.0).*
