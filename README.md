@@ -31,7 +31,7 @@ npm install --save @c-hive/team-contribution-calendar
 
 
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar/release@0.2.0/dist/team-contribution-calendar.min.js">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar@0.1.1/dist/team-contribution-calendar.min.js">
 </script>
 ```
 
