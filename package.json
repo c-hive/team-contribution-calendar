@@ -1,8 +1,14 @@
 {
   "name": "@c-hive/team-contribution-calendar",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GitHub-like contribution calendar for the whole team. Supports GitHub and GitLab.",
   "main": "./lib/index.js",
+  "files": [
+    "/lib/**/*.js",
+    "!/lib/**/*.test.js",
+    "/lib/**/*.json",
+    "/lib/**/*.svg"
+  ],
   "scripts": {
     "dev": "parcel ./dev/index.html --global TeamContributionCalendar -d ./dev/parcel",
     "build": "cross-env BABEL_ENV=production babel src --out-dir lib --copy-files",
