@@ -11,8 +11,6 @@ jobs:
       run: |
         yarn install
         yarn run test
-
-jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
