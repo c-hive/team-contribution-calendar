@@ -1,0 +1,23 @@
+name: Verify
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Test
+      run: |
+        yarn install
+        yarn run test
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Lint
+      run: |
+        yarn install
+        yarn run lint
