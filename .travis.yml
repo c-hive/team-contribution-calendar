@@ -11,7 +11,8 @@ stages:
     - test
     - name: distify
       if: branch = master
-    - release
+    - name: release
+      if: tag =~ /^v[0-9]\.[0-9]\.[0-9]$/
 jobs:
   include:
     - stage: lint
@@ -30,6 +31,5 @@ jobs:
         api_key: $NPM_TOKEN
         on:
           all_branches: true
-          condition: $TRAVIS_TAG =~ /^v[0-9]\.[0-9]\.[0-9]$/
 after_success:
   - yarn run coveralls
