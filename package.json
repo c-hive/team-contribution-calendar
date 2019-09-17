@@ -10,7 +10,7 @@
     "/lib/**/*.svg"
   ],
   "scripts": {
-    "dev": "parcel ./dev/index.html --global TeamContributionCalendar -d ./dev/parcel",
+    "dev": "cross-env BROWSERSLIST_ENV=development parcel ./dev/index.html --global TeamContributionCalendar -d ./dev/parcel",
     "build": "cross-env BABEL_ENV=production babel src --out-dir lib --copy-files",
     "clean:lib": "rimraf lib",
     "lint": "eslint src",
@@ -73,11 +73,13 @@
     "elly": "^1.1.10",
     "svgson": "^3.1.0"
   },
-  "browserslist": [
-    "last 2 Chrome versions",
-    "last 2 Firefox versions",
-    "last 2 Safari versions",
-    "last 2 Edge versions",
-    "last 2 Opera versions"
-  ]
+  "browserslist": {
+    "development": [
+      "last 2 Chrome versions",
+      "last 2 Firefox versions",
+      "last 2 Safari versions",
+      "last 2 Edge versions",
+      "last 2 Opera versions"
+    ]
+  }
 }
