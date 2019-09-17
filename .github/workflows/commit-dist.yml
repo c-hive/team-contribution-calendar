@@ -1,6 +1,9 @@
 name: Commit dist
 
-on: [push]
+on:
+  push:
+    tags:
+    - 'v*'
 
 jobs:
   commit-dist:
