@@ -28,6 +28,7 @@ jobs:
     - stage: release
       deploy:
         provider: npm
+        email: "opensource@c-hive.dev"
         api_key: $NPM_TOKEN
         on:
           all_branches: true
