@@ -12,6 +12,8 @@
 /package-lock.json
 yarn.lock
 
+/*.tgz
+
 # parcel
 .cache/
 /dev/parcel

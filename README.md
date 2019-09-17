@@ -6,18 +6,18 @@
 
 Status and support
 
-- &#x2716; not stable
+- &#x2714; stable
 - &#x2714; supported
 - &#x2714; ongoing development
 
 <!--- Version information -->
-*You are viewing the README of the development version. There are no releases yet.*
+*You are viewing the README of version [v0.1.1](/../../releases/tag/v0.1.1). You can find other releases [here](/../../releases).*
 <!--- Version information end -->
 
-| Branch | Status |
-| ------ | ------ |
-| Release | [![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=release)](https://travis-ci.org/c-hive/team-contribution-calendar)   [![Coverage Status](https://coveralls.io/repos/github/c-hive/team-contributio-calendar/badge.svg?branch=release)](https://coveralls.io/github/c-hive/team-contribution-calendar?branch=release)   [![npm version](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar.svg)](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar)   [![Total Downloads](https://img.shields.io/npm/dw/@c-hive/team-contribution-calendar.svg)](https://www.npmjs.com/package/@c-hive/team-contribution-calendar) |
-| Development | [![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=master)](https://travis-ci.org/c-hive/team-contribution-calendar)   [![Coverage Status](https://coveralls.io/repos/github/c-hive/team-contribution-calendar/badge.svg?branch=master)](https://coveralls.io/github/c-hive/team-contribution-calendar?branch=master) |
+[![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=master)](https://travis-ci.org/c-hive/team-contribution-calendar)
+[![Coverage Status](https://coveralls.io/repos/github/c-hive/team-contribution-calendar/badge.svg?branch=master)](https://coveralls.io/github/c-hive/team-contribution-calendar?branch=master)
+[![npm version](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar.svg)](https://badge.fury.io/js/%40c-hive%2Fteam-contribution-calendar)
+[![Total Downloads](https://img.shields.io/npm/dw/@c-hive/team-contribution-calendar.svg)](https://www.npmjs.com/package/@c-hive/team-contribution-calendar)
 
 ### Usage
 
@@ -31,7 +31,7 @@ npm install --save @c-hive/team-contribution-calendar
 
 
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar/dist/team-contribution-calendar.min.js">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar@0.1.1/dist/team-contribution-calendar.min.js">
 </script>
 ```
 
