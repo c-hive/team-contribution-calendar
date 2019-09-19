@@ -53,10 +53,12 @@ const getColorsList = () => {
   const lessText = document.createElement("SPAN");
   lessText.innerText = "Less";
   lessText.style.margin = "0 5px";
+  lessText.style.color = "#767676";
 
   const moreText = document.createElement("SPAN");
   moreText.innerText = "More";
   moreText.style.margin = "0 5px";
+  moreText.style.color = "#767676";
 
   calendarColorsList.insertBefore(lessText, calendarColorsList.childNodes[0]);
   calendarColorsList.insertBefore(moreText, calendarColorsList.nextSibling);

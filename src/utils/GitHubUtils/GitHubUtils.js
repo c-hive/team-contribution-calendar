@@ -39,6 +39,13 @@ export const setEmptyCalendarValues = calendar => {
       "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: .8em"
   };
 
+  copiedCalendar.children[0].children.forEach(data => {
+    if (data.name === "text") {
+      // eslint-disable-next-line no-param-reassign
+      data.attributes = { ...data.attributes, fill: "#767676" };
+    }
+  });
+
   copiedCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
       copiedCalendar.children[0].children[weekIndex].children[
