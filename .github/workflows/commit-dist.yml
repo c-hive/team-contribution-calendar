@@ -8,6 +8,7 @@ on:
 jobs:
   commit-dist:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
     - uses: actions/checkout@v1
     - name: Install dependencies
