@@ -17,7 +17,7 @@
     "test": "nyc --reporter=html --reporter=text mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
     "test:only": "mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
     "prepublishOnly": "npm run clean:lib && npm run lint && npm run test && npm run build",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "test:coverage": "nyc report --reporter=text-lcov",
     "browserify": "browserify lib/index.js --standalone TeamContributionCalendar -o dist/team-contribution-calendar.min.js",
     "uglify": "uglifyjs dist/team-contribution-calendar.min.js -o dist/team-contribution-calendar.min.js",
     "distify": "yarn run build && yarn run browserify && yarn run uglify"

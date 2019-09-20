@@ -12,7 +12,15 @@ jobs:
       run: |
         yarn install
         yarn run test
-        yarn run coveralls
+    - name: Generate test coverage
+      run: |
+        yarn run test:coverage
+        ll
+        ll ./coverage
+    - name: Send data to Coveralls
+      uses: coverallsapp/github-action@v1.0.1
+      with:
+          github-token: ${{ secrets.github_token }}
   lint:
     runs-on: ubuntu-latest
     timeout-minutes: 3
