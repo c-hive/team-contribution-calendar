@@ -4,3 +4,17 @@ on:
   push:
     tags:
     - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Publish to npm
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        run: |
+          npm install
+          npm publish
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
