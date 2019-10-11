@@ -53,6 +53,24 @@ export default class TeamContributionCalendar {
     }
   }
 
+  updateHeader(data) {
+    if (javaScriptUtils.isDefined(data.isLoading)) {
+      this.isLoading = data.isLoading;
+    }
+
+    if (javaScriptUtils.isDefined(data.updatedActualCalendar)) {
+      const { contributions, updatedActualCalendar } = data;
+
+      this.actualCalendar = {
+        ...updatedActualCalendar
+      };
+
+      this.totalContributions = this.totalContributions + contributions;
+    }
+
+    this.renderActualHeader();
+  }
+
   updateCalendar(data) {
     if (javaScriptUtils.isDefined(data.isLoading)) {
       this.isLoading = data.isLoading;
@@ -88,7 +106,6 @@ export default class TeamContributionCalendar {
     );
     const svgElement = getStyledCalendarElement.svgCalendar();
 
-    // console.log(containerData.selectedElement.childNodes[0]);
     console.log(svgElement);
 
     if (containerData.error) {
@@ -150,6 +167,12 @@ export default class TeamContributionCalendar {
       contributions: lastYearContributions,
       isLoading: false
     });
+
+    this.updateHeader({
+      updatedActualCalendar,
+      contributions: lastYearContributions,
+      isLoading: false
+    });
   }
 
   processGitLabCalendar(gitLabUserJsonCalendar) {
@@ -163,6 +186,12 @@ export default class TeamContributionCalendar {
     );
 
     this.updateCalendar({
+      updatedActualCalendar,
+      contributions: lastYearContributions,
+      isLoading: false
+    });
+
+    this.updateHeader({
       updatedActualCalendar,
       contributions: lastYearContributions,
       isLoading: false
