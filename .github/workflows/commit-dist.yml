@@ -9,8 +9,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    - uses: actions/checkout@v1
     steps:
+      - uses: actions/checkout@v1
       - name: Test
         run: |
           yarn install
