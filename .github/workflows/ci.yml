@@ -41,7 +41,7 @@ jobs:
   commit-dist:
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    if: github.ref == master # <- make sure this works, otherwise need a different workflow restricted to master
+    if: github.ref == "master" # <- make sure this works, otherwise need a different workflow restricted to master
     needs: lint, test, build
     steps:
     - uses: actions/checkout@v1
