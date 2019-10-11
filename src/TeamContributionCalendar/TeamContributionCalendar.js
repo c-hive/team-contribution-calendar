@@ -86,11 +86,9 @@ export default class TeamContributionCalendar {
     const containerData = getStyledCalendarElement.container(
       this.configs.container
     );
-    const svgElement = getStyledCalendarElement.svgCalendar(
-      this.configs.container
-    );
+    const svgElement = getStyledCalendarElement.svgCalendar();
 
-    console.log(containerData.selectedElement.childNodes[0]);
+    // console.log(containerData.selectedElement.childNodes[0]);
     console.log(svgElement);
 
     if (containerData.error) {
@@ -102,7 +100,8 @@ export default class TeamContributionCalendar {
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
     // containerData.selectedElement.innerHTML = stringifiedHTMLContent;
-    SVGAElement.innerHTML = stringifiedHTMLContent;
+    containerData.selectedElement.appendChild(svgElement);
+    svgElement.innerHTML = stringifiedHTMLContent;
     containerData.selectedElement.appendChild(calendarTooltip);
 
     tooltip.addEventsToRectElements();

@@ -27,20 +27,10 @@ export const container = containerSelector => {
   };
 };
 
-export const svgCalendar = containerSelector => {
-  const selectedElementSVG = $(containerSelector).childNodes[0].childNodes[1];
+export const svgCalendar = () => {
+  const svgElement = document.createElement("DIV");
 
-  if (!selectedElementSVG) {
-    return {
-      error: true,
-      errorMessage: "Could not find the container element in the DOM."
-    };
-  }
-
-  return {
-    selectedElementSVG,
-    error: false
-  };
+  return svgElement;
 };
 
 const getColorElement = color => {
