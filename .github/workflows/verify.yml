@@ -28,26 +28,3 @@ jobs:
       run: |
         yarn install
         yarn run lint
-  build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    steps:
-    - uses: actions/checkout@v1
-    - name: Build
-      run: |
-        yarn install
-        yarn run build
-        yarn run distify
-  commit-dist:
-    runs-on: ubuntu-latest
-    timeout-minutes: 3
-    if: github.ref == master
-    needs: [lint, test, build]
-    steps:
-    - uses: actions/checkout@v1
-    - name: Commit & push dist to master
-      run: |
-        yarn install
-        yarn run build
-        yarn run distify
-        # TODO

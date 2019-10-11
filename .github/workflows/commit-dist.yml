@@ -1,0 +1,33 @@
+name: Commit dist folder
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    - uses: actions/checkout@v1
+    steps:
+      - name: Test
+        run: |
+          yarn install
+          yarn run test
+      - name: Lint
+        run: |
+          yarn install
+          yarn run lint
+  commit-dist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    needs: verify
+    steps:
+    - uses: actions/checkout@v1
+    - name: Commit & push dist to master
+      run: |
+        yarn install
+        yarn run build
+        yarn run distify
+        # TODO
