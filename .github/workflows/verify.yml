@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     if: github.ref == 'master'
-    needs: [lint, test, build]
+    needs: [lint, test]
     steps:
     - uses: actions/checkout@v1
     - name: Commit & push dist to master
