@@ -28,6 +28,7 @@ export default class TeamContributionCalendar {
 
   async renderBasicAppearance() {
     this.renderActualCalendar();
+    this.renderActualHeader();
 
     const defaultUserData = await gitHubUtils.getJsonFormattedCalendarSync(
       this.configs.proxyServerUrl,
@@ -70,25 +71,38 @@ export default class TeamContributionCalendar {
     this.renderActualCalendar();
   }
 
+  renderActualHeader() {
+    const containerData = getStyledCalendarElement.container(
+      this.configs.container
+    );
+    const calendarHeader = getStyledCalendarElement.header(
+      this.totalContributions,
+      this.isLoading
+    );
+    containerData.selectedElement.prepend(calendarHeader);
+  }
+
   renderActualCalendar() {
     const containerData = getStyledCalendarElement.container(
       this.configs.container
     );
+    const svgElement = getStyledCalendarElement.svgCalendar(
+      this.configs.container
+    );
+
+    console.log(containerData.selectedElement.childNodes[0]);
+    console.log(svgElement);
 
     if (containerData.error) {
       throw new Error(containerData.errorMessage);
     }
 
-    const calendarHeader = getStyledCalendarElement.header(
-      this.totalContributions,
-      this.isLoading
-    );
     const calendarTooltip = getStyledCalendarElement.tooltip();
 
     const stringifiedHTMLContent = stringify(this.actualCalendar);
 
-    containerData.selectedElement.innerHTML = stringifiedHTMLContent;
-    containerData.selectedElement.prepend(calendarHeader);
+    // containerData.selectedElement.innerHTML = stringifiedHTMLContent;
+    SVGAElement.innerHTML = stringifiedHTMLContent;
     containerData.selectedElement.appendChild(calendarTooltip);
 
     tooltip.addEventsToRectElements();

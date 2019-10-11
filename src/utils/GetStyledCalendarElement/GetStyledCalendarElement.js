@@ -27,6 +27,22 @@ export const container = containerSelector => {
   };
 };
 
+export const svgCalendar = containerSelector => {
+  const selectedElementSVG = $(containerSelector).childNodes[0].childNodes[1];
+
+  if (!selectedElementSVG) {
+    return {
+      error: true,
+      errorMessage: "Could not find the container element in the DOM."
+    };
+  }
+
+  return {
+    selectedElementSVG,
+    error: false
+  };
+};
+
 const getColorElement = color => {
   const colorELement = document.createElement("LI");
 
