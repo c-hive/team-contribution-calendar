@@ -8,7 +8,6 @@ import * as javaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
 import * as tooltip from "../utils/Tooltip/Tooltip";
 import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
 import * as defaultUsers from "../resources/DefaultUsers/DefaultUsers";
-import * as calendarUtils from "../utils/CalendarUtils/CalendarUtils";
 import elementIds from "../resources/ElementIds/ElementIds";
 
 export default class TeamContributionCalendar {
@@ -87,7 +86,7 @@ export default class TeamContributionCalendar {
       this.isLoading
     );
 
-    if (calendarUtils.elementExists(elementIds.HEADER)) {
+    if (javaScriptUtils.elementExists(elementIds.HEADER)) {
       const previousHeader = document.getElementById(elementIds.HEADER);
 
       containerData.selectedElement.replaceChild(newHeader, previousHeader);
@@ -108,7 +107,7 @@ export default class TeamContributionCalendar {
     const newSvgContainer = getStyledCalendarElement.svgContainer();
     newSvgContainer.innerHTML = stringify(this.actualCalendar);
 
-    if (calendarUtils.elementExists(elementIds.SVG_CONTAINER)) {
+    if (javaScriptUtils.elementExists(elementIds.SVG_CONTAINER)) {
       const previousSvgContainer = document.getElementById(
         elementIds.SVG_CONTAINER
       );

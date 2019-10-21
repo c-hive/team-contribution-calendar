@@ -16,3 +16,9 @@ export const isSuccess = statusCode => {
 
   return false;
 };
+
+export const elementExists = id => {
+  const element = document.getElementById(id);
+
+  return isDefined(element);
+};
