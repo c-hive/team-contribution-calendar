@@ -1,6 +1,7 @@
 import ResponseStatusCodes from "../../resources/ResponseStatusCodes/ResponseStatusCodes";
 
-export const isDefined = value => typeof value !== "undefined";
+export const isDefined = value =>
+  typeof value !== "undefined" && value !== null;
 
 export const deepCopyObject = object => JSON.parse(JSON.stringify(object));
 

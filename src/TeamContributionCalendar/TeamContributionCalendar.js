@@ -8,6 +8,8 @@ import * as javaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
 import * as tooltip from "../utils/Tooltip/Tooltip";
 import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
 import * as defaultUsers from "../resources/DefaultUsers/DefaultUsers";
+import * as calendarUtils from "../utils/CalendarUtils/CalendarUtils";
+import elementIds from "../resources/ElementIds/ElementIds";
 
 export default class TeamContributionCalendar {
   constructor(container, gitHubUsers, gitLabUsers, proxyServerUrl) {
@@ -36,21 +38,20 @@ export default class TeamContributionCalendar {
     );
 
     if (defaultUserData.error) {
-      this.updateCalendar({
+      this.updateHeader({
         isLoading: false
       });
 
       throw new Error(defaultUserData.errorMessage);
-    } else {
-      const defaultUserEmptyCalendar = gitHubUtils.setEmptyCalendarValues(
-        defaultUserData.parsedCalendar
-      );
-
-      this.updateCalendar({
-        contributions: 0,
-        updatedActualCalendar: defaultUserEmptyCalendar
-      });
     }
+
+    const defaultUserEmptyCalendar = gitHubUtils.setEmptyCalendarValues(
+      defaultUserData.parsedCalendar
+    );
+
+    this.updateCalendar({
+      updatedActualCalendar: defaultUserEmptyCalendar
+    });
   }
 
   updateHeader(data) {
@@ -58,32 +59,19 @@ export default class TeamContributionCalendar {
       this.isLoading = data.isLoading;
     }
 
-    if (javaScriptUtils.isDefined(data.updatedActualCalendar)) {
-      const { contributions, updatedActualCalendar } = data;
-
-      this.actualCalendar = {
-        ...updatedActualCalendar
-      };
-
-      this.totalContributions = this.totalContributions + contributions;
+    if (javaScriptUtils.isDefined(data.contributions)) {
+      this.totalContributions = this.totalContributions + data.contributions;
     }
 
     this.renderActualHeader();
   }
 
   updateCalendar(data) {
-    if (javaScriptUtils.isDefined(data.isLoading)) {
-      this.isLoading = data.isLoading;
-    }
-
     if (javaScriptUtils.isDefined(data.updatedActualCalendar)) {
-      const { contributions, updatedActualCalendar } = data;
-
       this.actualCalendar = {
-        ...updatedActualCalendar
+        ...this.actualCalendar,
+        ...data.updatedActualCalendar
       };
-
-      this.totalContributions = this.totalContributions + contributions;
     }
 
     this.renderActualCalendar();
@@ -93,34 +81,48 @@ export default class TeamContributionCalendar {
     const containerData = getStyledCalendarElement.container(
       this.configs.container
     );
-    const calendarHeader = getStyledCalendarElement.header(
+
+    const newHeader = getStyledCalendarElement.header(
       this.totalContributions,
       this.isLoading
     );
-    containerData.selectedElement.prepend(calendarHeader);
+
+    if (calendarUtils.elementExists(elementIds.HEADER)) {
+      const previousHeader = document.getElementById(elementIds.HEADER);
+
+      containerData.selectedElement.replaceChild(newHeader, previousHeader);
+    } else {
+      containerData.selectedElement.prepend(newHeader);
+    }
   }
 
   renderActualCalendar() {
     const containerData = getStyledCalendarElement.container(
       this.configs.container
     );
-    const svgElement = getStyledCalendarElement.svgCalendar();
-
-    console.log(svgElement);
 
     if (containerData.error) {
       throw new Error(containerData.errorMessage);
     }
 
+    const newSvgContainer = getStyledCalendarElement.svgContainer();
+    newSvgContainer.innerHTML = stringify(this.actualCalendar);
+
+    if (calendarUtils.elementExists(elementIds.SVG_CONTAINER)) {
+      const previousSvgContainer = document.getElementById(
+        elementIds.SVG_CONTAINER
+      );
+
+      containerData.selectedElement.replaceChild(
+        newSvgContainer,
+        previousSvgContainer
+      );
+    } else {
+      containerData.selectedElement.appendChild(newSvgContainer);
+    }
+
     const calendarTooltip = getStyledCalendarElement.tooltip();
-
-    const stringifiedHTMLContent = stringify(this.actualCalendar);
-
-    // containerData.selectedElement.innerHTML = stringifiedHTMLContent;
-    containerData.selectedElement.appendChild(svgElement);
-    svgElement.innerHTML = stringifiedHTMLContent;
     containerData.selectedElement.appendChild(calendarTooltip);
-
     tooltip.addEventsToRectElements();
   }
 
@@ -163,13 +165,10 @@ export default class TeamContributionCalendar {
     );
 
     this.updateCalendar({
-      updatedActualCalendar,
-      contributions: lastYearContributions,
-      isLoading: false
+      updatedActualCalendar
     });
 
     this.updateHeader({
-      updatedActualCalendar,
       contributions: lastYearContributions,
       isLoading: false
     });
@@ -186,13 +185,10 @@ export default class TeamContributionCalendar {
     );
 
     this.updateCalendar({
-      updatedActualCalendar,
-      contributions: lastYearContributions,
-      isLoading: false
+      updatedActualCalendar
     });
 
     this.updateHeader({
-      updatedActualCalendar,
       contributions: lastYearContributions,
       isLoading: false
     });

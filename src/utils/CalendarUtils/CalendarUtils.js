@@ -44,3 +44,9 @@ export const getCalendarDataByIndexes = (calendarData, weekIndex, dayIndex) => {
 
   return calendarData.children[0].children[weekIndex];
 };
+
+export const elementExists = id => {
+  const element = document.getElementById(id);
+
+  return javaScriptUtils.isDefined(element);
+};

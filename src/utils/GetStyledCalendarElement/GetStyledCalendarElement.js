@@ -1,6 +1,7 @@
 import $ from "elly";
 import * as colorSchemas from "../../resources/ColorSchemas/ColorSchemas";
 import LoaderIcon from "../../resources/LoaderIcon/LoaderIcon.svg";
+import elementIds from "../../resources/ElementIds/ElementIds";
 
 export const container = containerSelector => {
   const selectedElement = $(containerSelector);
@@ -27,10 +28,12 @@ export const container = containerSelector => {
   };
 };
 
-export const svgCalendar = () => {
-  const svgElement = document.createElement("DIV");
+export const svgContainer = () => {
+  const svgContainerElement = document.createElement("DIV");
 
-  return svgElement;
+  svgContainerElement.id = elementIds.SVG_CONTAINER;
+
+  return svgContainerElement;
 };
 
 const getColorElement = color => {
@@ -76,6 +79,7 @@ export const header = (totalContributions, isLoading) => {
   const calendarHeader = document.createElement("DIV");
   const calendarColorsList = getColorsList();
 
+  calendarHeader.id = elementIds.HEADER;
   calendarHeader.style.fontSize = "1em";
 
   const contributionsValueDisplayer = document.createElement("P");
@@ -102,7 +106,7 @@ export const header = (totalContributions, isLoading) => {
 export const tooltip = () => {
   const calendarTooltip = document.createElement("DIV");
 
-  calendarTooltip.id = "tooltip";
+  calendarTooltip.id = elementIds.TOOLTIP;
 
   calendarTooltip.style.background = "rgba(0, 0, 0, 0.8)";
   calendarTooltip.style.borderRadius = "3px";

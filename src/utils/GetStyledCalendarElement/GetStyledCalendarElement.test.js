@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import jsdom from "mocha-jsdom";
 import proxyquire from "proxyquire";
+import elementIds from "../../resources/ElementIds/ElementIds";
 
 const getStyledCalendarElement = proxyquire("./GetStyledCalendarElement.js", {
   elly: () => ({
@@ -79,10 +80,10 @@ describe("GetStyledCalendarElement", () => {
   });
 
   describe("tooltip", () => {
-    it("sets the `id` attribute to `tooltip`", () => {
+    it("sets the `id` attribute to `elementIds.TOOLTIP`", () => {
       const calendarTooltip = getStyledCalendarElement.tooltip();
 
-      expect(calendarTooltip.id).to.equal("tooltip");
+      expect(calendarTooltip.id).to.equal(elementIds.TOOLTIP);
     });
 
     it("returns a `div` element", () => {
