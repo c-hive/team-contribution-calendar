@@ -22,14 +22,14 @@ export default class TeamContributionCalendar {
       gitLab: [...gitLabUsers]
     };
 
-    this.actualCalendar = BasicCalendar;
+    this.actualSvg = BasicCalendar;
     this.totalContributions = 0;
     this.isLoading = true;
   }
 
   async renderBasicAppearance() {
-    this.renderActualCalendar();
-    this.renderActualHeader();
+    this.renderSvg();
+    this.renderHeader();
 
     const defaultUserData = await gitHubUtils.getJsonFormattedCalendarSync(
       this.configs.proxyServerUrl,
@@ -48,8 +48,8 @@ export default class TeamContributionCalendar {
       defaultUserData.parsedCalendar
     );
 
-    this.updateCalendar({
-      updatedActualCalendar: defaultUserEmptyCalendar
+    this.updateSvg({
+      updatedSvg: defaultUserEmptyCalendar
     });
   }
 
@@ -62,24 +62,28 @@ export default class TeamContributionCalendar {
       this.totalContributions = this.totalContributions + data.contributions;
     }
 
-    this.renderActualHeader();
+    this.renderHeader();
   }
 
-  updateCalendar(data) {
-    if (javaScriptUtils.isDefined(data.updatedActualCalendar)) {
-      this.actualCalendar = {
-        ...this.actualCalendar,
-        ...data.updatedActualCalendar
+  updateSvg(data) {
+    if (javaScriptUtils.isDefined(data.updatedSvg)) {
+      this.actualSvg = {
+        ...this.actualSvg,
+        ...data.updatedSvg
       };
     }
 
-    this.renderActualCalendar();
+    this.renderSvg();
   }
 
-  renderActualHeader() {
+  renderHeader() {
     const containerData = getStyledCalendarElement.container(
       this.configs.container
     );
+
+    if (containerData.error) {
+      throw new Error(containerData.errorMessage);
+    }
 
     const newHeader = getStyledCalendarElement.header(
       this.totalContributions,
@@ -95,7 +99,7 @@ export default class TeamContributionCalendar {
     }
   }
 
-  renderActualCalendar() {
+  renderSvg() {
     const containerData = getStyledCalendarElement.container(
       this.configs.container
     );
@@ -105,7 +109,7 @@ export default class TeamContributionCalendar {
     }
 
     const newSvgContainer = getStyledCalendarElement.svgContainer();
-    newSvgContainer.innerHTML = stringify(this.actualCalendar);
+    newSvgContainer.innerHTML = stringify(this.actualSvg);
 
     if (javaScriptUtils.elementExists(elementIds.SVG_CONTAINER)) {
       const previousSvgContainer = document.getElementById(
@@ -154,8 +158,8 @@ export default class TeamContributionCalendar {
   }
 
   processGitHubCalendar(gitHubUserJsonCalendar) {
-    const updatedActualCalendar = gitHubUtils.mergeCalendarsContributions(
-      this.actualCalendar,
+    const updatedSvg = gitHubUtils.mergeCalendarsContributions(
+      this.actualSvg,
       gitHubUserJsonCalendar
     );
 
@@ -163,8 +167,8 @@ export default class TeamContributionCalendar {
       gitHubUserJsonCalendar
     );
 
-    this.updateCalendar({
-      updatedActualCalendar
+    this.updateSvg({
+      updatedSvg
     });
 
     this.updateHeader({
@@ -174,8 +178,8 @@ export default class TeamContributionCalendar {
   }
 
   processGitLabCalendar(gitLabUserJsonCalendar) {
-    const updatedActualCalendar = gitLabUtils.mergeCalendarsContributions(
-      this.actualCalendar,
+    const updatedSvg = gitLabUtils.mergeCalendarsContributions(
+      this.actualSvg,
       gitLabUserJsonCalendar
     );
 
@@ -183,8 +187,8 @@ export default class TeamContributionCalendar {
       gitLabUserJsonCalendar
     );
 
-    this.updateCalendar({
-      updatedActualCalendar
+    this.updateSvg({
+      updatedSvg
     });
 
     this.updateHeader({
