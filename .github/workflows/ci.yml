@@ -39,7 +39,6 @@ jobs:
     - name: Build & distify
       run: |
         yarn install
-        yarn run build
         yarn run distify
     - name: Commit & push dist to master
       uses: stefanzweifel/git-auto-commit-action@v2.2.0
