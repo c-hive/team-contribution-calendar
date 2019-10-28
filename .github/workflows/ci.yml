@@ -35,7 +35,7 @@ jobs:
     needs: [lint, test]
     steps:
     - name: Checkout
-      uses: actions/checkout@vi
+      uses: actions/checkout@v1
     - name: Build & distify
       run: |
         yarn install
