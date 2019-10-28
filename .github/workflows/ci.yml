@@ -43,8 +43,8 @@ jobs:
     - name: Commit & push dist to master
     - uses: stefanzweifel/git-auto-commit-action@v2.2.0
       with:
-        commit_message: [skip travis] Update distified version
+        commit_message: '[skip travis] Update distified version'
         branch: ${{ github.ref }}
-        file_pattern: dist/team-contribution-calendar.min.js
+        file_pattern: 'dist/team-contribution-calendar.min.js'
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
