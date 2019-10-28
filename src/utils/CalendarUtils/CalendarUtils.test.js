@@ -182,7 +182,7 @@ describe("CalendarUtils", () => {
     });
   });
 
-  describe("containerExists", () => {
+  describe("elementExists", () => {
     let ellyStub;
     let calendarUtilsWithMockedElly;
 
@@ -197,7 +197,7 @@ describe("CalendarUtils", () => {
     });
 
     afterEach(() => {
-      ellyStub.restore();
+      ellyStub.reset();
     });
 
     describe("when the given element exists", () => {
@@ -206,7 +206,7 @@ describe("CalendarUtils", () => {
       });
 
       it("returns true", () => {
-        expect(calendarUtilsWithMockedElly.containerExists(selector)).to.equal(
+        expect(calendarUtilsWithMockedElly.elementExists(selector)).to.equal(
           true
         );
       });
@@ -218,7 +218,7 @@ describe("CalendarUtils", () => {
       });
 
       it("returns false", () => {
-        expect(calendarUtilsWithMockedElly.containerExists(selector)).to.equal(
+        expect(calendarUtilsWithMockedElly.elementExists(selector)).to.equal(
           false
         );
       });

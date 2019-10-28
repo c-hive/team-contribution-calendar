@@ -4,6 +4,7 @@ import { stringify } from "svgson";
 import * as getStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
 import * as gitHubUtils from "../utils/GitHubUtils/GitHubUtils";
 import * as gitLabUtils from "../utils/GitLabUtils/GitLabUtils";
+import * as calendarUtils from "../utils/CalendarUtils/CalendarUtils";
 import * as javaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
 import * as tooltip from "../utils/Tooltip/Tooltip";
 import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
@@ -77,55 +78,52 @@ export default class TeamContributionCalendar {
   }
 
   renderHeader() {
-    const containerData = getStyledCalendarElement.container(
+    if (!calendarUtils.elementExists(this.configs.container)) {
+      throw new Error("The given container does not exist.");
+    }
+
+    const calendarContainer = getStyledCalendarElement.container(
       this.configs.container
     );
-
-    if (containerData.error) {
-      throw new Error(containerData.errorMessage);
-    }
 
     const newHeader = getStyledCalendarElement.header(
       this.totalContributions,
       this.isLoading
     );
 
-    if (javaScriptUtils.elementExists(elementIds.HEADER)) {
+    if (calendarUtils.elementExists(`#${elementIds.HEADER}`)) {
       const previousHeader = document.getElementById(elementIds.HEADER);
 
-      containerData.selectedElement.replaceChild(newHeader, previousHeader);
+      calendarContainer.replaceChild(newHeader, previousHeader);
     } else {
-      containerData.selectedElement.prepend(newHeader);
+      calendarContainer.prepend(newHeader);
     }
   }
 
   renderSvg() {
-    const containerData = getStyledCalendarElement.container(
+    if (!calendarUtils.elementExists(this.configs.container)) {
+      throw new Error("The given container does not exist.");
+    }
+
+    const calendarContainer = getStyledCalendarElement.container(
       this.configs.container
     );
-
-    if (containerData.error) {
-      throw new Error(containerData.errorMessage);
-    }
 
     const newSvgContainer = getStyledCalendarElement.svgContainer();
     newSvgContainer.innerHTML = stringify(this.actualSvg);
 
-    if (javaScriptUtils.elementExists(elementIds.SVG_CONTAINER)) {
+    if (calendarUtils.elementExists(`#${elementIds.SVG_CONTAINER}`)) {
       const previousSvgContainer = document.getElementById(
         elementIds.SVG_CONTAINER
       );
 
-      containerData.selectedElement.replaceChild(
-        newSvgContainer,
-        previousSvgContainer
-      );
+      calendarContainer.replaceChild(newSvgContainer, previousSvgContainer);
     } else {
-      containerData.selectedElement.appendChild(newSvgContainer);
+      calendarContainer.appendChild(newSvgContainer);
     }
 
     const calendarTooltip = getStyledCalendarElement.tooltip();
-    containerData.selectedElement.appendChild(calendarTooltip);
+    calendarContainer.appendChild(calendarTooltip);
     tooltip.addEventsToRectElements();
   }
 
