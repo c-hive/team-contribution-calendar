@@ -200,7 +200,7 @@ describe("CalendarUtils", () => {
       ellyStub.restore();
     });
 
-    describe("when the given selector exists", () => {
+    describe("when the given element exists", () => {
       beforeEach(() => {
         ellyStub.returns({});
       });
@@ -212,7 +212,7 @@ describe("CalendarUtils", () => {
       });
     });
 
-    describe("when the given selector does not exist", () => {
+    describe("when the given element does not exist", () => {
       beforeEach(() => {
         ellyStub.returns(null);
       });

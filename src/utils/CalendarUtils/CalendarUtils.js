@@ -46,7 +46,7 @@ export const getCalendarDataByIndexes = (calendarData, weekIndex, dayIndex) => {
   return calendarData.children[0].children[weekIndex];
 };
 
-export const containerExists = selector => {
+export const elementExists = selector => {
   const element = $(selector);
 
   return javaScriptUtils.isDefined(element);
