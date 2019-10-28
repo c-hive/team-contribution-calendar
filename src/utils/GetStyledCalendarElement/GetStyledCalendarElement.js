@@ -4,28 +4,18 @@ import LoaderIcon from "../../resources/LoaderIcon/LoaderIcon.svg";
 import elementIds from "../../resources/ElementIds/ElementIds";
 
 export const container = containerSelector => {
-  const selectedElement = $(containerSelector);
+  const element = $(containerSelector);
 
-  if (!selectedElement) {
-    return {
-      error: true,
-      errorMessage: "Could not find the container element in the DOM."
-    };
-  }
+  element.style.display = "inline-block";
+  element.style.width = "700px";
+  element.style.borderTopLeftRadius = "3px";
+  element.style.borderTopRightRadius = "3px";
+  element.style.border = "1px solid #E1E4E8";
+  element.style.padding = "10px 20px";
+  element.style.minWidth = "350px";
+  element.style.fontSize = "14px";
 
-  selectedElement.style.display = "inline-block";
-  selectedElement.style.width = "700px";
-  selectedElement.style.borderTopLeftRadius = "3px";
-  selectedElement.style.borderTopRightRadius = "3px";
-  selectedElement.style.border = "1px solid #E1E4E8";
-  selectedElement.style.padding = "10px 20px";
-  selectedElement.style.minWidth = "350px";
-  selectedElement.style.fontSize = "14px";
-
-  return {
-    selectedElement,
-    error: false
-  };
+  return element;
 };
 
 export const svgContainer = () => {

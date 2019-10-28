@@ -1,3 +1,4 @@
+import $ from "elly";
 import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
 export const requiredParamsExist = (container, gitHubUsers, gitLabUsers) => {
@@ -43,4 +44,10 @@ export const getCalendarDataByIndexes = (calendarData, weekIndex, dayIndex) => {
   }
 
   return calendarData.children[0].children[weekIndex];
+};
+
+export const containerExists = selector => {
+  const element = $(selector);
+
+  return javaScriptUtils.isDefined(element);
 };
