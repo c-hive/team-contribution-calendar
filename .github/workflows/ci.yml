@@ -34,14 +34,15 @@ jobs:
     if: github.ref == 'master'
     needs: [lint, test]
     steps:
+    - name: Checkout
+      uses: actions/checkout@vi
     - name: Build & distify
-    - uses: actions/checkout@v1
       run: |
         yarn install
         yarn run build
         yarn run distify
     - name: Commit & push dist to master
-    - uses: stefanzweifel/git-auto-commit-action@v2.2.0
+      uses: stefanzweifel/git-auto-commit-action@v2.2.0
       with:
         commit_message: '[skip travis] Update distified version'
         branch: ${{ github.ref }}
