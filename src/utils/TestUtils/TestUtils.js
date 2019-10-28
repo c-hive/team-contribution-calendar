@@ -68,12 +68,6 @@ export const getFakeContributionsObjectWithDailyCounts = dailyDataWithContributi
   return fakeContributionsObjectWithDailyCounts;
 };
 
-export const getFakeTextObjectWithFill = () => {
-  const fakeTextObjectWithFill = getInitialCalendarWithTextFill();
-
-  return fakeTextObjectWithFill;
-};
-
 export const getTestParams = () => ({
   container: ".container",
   gitHubUsers: ["gitHubUsername"],
