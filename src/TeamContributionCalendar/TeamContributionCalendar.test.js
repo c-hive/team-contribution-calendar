@@ -812,7 +812,7 @@ describe("TeamContributionCalendar", () => {
       ).to.equal(true);
     });
 
-    it("updated the calendar's SVG", () => {
+    it("updates the calendar's SVG", () => {
       teamContributionCalendar.processGitLabCalendar(gitLabUserJsonCalendar);
 
       expect(
