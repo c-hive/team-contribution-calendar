@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import jsdom from "mocha-jsdom";
 import proxyquire from "proxyquire";
+import elementIds from "../../resources/ElementIds/ElementIds";
 
 const getStyledCalendarElement = proxyquire("./GetStyledCalendarElement.js", {
   elly: () => ({
@@ -78,11 +79,25 @@ describe("GetStyledCalendarElement", () => {
     });
   });
 
+  describe("svgContainer", () => {
+    it("returns a `DIV` element", () => {
+      const svgContainer = getStyledCalendarElement.svgContainer();
+
+      expect(svgContainer.nodeName).to.equal("DIV");
+    });
+
+    it("sets the id attribute to `elementIds.SVG_CONTAINER`", () => {
+      const svgContainer = getStyledCalendarElement.svgContainer();
+
+      expect(svgContainer.id).to.equal(elementIds.SVG_CONTAINER);
+    });
+  });
+
   describe("tooltip", () => {
-    it("sets the `id` attribute to `tooltip`", () => {
+    it("sets the `id` attribute to `elementIds.TOOLTIP`", () => {
       const calendarTooltip = getStyledCalendarElement.tooltip();
 
-      expect(calendarTooltip.id).to.equal("tooltip");
+      expect(calendarTooltip.id).to.equal(elementIds.TOOLTIP);
     });
 
     it("returns a `div` element", () => {

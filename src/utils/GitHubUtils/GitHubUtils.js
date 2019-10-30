@@ -51,6 +51,13 @@ export const setEmptyCalendarValues = calendar => {
     });
   });
 
+  copiedCalendar.children[0].children.forEach(data => {
+    if (data.name === "text") {
+      // eslint-disable-next-line no-param-reassign
+      data.attributes = { ...data.attributes, fill: "#767676" };
+    }
+  });
+
   return copiedCalendar;
 };
 

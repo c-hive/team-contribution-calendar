@@ -10,11 +10,44 @@ const getInitialCalendar = () => ({
   ]
 });
 
+export const getInitialCalendarWithTextFill = () => {
+  return {
+    children: [
+      {
+        children: [
+          {
+            name: "text",
+            type: "element",
+            value: "",
+            attributes: {
+              "text-anchor": "start",
+              class: "wday",
+              fill: "#767676",
+              dx: "-10",
+              dy: "81",
+              style: "display: none;"
+            },
+            children: [
+              {
+                name: "",
+                type: "text",
+                value: "Sat",
+                attributes: {},
+                children: []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+};
+
 const getDailyAttribute = (date, contributions) => ({
   class: "day",
   "data-count": String(contributions),
   "data-date": date,
-  fill: "#ebedf0",
+  fill: "#000000",
   height: "10",
   width: "10",
   x: "13",

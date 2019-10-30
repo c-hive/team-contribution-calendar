@@ -1,30 +1,29 @@
 import $ from "elly";
 import * as colorSchemas from "../../resources/ColorSchemas/ColorSchemas";
 import LoaderIcon from "../../resources/LoaderIcon/LoaderIcon.svg";
+import elementIds from "../../resources/ElementIds/ElementIds";
 
 export const container = containerSelector => {
-  const selectedElement = $(containerSelector);
+  const element = $(containerSelector);
 
-  if (!selectedElement) {
-    return {
-      error: true,
-      errorMessage: "Could not find the container element in the DOM."
-    };
-  }
+  element.style.display = "inline-block";
+  element.style.width = "700px";
+  element.style.borderTopLeftRadius = "3px";
+  element.style.borderTopRightRadius = "3px";
+  element.style.border = "1px solid #E1E4E8";
+  element.style.padding = "10px 20px";
+  element.style.minWidth = "350px";
+  element.style.fontSize = "14px";
 
-  selectedElement.style.display = "inline-block";
-  selectedElement.style.width = "700px";
-  selectedElement.style.borderTopLeftRadius = "3px";
-  selectedElement.style.borderTopRightRadius = "3px";
-  selectedElement.style.border = "1px solid #E1E4E8";
-  selectedElement.style.padding = "10px 20px";
-  selectedElement.style.minWidth = "350px";
-  selectedElement.style.fontSize = "14px";
+  return element;
+};
 
-  return {
-    selectedElement,
-    error: false
-  };
+export const svgContainer = () => {
+  const svgContainerElement = document.createElement("DIV");
+
+  svgContainerElement.id = elementIds.SVG_CONTAINER;
+
+  return svgContainerElement;
 };
 
 const getColorElement = color => {
@@ -53,10 +52,12 @@ const getColorsList = () => {
   const lessText = document.createElement("SPAN");
   lessText.innerText = "Less";
   lessText.style.margin = "0 5px";
+  lessText.style.color = "#767676";
 
   const moreText = document.createElement("SPAN");
   moreText.innerText = "More";
   moreText.style.margin = "0 5px";
+  moreText.style.color = "#767676";
 
   calendarColorsList.insertBefore(lessText, calendarColorsList.childNodes[0]);
   calendarColorsList.insertBefore(moreText, calendarColorsList.nextSibling);
@@ -68,7 +69,8 @@ export const header = (totalContributions, isLoading) => {
   const calendarHeader = document.createElement("DIV");
   const calendarColorsList = getColorsList();
 
-  calendarHeader.style.fontSize = ".9em";
+  calendarHeader.id = elementIds.HEADER;
+  calendarHeader.style.fontSize = "1em";
 
   const contributionsValueDisplayer = document.createElement("P");
   contributionsValueDisplayer.innerHTML = LoaderIcon;
@@ -94,7 +96,7 @@ export const header = (totalContributions, isLoading) => {
 export const tooltip = () => {
   const calendarTooltip = document.createElement("DIV");
 
-  calendarTooltip.id = "tooltip";
+  calendarTooltip.id = elementIds.TOOLTIP;
 
   calendarTooltip.style.background = "rgba(0, 0, 0, 0.8)";
   calendarTooltip.style.borderRadius = "3px";

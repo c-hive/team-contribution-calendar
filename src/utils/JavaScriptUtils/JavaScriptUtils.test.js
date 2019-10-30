@@ -3,10 +3,22 @@ import * as javaScriptUtils from "./JavaScriptUtils";
 
 describe("JavaScriptUtils", () => {
   describe("isDefined", () => {
-    describe("when the given value is undefined", () => {
+    describe("when the given value is `undefined`", () => {
       const value = undefined;
 
       it("returns false", () => {
+        const expectedReturnedValue = false;
+
+        const actualReturnedValue = javaScriptUtils.isDefined(value);
+
+        expect(actualReturnedValue).to.equal(expectedReturnedValue);
+      });
+    });
+
+    describe("when the given value is `null`", () => {
+      const value = null;
+
+      it("returns `false`", () => {
         const expectedReturnedValue = false;
 
         const actualReturnedValue = javaScriptUtils.isDefined(value);

@@ -1,4 +1,6 @@
 import { expect } from "chai";
+import sinon from "sinon";
+import proxyquire from "proxyquire";
 import * as calendarUtils from "./CalendarUtils";
 import * as TestUtils from "../TestUtils/TestUtils";
 
@@ -176,6 +178,49 @@ describe("CalendarUtils", () => {
         );
 
         expect(actualWeeklyData).to.equal(expectedWeeklyData);
+      });
+    });
+  });
+
+  describe("elementExists", () => {
+    let ellyStub;
+    let calendarUtilsWithMockedElly;
+
+    const selector = ".container";
+
+    beforeEach(() => {
+      ellyStub = sinon.stub().withArgs(selector);
+
+      calendarUtilsWithMockedElly = proxyquire("./CalendarUtils.js", {
+        elly: ellyStub
+      });
+    });
+
+    afterEach(() => {
+      ellyStub.reset();
+    });
+
+    describe("when the given element exists", () => {
+      beforeEach(() => {
+        ellyStub.returns({});
+      });
+
+      it("returns true", () => {
+        expect(calendarUtilsWithMockedElly.elementExists(selector)).to.equal(
+          true
+        );
+      });
+    });
+
+    describe("when the given element does not exist", () => {
+      beforeEach(() => {
+        ellyStub.returns(null);
+      });
+
+      it("returns false", () => {
+        expect(calendarUtilsWithMockedElly.elementExists(selector)).to.equal(
+          false
+        );
       });
     });
   });

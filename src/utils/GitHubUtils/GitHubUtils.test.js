@@ -30,6 +30,18 @@ describe("GitHubUtils", () => {
 
       expect(actualFillColor).to.equal(expectedFillColor);
     });
+
+    it("sets the text colors to `#767676`", () => {
+      const expectedFillColor = "#767676";
+
+      const restoredCalendar = gitHubUtils.setEmptyCalendarValues(
+        testUtils.getInitialCalendarWithTextFill()
+      );
+      const actualFillColor =
+        restoredCalendar.children[0].children[0].attributes.fill;
+
+      expect(actualFillColor).to.equal(expectedFillColor);
+    });
   });
 
   describe("mergeCalendarsContributions", () => {

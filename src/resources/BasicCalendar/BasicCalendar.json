@@ -6428,7 +6428,8 @@
             "attributes": {
               "x": "16",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6447,7 +6448,8 @@
             "attributes": {
               "x": "91",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6466,7 +6468,8 @@
             "attributes": {
               "x": "151",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6485,7 +6488,8 @@
             "attributes": {
               "x": "211",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6504,7 +6508,8 @@
             "attributes": {
               "x": "286",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6523,7 +6528,8 @@
             "attributes": {
               "x": "346",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6542,7 +6548,8 @@
             "attributes": {
               "x": "406",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6561,7 +6568,8 @@
             "attributes": {
               "x": "481",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6580,7 +6588,8 @@
             "attributes": {
               "x": "541",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6599,7 +6608,8 @@
             "attributes": {
               "x": "601",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6618,7 +6628,8 @@
             "attributes": {
               "x": "676",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6637,7 +6648,8 @@
             "attributes": {
               "x": "736",
               "y": "-9",
-              "class": "month"
+              "class": "month",
+              "fill": "#767676"
             },
             "children": [
               {
@@ -6656,6 +6668,7 @@
             "attributes": {
               "text-anchor": "start",
               "class": "wday",
+              "fill": "#767676",
               "dx": "-10",
               "dy": "8",
               "style": "display: none;"
@@ -6677,6 +6690,7 @@
             "attributes": {
               "text-anchor": "start",
               "class": "wday",
+              "fill": "#767676",
               "dx": "-10",
               "dy": "25"
             },
@@ -6697,6 +6711,7 @@
             "attributes": {
               "text-anchor": "start",
               "class": "wday",
+              "fill": "#767676",
               "dx": "-10",
               "dy": "32",
               "style": "display: none;"
@@ -6718,6 +6733,7 @@
             "attributes": {
               "text-anchor": "start",
               "class": "wday",
+              "fill": "#767676",
               "dx": "-10",
               "dy": "56"
             },
@@ -6738,6 +6754,7 @@
             "attributes": {
               "text-anchor": "start",
               "class": "wday",
+              "fill": "#767676",
               "dx": "-10",
               "dy": "57",
               "style": "display: none;"
@@ -6759,6 +6776,7 @@
             "attributes": {
               "text-anchor": "start",
               "class": "wday",
+              "fill": "#767676",
               "dx": "-10",
               "dy": "85"
             },
@@ -6779,6 +6797,7 @@
             "attributes": {
               "text-anchor": "start",
               "class": "wday",
+              "fill": "#767676",
               "dx": "-10",
               "dy": "81",
               "style": "display: none;"

@@ -1,4 +1,5 @@
 import * as getStyledCalendarElement from "../GetStyledCalendarElement/GetStyledCalendarElement";
+import elementIds from "../../resources/ElementIds/ElementIds";
 
 const showTooltip = event => {
   const hoveredDay = event.target;
@@ -6,7 +7,7 @@ const showTooltip = event => {
   const contributions = Number(hoveredDay.getAttribute("data-count"));
   const date = hoveredDay.getAttribute("data-date");
 
-  const tooltipElement = document.getElementById("tooltip");
+  const tooltipElement = document.getElementById(elementIds.TOOLTIP);
 
   const tooltipInnerText = getStyledCalendarElement.contributionsWithDateText(
     contributions,
@@ -24,7 +25,7 @@ const showTooltip = event => {
 };
 
 const hideTooltip = () => {
-  const tooltipElement = document.getElementById("tooltip");
+  const tooltipElement = document.getElementById(elementIds.TOOLTIP);
 
   if (tooltipElement.childNodes.length === 0) {
     return;
