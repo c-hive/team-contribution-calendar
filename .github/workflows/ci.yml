@@ -1,0 +1,50 @@
+name: CI
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+    - uses: actions/checkout@v1
+    - name: Test
+      run: |
+        yarn install
+        yarn run test
+    - name: Generate test coverage
+      run: |
+        yarn run test:coverage > ./coverage/lcov.info
+    - name: Send data to Coveralls
+      uses: coverallsapp/github-action@v1.0.1
+      with:
+          github-token: ${{ secrets.github_token }}
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+    - uses: actions/checkout@v1
+    - name: Lint
+      run: |
+        yarn install
+        yarn run lint
+  commit-dist:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    if: github.ref == 'master'
+    needs: [lint, test]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Build & distify
+      run: |
+        yarn install
+        yarn run distify
+    - name: Commit & push dist to master
+      uses: stefanzweifel/git-auto-commit-action@v2.2.0
+      with:
+        commit_message: 'Update distified version'
+        branch: ${{ github.ref }}
+        file_pattern: 'dist/team-contribution-calendar.min.js'
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
