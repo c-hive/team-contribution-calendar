@@ -31,7 +31,7 @@ jobs:
   commit-dist:
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    if: github.ref == 'master'
+    if: github.ref == 'refs/heads/master'
     needs: [lint, test]
     steps:
     - name: Checkout
