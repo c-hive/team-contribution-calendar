@@ -41,9 +41,10 @@ jobs:
         yarn install
         yarn run distify
     - name: Commit & push dist to master
-      uses: stefanzweifel/git-auto-commit-action@v2.2.0
+      uses: stefanzweifel/git-auto-commit-action@v2.3.0
       with:
         commit_message: 'Update distified version'
+        commit_options: '--no-verify'
         branch: 'master'
         file_pattern: 'dist/team-contribution-calendar.min.js'
       env:
