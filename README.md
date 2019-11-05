@@ -11,7 +11,7 @@ Status and support
 - &#x2714; ongoing development
 
 <!--- Version information -->
-*You are viewing the README of version [v0.1.1](/../../releases/tag/v0.1.1). You can find other releases [here](/../../releases).*
+*You are viewing the README of version [v0.2.0](/../../releases/tag/v0.2.0). You can find other releases [here](/../../releases).*
 <!--- Version information end -->
 
 [![Build Status](https://travis-ci.org/c-hive/team-contribution-calendar.svg?branch=master)](https://travis-ci.org/c-hive/team-contribution-calendar)
@@ -31,7 +31,7 @@ npm install --save @c-hive/team-contribution-calendar
 
 
 ```html
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar@0.1.1/dist/team-contribution-calendar.min.js">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar@0.2.0/dist/team-contribution-calendar.min.js">
 </script>
 ```
 
