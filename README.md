@@ -21,11 +21,13 @@ Status and support
 
 ### Usage
 
-#### NPM
+#### Yarn
 
 ```
-npm install --save @c-hive/team-contribution-calendar
+yarn add @c-hive/team-contribution-calendar
 ```
+
+It's strongly advised to use yarn due to [incompatibility reasons](https://github.com/c-hive/team-contribution-calendar/issues/55).
 
 #### CDN
 
