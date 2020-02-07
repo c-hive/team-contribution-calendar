@@ -68,8 +68,11 @@
     "sinon": "^7.3.1",
     "uglify-js": "^3.5.4"
   },
+  "//resolutions": {
+    "svgo": "https://github.com/c-hive/team-contribution-calendar/issues/55"
+  },
   "resolutions": {
-    "svgo": "1.3.0"
+    "svgo": "^1.3.2"
   },
   "pre-commit": [
     "lint",
