@@ -21,16 +21,15 @@ Status and support
 
 ### Usage
 
-#### Yarn
+#### As dependency
 
 ```
 yarn add @c-hive/team-contribution-calendar
 ```
 
-It's strongly advised to use yarn due to [incompatibility reasons](https://github.com/c-hive/team-contribution-calendar/issues/55).
+We recommend using `yarn` because of [compatibility](https://github.com/c-hive/team-contribution-calendar/issues/55).
 
-#### CDN
-
+#### Via CDN
 
 ```html
 <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/c-hive/team-contribution-calendar@0.2.0/dist/team-contribution-calendar.min.js">
@@ -50,7 +49,7 @@ It's strongly advised to use yarn due to [incompatibility reasons](https://githu
 
 #### Examples
 
-##### NPM
+##### As dependency
 
 ```javascript
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
@@ -62,7 +61,7 @@ const glUsernames = ["sytses", "gnachman"];
 TeamContributionCalendar(container, ghUsernames, glUsernames, "https://your-proxy-server.com/");
 ```
 
-##### CDN
+##### Via CDN
 
 ```html
 <div class="container"></div>
