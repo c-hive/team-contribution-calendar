@@ -63,30 +63,42 @@ export const setEmptyCalendarValues = calendar => {
 
 export const mergeCalendarsContributions = (
   actualCalendar,
-  gitHubUserJsonCalendar
+  gitHubUserJsonCalendar,
+  gitHubUserTimeFrame
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
+  console.log(gitHubUserTimeFrame);
 
   gitHubUserJsonCalendar.children[0].children.forEach(
     (weeklyData, weekIndex) => {
       weeklyData.children.forEach((dailyData, dayIndex) => {
-        if (dailyData.attributes["data-count"]) {
-          const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
-            copiedActualCalendar,
-            weekIndex,
-            dayIndex
-          );
-          const totalDailyContributions =
-            Number(actualCalendarDailyData.attributes["data-count"]) +
-            Number(dailyData.attributes["data-count"]);
+        const dayDate = new Date(dailyData.attributes["data-date"]);
+        const timeFrame1Date = new Date(gitHubUserTimeFrame[0]);
+        const timeFrame2Date = new Date(gitHubUserTimeFrame[1]);
 
-          copiedActualCalendar.children[0].children[weekIndex].children[
-            dayIndex
-          ].attributes = {
-            ...actualCalendarDailyData.attributes,
-            "data-count": String(totalDailyContributions),
-            fill: calendarUtils.getFillColor(totalDailyContributions)
-          };
+        if (
+          dailyData.attributes.class === "day" &&
+          dayDate > timeFrame1Date &&
+          dayDate < timeFrame2Date
+        ) {
+          if (dailyData.attributes["data-count"]) {
+            const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
+              copiedActualCalendar,
+              weekIndex,
+              dayIndex
+            );
+            const totalDailyContributions =
+              Number(actualCalendarDailyData.attributes["data-count"]) +
+              Number(dailyData.attributes["data-count"]);
+
+            copiedActualCalendar.children[0].children[weekIndex].children[
+              dayIndex
+            ].attributes = {
+              ...actualCalendarDailyData.attributes,
+              "data-count": String(totalDailyContributions),
+              fill: calendarUtils.getFillColor(totalDailyContributions)
+            };
+          }
         }
       });
     }
@@ -113,7 +125,10 @@ export const getJsonFormattedCalendarSync = async (
   proxyServerUrl,
   gitHubUsername
 ) => {
-  const userData = await getUserSvg(proxyServerUrl, gitHubUsername);
+  const userData = await getUserSvg(
+    proxyServerUrl,
+    Array.isArray(gitHubUsername) ? gitHubUsername[0] : gitHubUsername
+  );
 
   if (userData.error) {
     return {
@@ -127,7 +142,8 @@ export const getJsonFormattedCalendarSync = async (
   return {
     parsedCalendar,
     error: false,
-    errorMessage: null
+    errorMessage: null,
+    timeFrame: Array.isArray(gitHubUsername) ? gitHubUsername[1] : null
   };
 };
 
@@ -135,7 +151,10 @@ export const getJsonFormattedCalendarAsync = async (
   proxyServerUrl,
   gitHubUsername
 ) => {
-  const userData = await getUserSvg(proxyServerUrl, gitHubUsername);
+  const userData = await getUserSvg(
+    proxyServerUrl,
+    Array.isArray(gitHubUsername) ? gitHubUsername[0] : gitHubUsername
+  );
 
   if (userData.error) {
     return {
@@ -147,6 +166,7 @@ export const getJsonFormattedCalendarAsync = async (
   return parse(userData.rawUserSvg.outerHTML).then(parsedGitHubCalendar => ({
     parsedCalendar: parsedGitHubCalendar,
     error: false,
-    errorMessage: null
+    errorMessage: null,
+    timeFrame: Array.isArray(gitHubUsername) ? gitHubUsername[1] : null
   }));
 };

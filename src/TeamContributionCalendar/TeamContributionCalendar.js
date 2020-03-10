@@ -137,7 +137,10 @@ export default class TeamContributionCalendar {
       if (gitHubUserData.error) {
         console.error(gitHubUserData.errorMessage);
       } else {
-        this.processGitHubCalendar(gitHubUserData.parsedCalendar);
+        this.processGitHubCalendar(
+          gitHubUserData.parsedCalendar,
+          gitHubUserData.timeFrame
+        );
       }
     });
 
@@ -150,15 +153,19 @@ export default class TeamContributionCalendar {
       if (gitLabUserData.error) {
         console.error(gitLabUserData.errorMessage);
       } else {
-        this.processGitLabCalendar(gitLabUserData.parsedCalendar);
+        this.processGitLabCalendar(
+          gitLabUserData.parsedCalendar,
+          gitLabUserData.timeFrame
+        );
       }
     });
   }
 
-  processGitHubCalendar(gitHubUserJsonCalendar) {
+  processGitHubCalendar(gitHubUserJsonCalendar, gitHubUserTimeFrame) {
     const updatedSvg = gitHubUtils.mergeCalendarsContributions(
       this.actualSvg,
-      gitHubUserJsonCalendar
+      gitHubUserJsonCalendar,
+      gitHubUserTimeFrame
     );
 
     const lastYearContributions = gitHubUtils.getLastYearContributions(
@@ -175,10 +182,11 @@ export default class TeamContributionCalendar {
     });
   }
 
-  processGitLabCalendar(gitLabUserJsonCalendar) {
+  processGitLabCalendar(gitLabUserJsonCalendar, gitLabUserTimeFrame) {
     const updatedSvg = gitLabUtils.mergeCalendarsContributions(
       this.actualSvg,
-      gitLabUserJsonCalendar
+      gitLabUserJsonCalendar,
+      gitLabUserTimeFrame
     );
 
     const lastYearContributions = gitLabUtils.getLastYearContributions(
