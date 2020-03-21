@@ -67,19 +67,18 @@ export const mergeCalendarsContributions = (
   gitHubUserTimeFrame
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
-  console.log(gitHubUserTimeFrame);
 
   gitHubUserJsonCalendar.children[0].children.forEach(
     (weeklyData, weekIndex) => {
       weeklyData.children.forEach((dailyData, dayIndex) => {
         const dayDate = new Date(dailyData.attributes["data-date"]);
-        const timeFrame1Date = new Date(gitHubUserTimeFrame[0]);
-        const timeFrame2Date = new Date(gitHubUserTimeFrame[1]);
+        const timeFrameDateFrom = new Date(gitHubUserTimeFrame[0]);
+        const timeFrameDateTo = new Date(gitHubUserTimeFrame[1]);
 
         if (
           dailyData.attributes.class === "day" &&
-          dayDate > timeFrame1Date &&
-          dayDate < timeFrame2Date
+          dayDate > timeFrameDateFrom &&
+          dayDate < timeFrameDateTo
         ) {
           if (dailyData.attributes["data-count"]) {
             const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(

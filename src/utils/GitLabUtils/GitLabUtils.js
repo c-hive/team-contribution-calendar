@@ -18,19 +18,17 @@ export const mergeCalendarsContributions = (
   gitLabUserTimeFrame
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
-  console.log(gitLabUserTimeFrame);
+
   copiedActualCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
-      // console.log(dailyData.attributes["data-date"]);
-      // console.log(dailyData.attributes.class == "day");
       const dayDate = new Date(dailyData.attributes["data-date"]);
-      const timeFrame1Date = new Date(gitLabUserTimeFrame[0]);
-      const timeFrame2Date = new Date(gitLabUserTimeFrame[1]);
+      const timeFrameDateFrom = new Date(gitLabUserTimeFrame[0]);
+      const timeFrameDateTo = new Date(gitLabUserTimeFrame[1]);
 
       if (
         dailyData.attributes.class === "day" &&
-        dayDate > timeFrame1Date &&
-        dayDate < timeFrame2Date
+        dayDate > timeFrameDateFrom &&
+        dayDate < timeFrameDateTo
       ) {
         if (dailyData.attributes["data-count"]) {
           const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
