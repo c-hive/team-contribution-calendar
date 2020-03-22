@@ -22,13 +22,17 @@ export const mergeCalendarsContributions = (
   copiedActualCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
       const dayDate = new Date(dailyData.attributes["data-date"]);
-      const timeFrameDateFrom = new Date(gitLabUserTimeFrame[0]);
-      const timeFrameDateTo = new Date(gitLabUserTimeFrame[1]);
+      const timeFrameDateFrom = gitLabUserTimeFrame
+        ? new Date(gitLabUserTimeFrame[0])
+        : dayDate;
+      const timeFrameDateTo = gitLabUserTimeFrame
+        ? new Date(gitLabUserTimeFrame[1])
+        : dayDate;
 
       if (
         dailyData.attributes.class === "day" &&
-        dayDate > timeFrameDateFrom &&
-        dayDate < timeFrameDateTo
+        dayDate >= timeFrameDateFrom &&
+        dayDate <= timeFrameDateTo
       ) {
         if (dailyData.attributes["data-count"]) {
           const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(

@@ -25,6 +25,9 @@ describe("GitLabUtils", () => {
             "data-count"
           ]
         );
+        console.log("////////////start//////////////////");
+        console.log(updatedActualCalendar.children[0].children[0].children[0]);
+        console.log("////////////end//////////////////");
 
         expect(actualContributions).to.equal(expectedContributions);
       });
