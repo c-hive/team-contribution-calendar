@@ -15,46 +15,37 @@ const getDailyContributions = (gitLabCalendar, date) => {
 export const mergeCalendarsContributions = (
   actualCalendar,
   gitLabUserJsonCalendar,
-  gitLabUserTimeFrame
+  from
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
   copiedActualCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children.forEach((dailyData, dayIndex) => {
-      const dayDate = new Date(dailyData.attributes["data-date"]);
-      const timeFrameDateFrom = gitLabUserTimeFrame
-        ? new Date(gitLabUserTimeFrame[0])
-        : dayDate;
-      const timeFrameDateTo = gitLabUserTimeFrame
-        ? new Date(gitLabUserTimeFrame[1])
-        : dayDate;
+      const contributionDate = new Date(dailyData.attributes["data-date"]);
+      // Months and days should be ignored.
+      const isDate = dailyData.attributes.class === "day";
+      const skip = isDate && from && contributionDate <= new Date(from);
 
-      if (
-        dailyData.attributes.class === "day" &&
-        dayDate >= timeFrameDateFrom &&
-        dayDate <= timeFrameDateTo
-      ) {
-        if (dailyData.attributes["data-count"]) {
-          const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
-            actualCalendar,
-            weekIndex,
-            dayIndex
+      if (!skip) {
+        const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
+          actualCalendar,
+          weekIndex,
+          dayIndex
+        );
+        const totalDailyContributions =
+          Number(actualCalendarDailyData.attributes["data-count"]) +
+          getDailyContributions(
+            gitLabUserJsonCalendar,
+            actualCalendarDailyData.attributes["data-date"]
           );
-          const totalDailyContributions =
-            Number(actualCalendarDailyData.attributes["data-count"]) +
-            getDailyContributions(
-              gitLabUserJsonCalendar,
-              actualCalendarDailyData.attributes["data-date"]
-            );
 
-          copiedActualCalendar.children[0].children[weekIndex].children[
-            dayIndex
-          ].attributes = {
-            ...actualCalendarDailyData.attributes,
-            "data-count": String(totalDailyContributions),
-            fill: calendarUtils.getFillColor(totalDailyContributions)
-          };
-        }
+        copiedActualCalendar.children[0].children[weekIndex].children[
+          dayIndex
+        ].attributes = {
+          ...actualCalendarDailyData.attributes,
+          "data-count": String(totalDailyContributions),
+          fill: calendarUtils.getFillColor(totalDailyContributions)
+        };
       }
     });
   });
@@ -76,18 +67,14 @@ export const getJsonFormattedCalendarAsync = async (
   proxyServerUrl,
   gitLabUsername
 ) => {
-  const url = proxy.getGitLabProxyUrl(
-    proxyServerUrl,
-    Array.isArray(gitLabUsername) ? gitLabUsername[0] : gitLabUsername
-  );
+  const url = proxy.getGitLabProxyUrl(proxyServerUrl, gitLabUsername);
   const responseData = await fetch(url);
 
   if (javaScriptUtils.isSuccess(responseData.status)) {
     return responseData.json().then(parsedCalendar => ({
       parsedCalendar,
       error: false,
-      errorMessage: null,
-      timeFrame: Array.isArray(gitLabUsername) ? gitLabUsername[1] : null
+      errorMessage: null
     }));
   }
 

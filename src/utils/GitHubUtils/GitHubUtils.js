@@ -64,44 +64,35 @@ export const setEmptyCalendarValues = calendar => {
 export const mergeCalendarsContributions = (
   actualCalendar,
   gitHubUserJsonCalendar,
-  gitHubUserTimeFrame
+  from
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
   gitHubUserJsonCalendar.children[0].children.forEach(
     (weeklyData, weekIndex) => {
       weeklyData.children.forEach((dailyData, dayIndex) => {
-        const dayDate = new Date(dailyData.attributes["data-date"]);
-        const timeFrameDateFrom = gitHubUserTimeFrame
-          ? new Date(gitHubUserTimeFrame[0])
-          : dayDate;
-        const timeFrameDateTo = gitHubUserTimeFrame
-          ? new Date(gitHubUserTimeFrame[1])
-          : dayDate;
+        const contributionDate = new Date(dailyData.attributes["data-date"]);
+        // Months and days should be ignored.
+        const isDate = dailyData.attributes.class === "day";
+        const skip = isDate && from && contributionDate <= new Date(from);
 
-        if (
-          dailyData.attributes.class === "day" &&
-          dayDate >= timeFrameDateFrom &&
-          dayDate <= timeFrameDateTo
-        ) {
-          if (dailyData.attributes["data-count"]) {
-            const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
-              copiedActualCalendar,
-              weekIndex,
-              dayIndex
-            );
-            const totalDailyContributions =
-              Number(actualCalendarDailyData.attributes["data-count"]) +
-              Number(dailyData.attributes["data-count"]);
+        if (!skip) {
+          const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
+            copiedActualCalendar,
+            weekIndex,
+            dayIndex
+          );
+          const totalDailyContributions =
+            Number(actualCalendarDailyData.attributes["data-count"]) +
+            Number(dailyData.attributes["data-count"]);
 
-            copiedActualCalendar.children[0].children[weekIndex].children[
-              dayIndex
-            ].attributes = {
-              ...actualCalendarDailyData.attributes,
-              "data-count": String(totalDailyContributions),
-              fill: calendarUtils.getFillColor(totalDailyContributions)
-            };
-          }
+          copiedActualCalendar.children[0].children[weekIndex].children[
+            dayIndex
+          ].attributes = {
+            ...actualCalendarDailyData.attributes,
+            "data-count": String(totalDailyContributions),
+            fill: calendarUtils.getFillColor(totalDailyContributions)
+          };
         }
       });
     }

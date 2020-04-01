@@ -128,44 +128,48 @@ export default class TeamContributionCalendar {
   }
 
   aggregateUserCalendars() {
-    this.users.gitHub.map(async gitHubUsername => {
-      const gitHubUserData = await gitHubUtils.getJsonFormattedCalendarAsync(
+    this.users.gitHub.map(async user => {
+      // This supports both the object and previous formats. It'll be deprecated sooner or later.
+      const username = user.name || user;
+
+      const data = await gitHubUtils.getJsonFormattedCalendarAsync(
         this.configs.proxyServerUrl,
-        gitHubUsername
+        username
       );
 
-      if (gitHubUserData.error) {
-        console.error(gitHubUserData.errorMessage);
+      if (data.error) {
+        console.error(data.errorMessage);
       } else {
-        this.processGitHubCalendar(
-          gitHubUserData.parsedCalendar,
-          gitHubUserData.timeFrame
-        );
+        const from = user.from || null;
+
+        this.processGitHubCalendar(data.parsedCalendar, from);
       }
     });
 
-    this.users.gitLab.map(async gitLabUsername => {
-      const gitLabUserData = await gitLabUtils.getJsonFormattedCalendarAsync(
+    this.users.gitLab.map(async user => {
+      // This supports both the object and previous formats. It'll be deprecated sooner or later.
+      const username = user.name || user;
+
+      const data = await gitLabUtils.getJsonFormattedCalendarAsync(
         this.configs.proxyServerUrl,
-        gitLabUsername
+        username
       );
 
-      if (gitLabUserData.error) {
-        console.error(gitLabUserData.errorMessage);
+      if (data.error) {
+        console.error(data.errorMessage);
       } else {
-        this.processGitLabCalendar(
-          gitLabUserData.parsedCalendar,
-          gitLabUserData.timeFrame
-        );
+        const from = user.from || null;
+
+        this.processGitLabCalendar(data.parsedCalendar, from);
       }
     });
   }
 
-  processGitHubCalendar(gitHubUserJsonCalendar, gitHubUserTimeFrame) {
+  processGitHubCalendar(gitHubUserJsonCalendar, from) {
     const updatedSvg = gitHubUtils.mergeCalendarsContributions(
       this.actualSvg,
       gitHubUserJsonCalendar,
-      gitHubUserTimeFrame
+      from
     );
 
     const lastYearContributions = gitHubUtils.getLastYearContributions(
@@ -182,11 +186,11 @@ export default class TeamContributionCalendar {
     });
   }
 
-  processGitLabCalendar(gitLabUserJsonCalendar, gitLabUserTimeFrame) {
+  processGitLabCalendar(gitLabUserJsonCalendar, from) {
     const updatedSvg = gitLabUtils.mergeCalendarsContributions(
       this.actualSvg,
       gitLabUserJsonCalendar,
-      gitLabUserTimeFrame
+      from
     );
 
     const lastYearContributions = gitLabUtils.getLastYearContributions(
