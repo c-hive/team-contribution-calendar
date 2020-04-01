@@ -128,10 +128,7 @@ export const getJsonFormattedCalendarSync = async (
   proxyServerUrl,
   gitHubUsername
 ) => {
-  const userData = await getUserSvg(
-    proxyServerUrl,
-    Array.isArray(gitHubUsername) ? gitHubUsername[0] : gitHubUsername
-  );
+  const userData = await getUserSvg(proxyServerUrl, gitHubUsername);
 
   if (userData.error) {
     return {
@@ -145,8 +142,7 @@ export const getJsonFormattedCalendarSync = async (
   return {
     parsedCalendar,
     error: false,
-    errorMessage: null,
-    timeFrame: Array.isArray(gitHubUsername) ? gitHubUsername[1] : null
+    errorMessage: null
   };
 };
 
