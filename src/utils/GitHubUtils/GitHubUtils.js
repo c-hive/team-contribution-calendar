@@ -64,7 +64,7 @@ export const setEmptyCalendarValues = calendar => {
 export const mergeCalendarsContributions = (
   actualCalendar,
   gitHubUserJsonCalendar,
-  from
+  startDate
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
@@ -72,7 +72,7 @@ export const mergeCalendarsContributions = (
     (weeklyData, weekIndex) => {
       weeklyData.children
         .filter(dailyData =>
-          calendarUtils.filterContributionDays(dailyData, from)
+          calendarUtils.filterContributionDays(dailyData, startDate)
         )
         .forEach((dailyData, dayIndex) => {
           const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(

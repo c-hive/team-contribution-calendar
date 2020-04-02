@@ -52,7 +52,11 @@ export const elementExists = selector => {
   return javaScriptUtils.isDefined(element);
 };
 
-export const filterContributionDays = (dailyData, from) => {
+export const filterContributionDays = (dailyData, startDate) => {
+  if (!startDate) {
+    return true;
+  }
+
   const isDay = dailyData.attributes.class === "day";
 
   // Weekdays and months displayed around the calendar should be disregarded.
@@ -60,11 +64,7 @@ export const filterContributionDays = (dailyData, from) => {
     return false;
   }
 
-  if (!from) {
-    return true;
-  }
+  const contributionsDate = new Date(dailyData.attributes["data-date"]);
 
-  const date = new Date(dailyData.attributes["data-date"]);
-
-  return date >= new Date(from);
+  return contributionsDate >= new Date(startDate);
 };

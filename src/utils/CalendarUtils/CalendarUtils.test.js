@@ -261,11 +261,11 @@ describe("CalendarUtils", () => {
               "data-date": "2019-09-01"
             }
           };
-          const from = "2019-09-02";
+          const startDate = "2019-09-02";
 
           it("returns false", () => {
             expect(
-              calendarUtils.filterContributionDays(dailyData, from)
+              calendarUtils.filterContributionDays(dailyData, startDate)
             ).to.equal(false);
           });
         });
@@ -277,11 +277,11 @@ describe("CalendarUtils", () => {
               "data-date": "2020-03-18"
             }
           };
-          const from = "2020-03-17";
+          const startDate = "2020-03-17";
 
           it("returns true", () => {
             expect(
-              calendarUtils.filterContributionDays(dailyData, from)
+              calendarUtils.filterContributionDays(dailyData, startDate)
             ).to.equal(true);
           });
         });
