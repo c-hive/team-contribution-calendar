@@ -53,15 +53,15 @@ export const elementExists = selector => {
 };
 
 export const filterContributionDays = (dailyData, startDate) => {
-  if (!startDate) {
-    return true;
-  }
-
   const isDay = dailyData.attributes.class === "day";
 
   // Weekdays and months displayed around the calendar should be disregarded.
   if (!isDay) {
     return false;
+  }
+
+  if (!startDate) {
+    return true;
   }
 
   const contributionsDate = new Date(dailyData.attributes["data-date"]);
