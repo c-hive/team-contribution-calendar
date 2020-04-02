@@ -224,4 +224,68 @@ describe("CalendarUtils", () => {
       });
     });
   });
+
+  describe("filterContributionDays", () => {
+    describe("when the passed daily data is either a month's or weekday's name", () => {
+      const dailyData = {
+        attributes: {
+          class: "month"
+        }
+      };
+
+      it("returns false", () => {
+        expect(calendarUtils.filterContributionDays(dailyData)).to.equal(false);
+      });
+    });
+
+    describe("when the passed daily data is in fact a day", () => {
+      describe("when the starting point of the timeframe is not explicitly defined", () => {
+        const dailyData = {
+          attributes: {
+            class: "day"
+          }
+        };
+
+        it("returns true", () => {
+          expect(calendarUtils.filterContributionDays(dailyData)).to.equal(
+            true
+          );
+        });
+      });
+
+      describe("when the starting point of the timeframe is explicitly defined", () => {
+        describe("when the contribution's date is earlier than starting point", () => {
+          const dailyData = {
+            attributes: {
+              class: "day",
+              "data-date": "2019-09-01"
+            }
+          };
+          const from = "2019-09-02";
+
+          it("returns false", () => {
+            expect(
+              calendarUtils.filterContributionDays(dailyData, from)
+            ).to.equal(false);
+          });
+        });
+
+        describe("when the contribution's date is not earlier than the starting point", () => {
+          const dailyData = {
+            attributes: {
+              class: "day",
+              "data-date": "2020-03-18"
+            }
+          };
+          const from = "2020-03-17";
+
+          it("returns true", () => {
+            expect(
+              calendarUtils.filterContributionDays(dailyData, from)
+            ).to.equal(true);
+          });
+        });
+      });
+    });
+  });
 });
