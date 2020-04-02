@@ -70,13 +70,11 @@ export const mergeCalendarsContributions = (
 
   gitHubUserJsonCalendar.children[0].children.forEach(
     (weeklyData, weekIndex) => {
-      weeklyData.children.forEach((dailyData, dayIndex) => {
-        const contributionDate = new Date(dailyData.attributes["data-date"]);
-        // Months and days should be ignored.
-        const isDate = dailyData.attributes.class === "day";
-        const skip = isDate && from && contributionDate <= new Date(from);
-
-        if (!skip) {
+      weeklyData.children
+        .filter(dailyData =>
+          calendarUtils.filterContributionDays(dailyData, from)
+        )
+        .forEach((dailyData, dayIndex) => {
           const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
             copiedActualCalendar,
             weekIndex,
@@ -93,8 +91,7 @@ export const mergeCalendarsContributions = (
             "data-count": String(totalDailyContributions),
             fill: calendarUtils.getFillColor(totalDailyContributions)
           };
-        }
-      });
+        });
     }
   );
 

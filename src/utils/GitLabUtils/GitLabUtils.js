@@ -20,13 +20,11 @@ export const mergeCalendarsContributions = (
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
   copiedActualCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
-    weeklyData.children.forEach((dailyData, dayIndex) => {
-      const contributionDate = new Date(dailyData.attributes["data-date"]);
-      // Months and days should be ignored.
-      const isDate = dailyData.attributes.class === "day";
-      const skip = isDate && from && contributionDate <= new Date(from);
-
-      if (!skip) {
+    weeklyData.children
+      .filter(dailyData =>
+        calendarUtils.filterContributionDays(dailyData, from)
+      )
+      .forEach((_, dayIndex) => {
         const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
           actualCalendar,
           weekIndex,
@@ -46,8 +44,7 @@ export const mergeCalendarsContributions = (
           "data-count": String(totalDailyContributions),
           fill: calendarUtils.getFillColor(totalDailyContributions)
         };
-      }
-    });
+      });
   });
 
   return copiedActualCalendar;

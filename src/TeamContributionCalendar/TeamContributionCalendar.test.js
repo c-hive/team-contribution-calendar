@@ -599,7 +599,7 @@ describe("TeamContributionCalendar", () => {
           }),
           error: false,
           errorMessage: null,
-          timeFrame: null
+          from: "2019-09-01"
         };
 
         beforeEach(() => {
@@ -662,7 +662,7 @@ describe("TeamContributionCalendar", () => {
           },
           error: false,
           errorMessage: null,
-          timeFrame: null
+          from: null
         };
 
         beforeEach(() => {

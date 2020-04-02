@@ -140,9 +140,7 @@ export default class TeamContributionCalendar {
       if (data.error) {
         console.error(data.errorMessage);
       } else {
-        const from = user.from || null;
-
-        this.processGitHubCalendar(data.parsedCalendar, from);
+        this.processGitHubCalendar(data.parsedCalendar, user.from);
       }
     });
 
@@ -158,9 +156,7 @@ export default class TeamContributionCalendar {
       if (data.error) {
         console.error(data.errorMessage);
       } else {
-        const from = user.from || null;
-
-        this.processGitLabCalendar(data.parsedCalendar, from);
+        this.processGitLabCalendar(data.parsedCalendar, user.from);
       }
     });
   }
