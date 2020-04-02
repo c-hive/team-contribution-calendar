@@ -161,11 +161,11 @@ export default class TeamContributionCalendar {
     });
   }
 
-  processGitHubCalendar(gitHubUserJsonCalendar, from) {
+  processGitHubCalendar(gitHubUserJsonCalendar, startDate) {
     const updatedSvg = gitHubUtils.mergeCalendarsContributions(
       this.actualSvg,
       gitHubUserJsonCalendar,
-      from
+      startDate
     );
 
     const lastYearContributions = gitHubUtils.getLastYearContributions(
@@ -182,11 +182,11 @@ export default class TeamContributionCalendar {
     });
   }
 
-  processGitLabCalendar(gitLabUserJsonCalendar, from) {
+  processGitLabCalendar(gitLabUserJsonCalendar, startDate) {
     const updatedSvg = gitLabUtils.mergeCalendarsContributions(
       this.actualSvg,
       gitLabUserJsonCalendar,
-      from
+      startDate
     );
 
     const lastYearContributions = gitLabUtils.getLastYearContributions(

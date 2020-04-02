@@ -43,8 +43,14 @@ We recommend using `yarn` because of [compatibility](https://github.com/c-hive/t
 </pre>
 
 - `container`: a DOM element in which the calendar will be rendered
-- `gitHubUsers` / `gitLabUsers`: array of user names  
-(optional: you can give timeframe to a user for example: `["tenderlove", ['2020-01-01','2020-03-01']]`)
+- `gitHubUsers` / `gitLabUsers`: array of users
+  - both of them should be defined even if they're empty
+  - optionally specify the starting point of the timeframe
+  - accepted formats
+    - `["tenderlove"]`
+    - `
+    - `[{ name: "tenderlove", from: "2020-01-01" }]`
+  - (optional: you can give timeframe to a user for example: `["tenderlove", ['2020-01-01','2020-03-01']]`)
 - `proxyServerUrl`: CORS proxy url
   - We serve one by default for _development purposes only_, no uptime guaranteed. Consider using your [own server](https://github.com/c-hive/cors-proxy). Keep it in mind, **otherwise you will most likely get 403 on production**.
 
