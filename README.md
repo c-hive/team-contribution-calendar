@@ -36,23 +36,15 @@ We recommend using `yarn` because of [compatibility](https://github.com/c-hive/t
 </script>
 ```
 
-#### Config
+#### Configs
 
 <pre>
 <b>TeamContributionCalendar(container, gitHubUsers, gitLabUsers, proxyServerUrl)</b>
 </pre>
 
-- `container`: a DOM element in which the calendar will be rendered
-- `gitHubUsers` / `gitLabUsers`: array of users
-  - both of them should be defined even if they're empty
-  - optionally specify the starting point of the timeframe
-  - accepted formats
-    - `["tenderlove"]`
-    - `
-    - `[{ name: "tenderlove", from: "2020-01-01" }]`
-  - (optional: you can give timeframe to a user for example: `["tenderlove", ['2020-01-01','2020-03-01']]`)
-- `proxyServerUrl`: CORS proxy url
-  - We serve one by default for _development purposes only_, no uptime guaranteed. Consider using your [own server](https://github.com/c-hive/cors-proxy). Keep it in mind, **otherwise you will most likely get 403 on production**.
+Caveats:
+- The arrays representing the list of users currently support both strings and objects due to backward compatibility. It's strongly advised switching to the object format because strings will become deprecated in the future.
+- We serve a CORS proxy server by default but *for development purposes only*, no uptime guaranteed. Consider creating your [own server](https://github.com/c-hive/cors-proxy), **otherwise you will most likely get 403 on production**.
 
 #### Examples
 
@@ -62,8 +54,8 @@ We recommend using `yarn` because of [compatibility](https://github.com/c-hive/t
 import TeamContributionCalendar from "@c-hive/team-contribution-calendar";
 
 const container = document.getElementById("container");
-const ghUsernames = ["tenderlove", "gaearon"];
-const glUsernames = ["sytses", "gnachman"];
+const ghUsernames = ["tenderlove", { name: "gaearon" }];
+const glUsernames = [{ name: "sytses", from: "2020-01-20" }, "gnachman"];
 
 TeamContributionCalendar(container, ghUsernames, glUsernames, "https://your-proxy-server.com/");
 ```
