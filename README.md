@@ -58,7 +58,7 @@ TeamContributionCalendar(container, ghUsernames, glUsernames, "https://your-prox
 <div class="container"></div>
 <script>
   const ghUsernames = [{ name: "gaearon" }, { name: "tenderlove", from: "2020-01-20" }, { name: "thisismydesign", from: "2020-01-20", to: "2020-03-20" }];
-  const glUsernames = [{ name: "gnachman" }, { name: "sytses", from: "2020-01-20" }];
+  const glUsernames = [{ name: "gnachman" }, { name: "sytses", from: "2020-01-20" }, { name: "gomorizsolt", to: "2020-04-03" }];
   TeamContributionCalendar(".container", ghUsernames, glUsernames, "https://your-proxy-server.com/");
 </script>
 ```
