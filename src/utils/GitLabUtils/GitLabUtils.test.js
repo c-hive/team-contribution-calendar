@@ -7,6 +7,7 @@ describe("GitLabUtils", () => {
     const actualCalendar = testUtils.getFakeContributionsObjectWithDailyCounts({
       "2019-04-20": 10
     });
+    const timeframe = {};
 
     describe("when the user`s calendar contains contributions on the date that is presented in the actual calendar", () => {
       const gitLabUserJsonCalendar = {
@@ -18,7 +19,8 @@ describe("GitLabUtils", () => {
 
         const updatedActualCalendar = gitLabUtils.mergeCalendarsContributions(
           actualCalendar,
-          gitLabUserJsonCalendar
+          gitLabUserJsonCalendar,
+          timeframe
         );
         const actualContributions = Number(
           updatedActualCalendar.children[0].children[0].children[0].attributes[
@@ -40,7 +42,8 @@ describe("GitLabUtils", () => {
 
         const updatedActualCalendar = gitLabUtils.mergeCalendarsContributions(
           actualCalendar,
-          gitLabUserJsonCalendar
+          gitLabUserJsonCalendar,
+          timeframe
         );
         const actualContributions = Number(
           updatedActualCalendar.children[0].children[0].children[0].attributes[

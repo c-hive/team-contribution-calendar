@@ -53,7 +53,7 @@ describe("GitHubUtils", () => {
         "2019-04-19": 6
       }
     );
-    const timeFrame = null;
+    const timeframe = {};
 
     it("merges the `data-count` properties of the given calendars", () => {
       // Because of the previously created 5 and 6 contribution calendars.
@@ -62,7 +62,7 @@ describe("GitHubUtils", () => {
       const mergedCalendar = gitHubUtils.mergeCalendarsContributions(
         actualCalendar,
         userJsonCalendar,
-        timeFrame
+        timeframe
       );
 
       const actualDataCountValue = Number(

@@ -70,7 +70,7 @@ export const getFakeContributionsObjectWithDailyCounts = dailyDataWithContributi
 
 export const getTestParams = () => ({
   container: ".container",
-  gitHubUsers: ["gitHubUsername"],
-  gitLabUsers: ["gitLabUsername_one", "gitLabUsername_two"],
+  gitHubUsers: [{ name: "gitHubUsername", from: "2020-04-03" }],
+  gitLabUsers: [{ name: "gitLabUsername" }],
   proxyServerUrl: "https://proxy-server.com/"
 });

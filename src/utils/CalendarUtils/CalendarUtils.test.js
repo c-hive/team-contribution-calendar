@@ -239,33 +239,36 @@ describe("CalendarUtils", () => {
     });
 
     describe("when the passed daily data is in fact a day", () => {
-      describe("when the starting point of the timeframe is not explicitly defined", () => {
+      describe("when the starting end ending points of the timeframe are not specified", () => {
         const dailyData = {
           attributes: {
             class: "day"
           }
         };
+        const timeframe = {};
 
         it("returns true", () => {
-          expect(calendarUtils.filterContributionDays(dailyData)).to.equal(
-            true
-          );
+          expect(
+            calendarUtils.filterContributionDays(dailyData, timeframe)
+          ).to.equal(true);
         });
       });
 
-      describe("when the starting point of the timeframe is explicitly defined", () => {
-        describe("when the contribution's date is earlier than starting point", () => {
+      describe("when the starting point of the timeframe is specified but the end date is missing", () => {
+        describe("when the contribution's date is earlier than the starting point", () => {
           const dailyData = {
             attributes: {
               class: "day",
               "data-date": "2019-09-01"
             }
           };
-          const startDate = "2019-09-02";
+          const timeframe = {
+            start: "2019-09-02"
+          };
 
           it("returns false", () => {
             expect(
-              calendarUtils.filterContributionDays(dailyData, startDate)
+              calendarUtils.filterContributionDays(dailyData, timeframe)
             ).to.equal(false);
           });
         });
@@ -274,15 +277,95 @@ describe("CalendarUtils", () => {
           const dailyData = {
             attributes: {
               class: "day",
-              "data-date": "2020-03-18"
+              "data-date": "2019-09-02"
             }
           };
-          const startDate = "2020-03-17";
+          const timeframe = {
+            start: "2019-09-01"
+          };
 
           it("returns true", () => {
             expect(
-              calendarUtils.filterContributionDays(dailyData, startDate)
+              calendarUtils.filterContributionDays(dailyData, timeframe)
             ).to.equal(true);
+          });
+        });
+      });
+
+      describe("when the end date of the timeframe is specified but the start date is missing", () => {
+        describe("when the contribution's date is not earlier than the end date", () => {
+          const dailyData = {
+            attributes: {
+              class: "day",
+              "data-date": "2019-09-03"
+            }
+          };
+          const timeframe = {
+            end: "2019-09-02"
+          };
+
+          it("returns false", () => {
+            expect(
+              calendarUtils.filterContributionDays(dailyData, timeframe)
+            ).to.equal(false);
+          });
+        });
+
+        describe("when the contribution's date is earlier than the end date", () => {
+          const dailyData = {
+            attributes: {
+              class: "day",
+              "data-date": "2019-09-02"
+            }
+          };
+          const timeframe = {
+            end: "2019-09-03"
+          };
+
+          it("returns true", () => {
+            expect(
+              calendarUtils.filterContributionDays(dailyData, timeframe)
+            ).to.equal(true);
+          });
+        });
+      });
+
+      describe("when the start and end dates of the timeframe are specified", () => {
+        describe("when the contribution's date falls into the timeframe", () => {
+          const dailyData = {
+            attributes: {
+              class: "day",
+              "data-date": "2019-09-02"
+            }
+          };
+          const timeframe = {
+            start: "2019-09-01",
+            end: "2019-09-03"
+          };
+
+          it("returns true", () => {
+            expect(
+              calendarUtils.filterContributionDays(dailyData, timeframe)
+            ).to.equal(true);
+          });
+        });
+
+        describe("when the contribution's date does not fall into the timeframe", () => {
+          const dailyData = {
+            attributes: {
+              class: "day",
+              "data-date": "2019-09-04"
+            }
+          };
+          const timeframe = {
+            start: "2019-09-01",
+            end: "2019-09-03"
+          };
+
+          it("returns false", () => {
+            expect(
+              calendarUtils.filterContributionDays(dailyData, timeframe)
+            ).to.equal(false);
           });
         });
       });

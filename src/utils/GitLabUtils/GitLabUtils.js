@@ -15,14 +15,14 @@ const getDailyContributions = (gitLabCalendar, date) => {
 export const mergeCalendarsContributions = (
   actualCalendar,
   gitLabUserJsonCalendar,
-  startDate
+  timeframe
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
   copiedActualCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
     weeklyData.children
       .filter(dailyData =>
-        calendarUtils.filterContributionDays(dailyData, startDate)
+        calendarUtils.filterContributionDays(dailyData, timeframe)
       )
       .forEach((_, dayIndex) => {
         const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(

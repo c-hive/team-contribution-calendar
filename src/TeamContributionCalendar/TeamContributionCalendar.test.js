@@ -598,21 +598,23 @@ describe("TeamContributionCalendar", () => {
             "2019-03-20": 5
           }),
           error: false,
-          errorMessage: null,
-          startDate: "2019-09-01"
+          errorMessage: null
         };
 
         beforeEach(() => {
           gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserData);
         });
 
-        it("processes the fetched GH user calendars", async () => {
+        it("processes the user's calendar along with the specified timeframe", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(
             processGitHubCalendarStub.calledWithExactly(
               gitHubUserData.parsedCalendar,
-              gitHubUserData.timeFrame
+              {
+                start: testParams.gitHubUsers[0].from,
+                end: testParams.gitHubUsers[0].end
+              }
             )
           ).to.equal(true);
         });
@@ -661,21 +663,23 @@ describe("TeamContributionCalendar", () => {
             "2018-02-09": 3
           },
           error: false,
-          errorMessage: null,
-          startDate: null
+          errorMessage: null
         };
 
         beforeEach(() => {
           gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserData);
         });
 
-        it("processes the fetched GL user calendars", async () => {
+        it("processes the user's calendar along with the specified timeframe", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(
             processGitLabCalendarStub.calledWithExactly(
               gitLabUserData.parsedCalendar,
-              gitLabUserData.timeFrame
+              {
+                start: testParams.gitLabUsers[0].from,
+                end: testParams.gitLabUsers[0].end
+              }
             )
           ).to.equal(true);
         });
