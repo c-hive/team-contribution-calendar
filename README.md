@@ -11,7 +11,7 @@ Status and support
 - &#x2714; ongoing development
 
 <!--- Version information -->
-*You are viewing the README of version [v0.2.0](/../../releases/tag/v0.2.0). You can find other releases [here](/../../releases).*
+*You are viewing the README of version [v0.3.0](/../../releases/tag/v0.3.0). You can find other releases [here](/../../releases).*
 <!--- Version information end -->
 
 [![Build Status](https://github.com/c-hive/team-contribution-calendar/workflows/CI/badge.svg)](https://github.com/c-hive/team-contribution-calendar/actions)
