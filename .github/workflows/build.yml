@@ -12,24 +12,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    - uses: actions/checkout@v2
-    - name: Setup Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ env.node_version }}
-      - name: Cache node_modules
-        uses: actions/cache@v1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
         with:
-          path: node_modules
-          key: ${{ runner.OS }}-node_modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-              ${{ runner.OS }}-node_modules-
-      - name: Install JS dependencies
-        run: yarn install
-      - name: Build
-        run: yarn run distify
-      - name: Commit and push distified version to master
-        uses: stefanzweifel/git-auto-commit-action@v4.1.2
-        with:
-          commit_message: 'Update distified version'
-          file_pattern: 'dist/index.js'
+          node-version: ${{ env.node_version }}
+        - name: Cache node_modules
+          uses: actions/cache@v1
+          with:
+            path: node_modules
+            key: ${{ runner.OS }}-node_modules-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+                ${{ runner.OS }}-node_modules-
+        - name: Install JS dependencies
+          run: yarn install
+        - name: Build
+          run: yarn run distify
+        - name: Commit and push distified version to master
+          uses: stefanzweifel/git-auto-commit-action@v4.1.2
+          with:
+            commit_message: 'Update distified version'
+            file_pattern: 'dist/index.js'
