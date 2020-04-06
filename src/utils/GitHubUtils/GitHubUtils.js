@@ -63,14 +63,18 @@ export const setEmptyCalendarValues = calendar => {
 
 export const mergeCalendarsContributions = (
   actualCalendar,
-  gitHubUserJsonCalendar
+  gitHubUserJsonCalendar,
+  timeframe
 ) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
 
   gitHubUserJsonCalendar.children[0].children.forEach(
     (weeklyData, weekIndex) => {
-      weeklyData.children.forEach((dailyData, dayIndex) => {
-        if (dailyData.attributes["data-count"]) {
+      weeklyData.children
+        .filter(dailyData =>
+          calendarUtils.filterContributionDays(dailyData, timeframe)
+        )
+        .forEach((dailyData, dayIndex) => {
           const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
             copiedActualCalendar,
             weekIndex,
@@ -87,8 +91,7 @@ export const mergeCalendarsContributions = (
             "data-count": String(totalDailyContributions),
             fill: calendarUtils.getFillColor(totalDailyContributions)
           };
-        }
-      });
+        });
     }
   );
 

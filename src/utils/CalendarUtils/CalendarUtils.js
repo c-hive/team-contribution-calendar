@@ -51,3 +51,31 @@ export const elementExists = selector => {
 
   return javaScriptUtils.isDefined(element);
 };
+
+export const filterContributionDays = (dailyData, timeframe) => {
+  const isDay = dailyData.attributes.class === "day";
+
+  // Weekdays and months displayed around the calendar should be disregarded.
+  if (!isDay) {
+    return false;
+  }
+
+  if (!timeframe.start && !timeframe.end) {
+    return true;
+  }
+
+  const contributionsDate = new Date(dailyData.attributes["data-date"]);
+
+  if (timeframe.start && !timeframe.end) {
+    return contributionsDate >= new Date(timeframe.start);
+  }
+
+  if (!timeframe.start && timeframe.end) {
+    return contributionsDate <= new Date(timeframe.end);
+  }
+
+  return (
+    contributionsDate >= new Date(timeframe.start) &&
+    contributionsDate <= new Date(timeframe.end)
+  );
+};

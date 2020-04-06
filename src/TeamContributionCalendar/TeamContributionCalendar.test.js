@@ -605,12 +605,16 @@ describe("TeamContributionCalendar", () => {
           gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserData);
         });
 
-        it("processes the fetched GH user calendars", async () => {
+        it("processes the user's calendar along with the specified timeframe", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(
             processGitHubCalendarStub.calledWithExactly(
-              gitHubUserData.parsedCalendar
+              gitHubUserData.parsedCalendar,
+              {
+                start: testParams.gitHubUsers[0].from,
+                end: testParams.gitHubUsers[0].end
+              }
             )
           ).to.equal(true);
         });
@@ -666,12 +670,16 @@ describe("TeamContributionCalendar", () => {
           gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserData);
         });
 
-        it("processes the fetched GL user calendars", async () => {
+        it("processes the user's calendar along with the specified timeframe", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(
             processGitLabCalendarStub.calledWithExactly(
-              gitLabUserData.parsedCalendar
+              gitLabUserData.parsedCalendar,
+              {
+                start: testParams.gitLabUsers[0].from,
+                end: testParams.gitLabUsers[0].end
+              }
             )
           ).to.equal(true);
         });
@@ -697,6 +705,9 @@ describe("TeamContributionCalendar", () => {
       "2019-03-12": 7
     });
     const lastYearContributions = 1024;
+    const timeframe = {
+      start: "2020-01-31"
+    };
 
     beforeEach(() => {
       mergeCalendarsContributionsStub = sandbox
@@ -717,12 +728,16 @@ describe("TeamContributionCalendar", () => {
     });
 
     it("merges the actual calendar contributions into the GH user`s contributions", () => {
-      teamContributionCalendar.processGitHubCalendar(gitHubUserJsonCalendar);
+      teamContributionCalendar.processGitHubCalendar(
+        gitHubUserJsonCalendar,
+        timeframe
+      );
 
       expect(
         mergeCalendarsContributionsStub.calledWithExactly(
           teamContributionCalendar.actualSvg,
-          gitHubUserJsonCalendar
+          gitHubUserJsonCalendar,
+          timeframe
         )
       ).to.equal(true);
     });
@@ -772,8 +787,10 @@ describe("TeamContributionCalendar", () => {
       "2018-02-03": 11,
       "2018-02-09": 20
     });
-
     const lastYearContributions = 2048;
+    const timeframe = {
+      end: "2019-02-05"
+    };
 
     beforeEach(() => {
       mergeCalendarsContributionsStub = sandbox
@@ -794,18 +811,25 @@ describe("TeamContributionCalendar", () => {
     });
 
     it("merges the actual SVG contributions into the GL user`s contributions", () => {
-      teamContributionCalendar.processGitLabCalendar(gitLabUserJsonCalendar);
+      teamContributionCalendar.processGitLabCalendar(
+        gitLabUserJsonCalendar,
+        timeframe
+      );
 
       expect(
         mergeCalendarsContributionsStub.calledWithExactly(
           teamContributionCalendar.actualSvg,
-          gitLabUserJsonCalendar
+          gitLabUserJsonCalendar,
+          timeframe
         )
       ).to.equal(true);
     });
 
     it("calculates the user`s last year contributions", () => {
-      teamContributionCalendar.processGitLabCalendar(gitLabUserJsonCalendar);
+      teamContributionCalendar.processGitLabCalendar(
+        gitLabUserJsonCalendar,
+        timeframe
+      );
 
       expect(
         getLastYearContributionsStub.calledWithExactly(gitLabUserJsonCalendar)
