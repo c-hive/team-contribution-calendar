@@ -129,7 +129,7 @@ export default class TeamContributionCalendar {
 
   aggregateUserCalendars() {
     this.users.gitHub.map(async user => {
-      // This supports both the object and previous formats. It'll be deprecated sooner or later.
+      // DEPRECATED: This supports both the object (current) and plain string (deprecated) formats.
       const username = user.name || user;
 
       const data = await gitHubUtils.getJsonFormattedCalendarAsync(
@@ -148,7 +148,7 @@ export default class TeamContributionCalendar {
     });
 
     this.users.gitLab.map(async user => {
-      // This supports both the object and previous formats. It'll be deprecated sooner or later.
+      // DEPRECATED: This supports both the object (current) and plain string (deprecated) formats.
       const username = user.name || user;
 
       const data = await gitLabUtils.getJsonFormattedCalendarAsync(
