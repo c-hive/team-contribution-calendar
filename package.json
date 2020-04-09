@@ -16,6 +16,7 @@
     "lint": "eslint src",
     "test": "nyc --reporter=html --reporter=text mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
     "test:only": "mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
+    "test:watch": "mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive --watch",
     "prepublishOnly": "npm run clean:lib && npm run lint && npm run test && npm run build",
     "test:coverage": "nyc report --reporter=text-lcov",
     "browserify": "browserify lib/index.js --standalone TeamContributionCalendar -o dist/team-contribution-calendar.min.js",
