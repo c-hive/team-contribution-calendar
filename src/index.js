@@ -4,8 +4,8 @@ import { isDefined } from "./utils/JavaScriptUtils/JavaScriptUtils";
 
 export default (
   container,
-  gitHubUsers,
-  gitLabUsers,
+  gitHubUsers = [],
+  gitLabUsers = [],
   proxyServerUrl = defaultProxyServerUrl
 ) => {
   if (!isDefined(container)) {
