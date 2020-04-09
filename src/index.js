@@ -9,15 +9,19 @@ export default (
   proxyServerUrl = defaultProxyServerUrl
 ) => {
   if (!isDefined(container)) {
-    throw new Error("Arguments are not sufficently provided.");
+    throw new Error("Container CSS selector is not defined.");
   }
 
   if (!isDefined(gitHubUsers) || !Array.isArray(gitHubUsers)) {
-    throw new Error("Arguments are not sufficently provided.");
+    throw new Error(
+      "GitHub users must be an array if provided. Pass undefined to bypass this contraint."
+    );
   }
 
   if (!isDefined(gitLabUsers) || !Array.isArray(gitLabUsers)) {
-    throw new Error("Arguments are not sufficently provided.");
+    throw new Error(
+      "GitLab users must be an array if provided. Pass undefined to bypass this contraint."
+    );
   }
 
   return main.processParams(

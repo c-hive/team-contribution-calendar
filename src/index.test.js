@@ -2,59 +2,82 @@ import { expect } from "chai";
 import sinon from "sinon";
 import index from "./index";
 import * as main from "./Main/Main";
+import { getTestParams } from "./utils/TestUtils/TestUtils";
 import defaultProxyServerUrl from "./resources/DefaultProxyServerUrl/DefaultProxyServerUrl";
 
 describe("index", () => {
-  it("processes the parameters", () => {
-    const mainStub = sinon.stub(main, "processParams");
-    const args = [".container", [], []];
+  let processParamsStub;
 
-    index(...args);
-
-    // Since the proxy server's url isn't specified, `index()` is expected to be invoked with the default server.
-    expect(mainStub.calledWithExactly(...args, defaultProxyServerUrl)).to.equal(
-      true
-    );
+  beforeEach(() => {
+    processParamsStub = sinon.stub(main, "processParams");
   });
 
-  describe("when the `container` does not exist", () => {
-    it("throws an error to fail-early", () => {
-      expect(() => index(null, [], [])).to.throw(
-        "Arguments are not sufficently provided."
+  afterEach(() => {
+    processParamsStub.restore();
+  });
+
+  it("processes the provided arguments", () => {
+    const testParams = Object.values(getTestParams());
+
+    index(...testParams);
+
+    expect(processParamsStub.calledWithExactly(...testParams)).to.equal(true);
+  });
+
+  describe("when the CORS proxy server URL is not provided", () => {
+    it("defaults to the default CORS proxy server", () => {
+      const expectedArgs = [".container", [], [], defaultProxyServerUrl];
+
+      index(".container", [], undefined);
+
+      expect(processParamsStub.calledWithExactly(...expectedArgs)).to.equal(
+        true
       );
     });
   });
 
-  describe("when `gitHubUsers` is not defined", () => {
-    it("throws an error to fail-early", () => {
-      expect(() => index(".container", null, [])).to.throw(
-        "Arguments are not sufficently provided."
+  describe("when the GitHub users array is not provided", () => {
+    it("defaults to an empty array", () => {
+      const expectedArgs = [".container", [], [], defaultProxyServerUrl];
+
+      index(".container", undefined, []);
+
+      expect(processParamsStub.calledWithExactly(...expectedArgs)).to.equal(
+        true
       );
     });
   });
 
-  describe("when `gitHubUsers` is not an array", () => {
-    it("throws an error to fail-early", () => {
-      // The `isDefined()` function treats empty strings as defined values.
-      expect(() => index(".container", "", [])).to.throw(
-        "Arguments are not sufficently provided."
+  describe("when the GitLab users array is not provided", () => {
+    it("defaults to an empty array", () => {
+      const expectedArgs = [".container", [], [], defaultProxyServerUrl];
+
+      index(".container", []);
+
+      expect(processParamsStub.calledWithExactly(...expectedArgs)).to.equal(
+        true
       );
     });
   });
 
-  describe("when `gitLabUsers` is not defined", () => {
+  // Heads-up: optional parameters do not default to the provided value unless it's in fact `undefined`.
+  describe("when the GitHub users array is not defined", () => {
     it("throws an error to fail-early", () => {
-      expect(() => index(".container", [], null)).to.throw(
-        "Arguments are not sufficently provided."
+      const args = [".container", null, []];
+
+      expect(() => index(...args)).to.throw(
+        "GitHub users must be an array if provided. Pass undefined to bypass this contraint."
       );
     });
   });
 
-  describe("when `gitLabUsers` is not an array", () => {
+  // Heads-up: optional parameters do not default to the provided value unless it's in fact `undefined`.
+  describe("when the GitLab users array is not defined", () => {
     it("throws an error to fail-early", () => {
-      // The `isDefined()` function treats empty strings as defined values.
-      expect(() => index(".container", [], "")).to.throw(
-        "Arguments are not sufficently provided."
+      const args = [".container", [], null];
+
+      expect(() => index(...args)).to.throw(
+        "GitLab users must be an array if provided. Pass undefined to bypass this contraint."
       );
     });
   });
