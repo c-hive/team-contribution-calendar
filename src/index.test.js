@@ -66,7 +66,7 @@ describe("index", () => {
       const args = [".container", null, []];
 
       expect(() => index(...args)).to.throw(
-        "GitHub users must be an array if provided. Pass undefined to bypass this contraint."
+        "GitHub users must be an array if provided. Omit or pass undefined to bypass this contraint."
       );
     });
   });
@@ -77,7 +77,7 @@ describe("index", () => {
       const args = [".container", [], null];
 
       expect(() => index(...args)).to.throw(
-        "GitLab users must be an array if provided. Pass undefined to bypass this contraint."
+        "GitLab users must be an array if provided. Omit or pass undefined to bypass this contraint."
       );
     });
   });

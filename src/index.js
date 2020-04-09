@@ -14,13 +14,13 @@ export default (
 
   if (!isDefined(gitHubUsers) || !Array.isArray(gitHubUsers)) {
     throw new Error(
-      "GitHub users must be an array if provided. Pass undefined to bypass this contraint."
+      "GitHub users must be an array if provided. Omit or pass undefined to bypass this contraint."
     );
   }
 
   if (!isDefined(gitLabUsers) || !Array.isArray(gitLabUsers)) {
     throw new Error(
-      "GitLab users must be an array if provided. Pass undefined to bypass this contraint."
+      "GitLab users must be an array if provided. Omit or pass undefined to bypass this contraint."
     );
   }
 
