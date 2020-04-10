@@ -37,11 +37,11 @@ export default class TeamContributionCalendar {
       defaultUsers.gitHub
     );
 
-    if (defaultUserData.error) {
-      this.updateHeader({
-        isLoading: false
-      });
+    this.updateHeader({
+      isLoading: false
+    });
 
+    if (defaultUserData.error) {
       throw new Error(defaultUserData.errorMessage);
     }
 
