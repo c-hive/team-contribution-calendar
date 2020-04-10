@@ -37,12 +37,18 @@ export default class TeamContributionCalendar {
       defaultUsers.gitHub
     );
 
-    this.updateHeader({
-      isLoading: false
-    });
-
     if (defaultUserData.error) {
+      this.updateHeader({
+        isLoading: false
+      });
+
       throw new Error(defaultUserData.errorMessage);
+    }
+
+    if (!this.users.gitHub.length && !this.users.gitLab.length) {
+      this.updateHeader({
+        isLoading: false
+      });
     }
 
     const defaultUserEmptyCalendar = gitHubUtils.setEmptyCalendarValues(

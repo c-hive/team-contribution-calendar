@@ -122,14 +122,22 @@ describe("TeamContributionCalendar", () => {
       ).to.equal(true);
     });
 
-    it("hides the loading indicator", async () => {
-      await teamContributionCalendar.renderBasicAppearance();
+    describe("when no users passed via the configs", () => {
+      it("hides the loading indicator", async () => {
+        const calendarWithoutUsers = new TeamContributionCalendar(
+          ".container",
+          [],
+          []
+        );
 
-      expect(
-        updateHeaderStub.calledWithExactly({
-          isLoading: false
-        })
-      ).to.equal(true);
+        await calendarWithoutUsers.renderBasicAppearance();
+
+        expect(
+          updateHeaderStub.calledWithExactly({
+            isLoading: false
+          })
+        ).to.equal(true);
+      });
     });
 
     describe("when the fetch fails", () => {
@@ -140,6 +148,18 @@ describe("TeamContributionCalendar", () => {
 
       beforeEach(() => {
         getJsonFormattedCalendarSyncStub.returns(defaultUserData);
+      });
+
+      it("hides the loading indicator", async () => {
+        try {
+          await teamContributionCalendar.renderBasicAppearance();
+        } catch (err) {
+          expect(
+            updateHeaderStub.calledWithExactly({
+              isLoading: false
+            })
+          ).to.equal(true);
+        }
       });
 
       it("throws the error", () => {
