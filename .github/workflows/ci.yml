@@ -12,9 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ env.node_version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.node_version }}
     - name: Cache node_modules
       uses: actions/cache@v1
       with:
