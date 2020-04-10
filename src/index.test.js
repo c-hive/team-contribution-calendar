@@ -1,66 +1,84 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import Index from "./index";
+import index from "./index";
 import * as main from "./Main/Main";
-import * as calendarUtils from "./utils/CalendarUtils/CalendarUtils";
-import * as testUtils from "./utils/TestUtils/TestUtils";
+import { getTestParams } from "./utils/TestUtils/TestUtils";
+import defaultProxyServerUrl from "./resources/DefaultProxyServerUrl/DefaultProxyServerUrl";
 
-describe("Index", () => {
-  const sandbox = sinon.createSandbox();
-
-  let requiredParamsExistStub;
+describe("index", () => {
+  let processParamsStub;
 
   beforeEach(() => {
-    requiredParamsExistStub = sandbox.stub(
-      calendarUtils,
-      "requiredParamsExist"
-    );
+    processParamsStub = sinon.stub(main, "processParams");
   });
 
   afterEach(() => {
-    sandbox.restore();
+    processParamsStub.restore();
   });
 
-  describe("when the required params do not exist", () => {
-    beforeEach(() => {
-      requiredParamsExistStub.callsFake(() => false);
-    });
+  it("processes the provided arguments", () => {
+    const testParams = Object.values(getTestParams());
 
-    it("throws an error", () => {
-      const expectedErrorMessage =
-        "Please provide the required parameters in the appropriate format.";
+    index(...testParams);
 
-      expect(() => Index()).to.throw(expectedErrorMessage);
-    });
+    expect(processParamsStub.calledWithExactly(...testParams)).to.equal(true);
   });
 
-  describe("when the required params exist", () => {
-    let processParamsStub;
+  describe("when the CORS proxy server URL is not provided", () => {
+    it("defaults to the default CORS proxy server", () => {
+      const expectedArgs = [".container", [], [], defaultProxyServerUrl];
 
-    const testParams = testUtils.getTestParams();
+      index(".container", [], undefined);
 
-    beforeEach(() => {
-      processParamsStub = sandbox.stub(main, "processParams");
-
-      requiredParamsExistStub.callsFake(() => true);
-    });
-
-    it("processes the given parameters", () => {
-      Index(
-        testParams.container,
-        testParams.gitHubUsers,
-        testParams.gitLabUsers,
-        testParams.proxyServerUrl
+      expect(processParamsStub.calledWithExactly(...expectedArgs)).to.equal(
+        true
       );
+    });
+  });
 
-      expect(
-        processParamsStub.calledWithExactly(
-          testParams.container,
-          testParams.gitHubUsers,
-          testParams.gitLabUsers,
-          testParams.proxyServerUrl
-        )
-      ).to.equal(true);
+  describe("when the GitHub users array is not provided", () => {
+    it("defaults to an empty array", () => {
+      const expectedArgs = [".container", [], [], defaultProxyServerUrl];
+
+      index(".container", undefined, []);
+
+      expect(processParamsStub.calledWithExactly(...expectedArgs)).to.equal(
+        true
+      );
+    });
+  });
+
+  describe("when the GitLab users array is not provided", () => {
+    it("defaults to an empty array", () => {
+      const expectedArgs = [".container", [], [], defaultProxyServerUrl];
+
+      index(".container", []);
+
+      expect(processParamsStub.calledWithExactly(...expectedArgs)).to.equal(
+        true
+      );
+    });
+  });
+
+  // Heads-up: optional parameters do not default to the provided value unless it's in fact `undefined`.
+  describe("when the GitHub users array is not defined", () => {
+    it("throws an error to fail-early", () => {
+      const args = [".container", null, []];
+
+      expect(() => index(...args)).to.throw(
+        "GitHub users must be an array if provided."
+      );
+    });
+  });
+
+  // Heads-up: optional parameters do not default to the provided value unless it's in fact `undefined`.
+  describe("when the GitLab users array is not defined", () => {
+    it("throws an error to fail-early", () => {
+      const args = [".container", [], null];
+
+      expect(() => index(...args)).to.throw(
+        "GitLab users must be an array if provided."
+      );
     });
   });
 });

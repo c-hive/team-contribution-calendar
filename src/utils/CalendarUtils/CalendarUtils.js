@@ -1,21 +1,6 @@
 import $ from "elly";
 import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
-export const requiredParamsExist = (container, gitHubUsers, gitLabUsers) => {
-  if (!javaScriptUtils.isDefined(container)) {
-    return false;
-  }
-
-  const userArraysAreEmpty =
-    gitHubUsers.length === 0 && gitLabUsers.length === 0;
-
-  if (userArraysAreEmpty) {
-    return false;
-  }
-
-  return true;
-};
-
 export const getFillColor = totalDailyContributions => {
   let fillColor = "#ebedf0";
 

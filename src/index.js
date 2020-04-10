@@ -1,20 +1,29 @@
-import * as calendarUtils from "./utils/CalendarUtils/CalendarUtils";
-import * as proxy from "./utils/Proxy/Proxy";
 import * as main from "./Main/Main";
+import defaultProxyServerUrl from "./resources/DefaultProxyServerUrl/DefaultProxyServerUrl";
+import { isDefined } from "./utils/JavaScriptUtils/JavaScriptUtils";
 
-const index = (
+export default (
   container,
   gitHubUsers = [],
   gitLabUsers = [],
-  proxyServerUrl = proxy.defaultProxyServerUrl
+  proxyServerUrl = defaultProxyServerUrl
 ) => {
-  if (calendarUtils.requiredParamsExist(container, gitHubUsers, gitLabUsers)) {
-    main.processParams(container, gitHubUsers, gitLabUsers, proxyServerUrl);
-  } else {
-    throw new Error(
-      "Please provide the required parameters in the appropriate format."
-    );
+  if (!isDefined(container)) {
+    throw new Error("Container CSS selector is not defined.");
   }
-};
 
-export default index;
+  if (!isDefined(gitHubUsers) || !Array.isArray(gitHubUsers)) {
+    throw new Error("GitHub users must be an array if provided.");
+  }
+
+  if (!isDefined(gitLabUsers) || !Array.isArray(gitLabUsers)) {
+    throw new Error("GitLab users must be an array if provided.");
+  }
+
+  return main.processParams(
+    container,
+    gitHubUsers,
+    gitLabUsers,
+    proxyServerUrl
+  );
+};
