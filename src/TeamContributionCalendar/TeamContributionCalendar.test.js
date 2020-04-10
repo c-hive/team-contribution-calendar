@@ -122,7 +122,7 @@ describe("TeamContributionCalendar", () => {
       ).to.equal(true);
     });
 
-    describe("when no users passed via the configs", () => {
+    describe("when no users are passed via the configs", () => {
       it("hides the loading indicator", async () => {
         const calendarWithoutUsers = new TeamContributionCalendar(
           ".container",
