@@ -12,17 +12,8 @@ const getDailyContributions = (gitLabCalendar, date) => {
   return 0;
 };
 
-const objectify = arr =>
-  arr.reduce((result, [date, contributions]) => {
-    return {
-      ...result,
-      [date]: contributions
-    };
-  }, {});
-
 export const aggregateCalendars = (actualCalendar, userCalendar) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
-  const objectifiedUserCalendar = objectify(userCalendar);
 
   copiedActualCalendar.children[0].children.forEach((week, weekIndex) =>
     week.children.forEach((day, dayIndex) => {
@@ -35,7 +26,7 @@ export const aggregateCalendars = (actualCalendar, userCalendar) => {
       const totalDailyContributions =
         Number(actualCalendarDailyData.attributes["data-count"]) +
         getDailyContributions(
-          objectifiedUserCalendar,
+          userCalendar,
           actualCalendarDailyData.attributes["data-date"]
         );
 
@@ -52,10 +43,18 @@ export const aggregateCalendars = (actualCalendar, userCalendar) => {
   return copiedActualCalendar;
 };
 
-export const aggregateContributions = calendar =>
+/* export const aggregateContributions = calendar =>
   // Using _ to indicate the parameter is unused is a common practice: https://stackoverflow.com/a/32198002/9599137
   // eslint-disable-next-line no-unused-vars
-  calendar.reduce((total, [_, contributions]) => total + contributions, 0);
+  calendar.reduce((total, [_, contributions]) => total + contributions, 0); */
+
+export const aggregateContributions = calendar =>
+  Object.entries(calendar).reduce(
+    // Using _ to indicate the parameter is unused is a common practice: https://stackoverflow.com/a/32198002/9599137
+    // eslint-disable-next-line no-unused-vars
+    (total, [_, contributions]) => total + contributions,
+    0
+  );
 
 export const getJsonFormattedCalendarAsync = async (
   proxyServerUrl,

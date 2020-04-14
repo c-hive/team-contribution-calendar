@@ -144,16 +144,18 @@ export default class TeamContributionCalendar {
         console.error(data.errorMessage);
       } else {
         const timeframe = { start: user.from, end: user.to };
-        const sanitized = gitHubUtils.sanitize(data.parsedCalendar);
-        const filtered = sanitized.map(week =>
-          week.map(day =>
-            withinTimeframe(day.attributes["data-date"], timeframe)
-              ? day
-              : undefined
-          )
-        );
+        // This removes the "noise" from the calendar and sorts the days out falling out of the specified timeframe.
+        const filteredCalendar = gitHubUtils
+          .sanitize(data.parsedCalendar)
+          .map(week =>
+            week.map(day =>
+              withinTimeframe(day.attributes["data-date"], timeframe)
+                ? day
+                : undefined
+            )
+          );
 
-        this.processGitHubCalendar(filtered);
+        this.processGitHubCalendar(filteredCalendar);
       }
     });
 
@@ -170,11 +172,18 @@ export default class TeamContributionCalendar {
         console.error(data.errorMessage);
       } else {
         const timeframe = { start: user.from, end: user.to };
-        const filtered = Object.entries(data.parsedCalendar).filter(([date]) =>
-          withinTimeframe(date, timeframe)
-        );
+        // This sorts the days out falling out of the specified timeframe and restores the array of arrays structure(i.e. [[date, contributions], ...]) to key-value pairs of an object.
+        const filteredCalendar = Object.entries(data.parsedCalendar)
+          .filter(([date]) => withinTimeframe(date, timeframe))
+          .reduce(
+            (result, [date, contributions]) => ({
+              ...result,
+              [date]: contributions
+            }),
+            {}
+          );
 
-        this.processGitLabCalendar(filtered);
+        this.processGitLabCalendar(filteredCalendar);
       }
     });
   }
