@@ -61,56 +61,56 @@ export const setEmptyCalendarValues = calendar => {
   return copiedCalendar;
 };
 
-export const mergeCalendarsContributions = (
-  actualCalendar,
-  gitHubUserJsonCalendar,
-  timeframe
-) => {
+export const sanitize = calendar =>
+  calendar.children[0].children
+    .filter(item => {
+      const isDay =
+        item.attributes.class !== "wday" && item.attributes.class !== "month";
+
+      return isDay;
+    })
+    .map(week => week.children.map(day => day));
+
+export const aggregateCalendars = (actualCalendar, userCalendar) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
+  const sanitizedActualCalendar = sanitize(actualCalendar);
 
-  gitHubUserJsonCalendar.children[0].children.forEach(
-    (weeklyData, weekIndex) => {
-      weeklyData.children
-        .filter(dailyData =>
-          calendarUtils.filterContributionDays(dailyData, timeframe)
-        )
-        .forEach((dailyData, dayIndex) => {
-          const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
-            copiedActualCalendar,
-            weekIndex,
-            dayIndex
-          );
-          const totalDailyContributions =
-            Number(actualCalendarDailyData.attributes["data-count"]) +
-            Number(dailyData.attributes["data-count"]);
+  userCalendar.forEach((week, weekIndex) =>
+    week.forEach((day, dayIndex) => {
+      if (day) {
+        const actualCalendarDailyAttributes =
+          sanitizedActualCalendar[weekIndex][dayIndex].attributes;
 
-          copiedActualCalendar.children[0].children[weekIndex].children[
-            dayIndex
-          ].attributes = {
-            ...actualCalendarDailyData.attributes,
-            "data-count": String(totalDailyContributions),
-            fill: calendarUtils.getFillColor(totalDailyContributions)
-          };
-        });
-    }
+        const totalDailyContributions =
+          +actualCalendarDailyAttributes["data-count"] +
+          +day.attributes["data-count"];
+
+        copiedActualCalendar.children[0].children[weekIndex].children[
+          dayIndex
+        ].attributes = {
+          ...actualCalendarDailyAttributes,
+          "data-count": String(totalDailyContributions),
+          fill: calendarUtils.getFillColor(totalDailyContributions)
+        };
+      }
+    })
   );
 
   return copiedActualCalendar;
 };
 
-export const getLastYearContributions = userCalendar => {
-  let lastYearContributions = 0;
+export const aggregateContributions = calendar =>
+  calendar.reduce((totalContributions, week) => {
+    const weeklyContributions = week.reduce(
+      (totalWeeklyContributions, day) =>
+        day
+          ? totalWeeklyContributions + +day.attributes["data-count"]
+          : totalWeeklyContributions,
+      0
+    );
 
-  userCalendar.children[0].children.forEach(weeklyData => {
-    weeklyData.children.forEach(dailyData => {
-      if (dailyData.attributes["data-count"]) {
-        lastYearContributions += Number(dailyData.attributes["data-count"]);
-      }
-    });
-  });
-
-  return lastYearContributions;
-};
+    return totalContributions + weeklyContributions;
+  }, 0);
 
 export const getJsonFormattedCalendarSync = async (
   proxyServerUrl,

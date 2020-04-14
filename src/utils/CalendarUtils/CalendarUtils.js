@@ -37,6 +37,27 @@ export const elementExists = selector => {
   return javaScriptUtils.isDefined(element);
 };
 
+export const withinTimeframe = (date, timeframe) => {
+  const converted = new Date(date);
+
+  if (!timeframe.start && !timeframe.end) {
+    return true;
+  }
+
+  if (timeframe.start && !timeframe.end) {
+    return converted > new Date(timeframe.start);
+  }
+
+  if (!timeframe.start && timeframe.end) {
+    return converted <= new Date(timeframe.end);
+  }
+
+  return (
+    converted >= new Date(timeframe.start) &&
+    converted <= new Date(timeframe.end)
+  );
+};
+
 export const filterContributionDays = (dailyData, timeframe) => {
   const isDay = dailyData.attributes.class === "day";
 
