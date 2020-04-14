@@ -145,7 +145,6 @@ export default class TeamContributionCalendar {
       } else {
         const timeframe = { start: user.from, end: user.to };
         const sanitized = gitHubUtils.sanitize(data.parsedCalendar);
-
         const filtered = sanitized.map(week =>
           week.map(day =>
             withinTimeframe(day.attributes["data-date"], timeframe)
@@ -171,27 +170,11 @@ export default class TeamContributionCalendar {
         console.error(data.errorMessage);
       } else {
         const timeframe = { start: user.from, end: user.to };
-        /*         const filtered = Object.entries(data.parsedCalendar).filter(([date]) =>
+        const filtered = Object.entries(data.parsedCalendar).filter(([date]) =>
           withinTimeframe(date, timeframe)
-        ); */
+        );
 
-        /*         const object = filtered.reduce((p, [date, contributions]) => {
-          p[date] = contributions;
-
-          return p;
-        }, {});
-
-        console.log(object); */
-
-        // this.processGitLabCalendar(restored);
-
-        // console.log(test);
-        /*         console.log(data.parsedCalendar);
-
-        this.processGitLabCalendar(data.parsedCalendar, {
-          start: user.from,
-          end: user.to
-        }); */
+        this.processGitLabCalendar(filtered);
       }
     });
   }
