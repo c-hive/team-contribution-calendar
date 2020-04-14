@@ -73,22 +73,24 @@ export const sanitize = calendar =>
 
 export const aggregateCalendars = (actualCalendar, userCalendar) => {
   const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
-  const sanitizedActualCalendar = sanitize(actualCalendar);
 
   userCalendar.forEach((week, weekIndex) =>
     week.forEach((day, dayIndex) => {
       if (day) {
-        const actualCalendarDailyAttributes =
-          sanitizedActualCalendar[weekIndex][dayIndex].attributes;
+        const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
+          copiedActualCalendar,
+          weekIndex,
+          dayIndex
+        );
 
         const totalDailyContributions =
-          +actualCalendarDailyAttributes["data-count"] +
+          +actualCalendarDailyData.attributes["data-count"] +
           +day.attributes["data-count"];
 
         copiedActualCalendar.children[0].children[weekIndex].children[
           dayIndex
         ].attributes = {
-          ...actualCalendarDailyAttributes,
+          ...actualCalendarDailyData.attributes,
           "data-count": String(totalDailyContributions),
           fill: calendarUtils.getFillColor(totalDailyContributions)
         };
