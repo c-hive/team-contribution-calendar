@@ -43,11 +43,6 @@ export const aggregateCalendars = (actualCalendar, userCalendar) => {
   return copiedActualCalendar;
 };
 
-/* export const aggregateContributions = calendar =>
-  // Using _ to indicate the parameter is unused is a common practice: https://stackoverflow.com/a/32198002/9599137
-  // eslint-disable-next-line no-unused-vars
-  calendar.reduce((total, [_, contributions]) => total + contributions, 0); */
-
 export const aggregateContributions = calendar =>
   Object.entries(calendar).reduce(
     // Using _ to indicate the parameter is unused is a common practice: https://stackoverflow.com/a/32198002/9599137
