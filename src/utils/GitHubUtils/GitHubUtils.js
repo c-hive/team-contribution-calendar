@@ -84,8 +84,8 @@ export const aggregateCalendars = (actualCalendar, userCalendar) => {
         );
 
         const totalDailyContributions =
-          +actualCalendarDailyData.attributes["data-count"] +
-          +day.attributes["data-count"];
+          Number(actualCalendarDailyData.attributes["data-count"]) +
+          Number(day.attributes["data-count"]);
 
         copiedActualCalendar.children[0].children[weekIndex].children[
           dayIndex
