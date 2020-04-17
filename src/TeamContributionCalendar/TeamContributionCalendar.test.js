@@ -67,6 +67,7 @@ describe("TeamContributionCalendar", () => {
   describe("renderBasicAppearance", () => {
     let renderSvgStub;
     let renderHeaderStub;
+    let updateHeaderStub;
     let getJsonFormattedCalendarSyncStub;
     let initializeStub;
 
@@ -87,6 +88,11 @@ describe("TeamContributionCalendar", () => {
       renderHeaderStub = sandbox.stub(
         TeamContributionCalendar.prototype,
         "renderHeader"
+      );
+
+      updateHeaderStub = sandbox.stub(
+        TeamContributionCalendar.prototype,
+        "updateHeader"
       );
     });
 
@@ -113,31 +119,44 @@ describe("TeamContributionCalendar", () => {
       ).to.equal(true);
     });
 
-    describe("when the fetch fails", () => {
-      let updateHeaderStub;
+    describe("when no users are passed via the configs", () => {
+      it("hides the loading indicator", async () => {
+        const calendarWithoutUsers = new TeamContributionCalendar(
+          ".container",
+          [],
+          []
+        );
 
+        await calendarWithoutUsers.renderBasicAppearance();
+
+        expect(
+          updateHeaderStub.calledWithExactly({
+            isLoading: false
+          })
+        ).to.equal(true);
+      });
+    });
+
+    describe("when the fetch fails", () => {
       const defaultUserData = {
         error: true,
         errorMessage: "Could not fetch the calendar of the default user."
       };
 
       beforeEach(() => {
-        updateHeaderStub = sandbox.stub(
-          TeamContributionCalendar.prototype,
-          "updateHeader"
-        );
-
         getJsonFormattedCalendarSyncStub.returns(defaultUserData);
       });
 
-      it("modifies the header's loading state", () => {
-        return teamContributionCalendar.renderBasicAppearance().catch(() => {
+      it("hides the loading indicator", async () => {
+        try {
+          await teamContributionCalendar.renderBasicAppearance();
+        } catch (err) {
           expect(
             updateHeaderStub.calledWithExactly({
               isLoading: false
             })
           ).to.equal(true);
-        });
+        }
       });
 
       it("throws the error", () => {
