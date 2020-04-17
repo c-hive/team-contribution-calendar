@@ -1,55 +1,7 @@
 /* eslint-disable no-console */
 
 import * as proxy from "../Proxy/Proxy";
-import * as calendarUtils from "../CalendarUtils/CalendarUtils";
 import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
-
-const getDailyContributions = (gitLabCalendar, date) => {
-  if (gitLabCalendar[date]) {
-    return gitLabCalendar[date];
-  }
-
-  return 0;
-};
-
-export const aggregateCalendars = (actualCalendar, userCalendar) => {
-  const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
-
-  copiedActualCalendar.children[0].children.forEach((week, weekIndex) =>
-    week.children.forEach((day, dayIndex) => {
-      const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
-        actualCalendar,
-        weekIndex,
-        dayIndex
-      );
-
-      const totalDailyContributions =
-        Number(actualCalendarDailyData.attributes["data-count"]) +
-        getDailyContributions(
-          userCalendar,
-          actualCalendarDailyData.attributes["data-date"]
-        );
-
-      copiedActualCalendar.children[0].children[weekIndex].children[
-        dayIndex
-      ].attributes = {
-        ...actualCalendarDailyData.attributes,
-        "data-count": String(totalDailyContributions),
-        fill: calendarUtils.getFillColor(totalDailyContributions)
-      };
-    })
-  );
-
-  return copiedActualCalendar;
-};
-
-export const aggregateContributions = calendar =>
-  Object.entries(calendar).reduce(
-    // Using _ to indicate the parameter is unused is a common practice: https://stackoverflow.com/a/32198002/9599137
-    // eslint-disable-next-line no-unused-vars
-    (total, [_, contributions]) => total + contributions,
-    0
-  );
 
 export const getJsonFormattedCalendarAsync = async (
   proxyServerUrl,

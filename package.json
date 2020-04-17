@@ -81,6 +81,7 @@
   ],
   "dependencies": {
     "elly": "^1.1.10",
+    "immer": "^6.0.3",
     "svgson": "^3.1.0"
   },
   "browserslist": {

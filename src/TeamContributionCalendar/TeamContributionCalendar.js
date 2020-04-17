@@ -6,7 +6,9 @@ import * as gitHubUtils from "../utils/GitHubUtils/GitHubUtils";
 import * as gitLabUtils from "../utils/GitLabUtils/GitLabUtils";
 import {
   elementExists,
-  withinTimeframe
+  filterByTimeframe,
+  aggregateCalendars,
+  aggregateContributions
 } from "../utils/CalendarUtils/CalendarUtils";
 import * as javaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
 import * as tooltip from "../utils/Tooltip/Tooltip";
@@ -48,7 +50,7 @@ export default class TeamContributionCalendar {
       throw new Error(defaultUserData.errorMessage);
     }
 
-    const defaultUserEmptyCalendar = gitHubUtils.setEmptyCalendarValues(
+    const defaultUserEmptyCalendar = gitHubUtils.initialize(
       defaultUserData.parsedCalendar
     );
 
@@ -144,18 +146,15 @@ export default class TeamContributionCalendar {
         console.error(data.errorMessage);
       } else {
         const timeframe = { start: user.from, end: user.to };
-        // This removes the "noise" from the calendar and sorts the days out falling out of the specified timeframe.
-        const filteredCalendar = gitHubUtils
-          .sanitize(data.parsedCalendar)
-          .map(week =>
-            week.map(day =>
-              withinTimeframe(day.attributes["data-date"], timeframe)
-                ? day
-                : undefined
-            )
-          );
+        const dailyDataWithContributions = gitHubUtils.dailyDataWithContributionsTransformation(
+          data.parsedCalendar
+        );
+        const filteredDailyDataWithContributions = filterByTimeframe(
+          dailyDataWithContributions,
+          timeframe
+        );
 
-        this.processGitHubCalendar(filteredCalendar);
+        this.processCalendar(filteredDailyDataWithContributions);
       }
     });
 
@@ -172,58 +171,31 @@ export default class TeamContributionCalendar {
         console.error(data.errorMessage);
       } else {
         const timeframe = { start: user.from, end: user.to };
-        // This sorts the days out falling out of the specified timeframe and restores the array of arrays structure(i.e. [[date, contributions], ...]) to key-value pairs of an object.
-        const filteredCalendar = Object.entries(data.parsedCalendar)
-          .filter(([date]) => withinTimeframe(date, timeframe))
-          .reduce(
-            (result, [date, contributions]) => ({
-              ...result,
-              [date]: contributions
-            }),
-            {}
-          );
+        const filteredDailyDataWithContributions = filterByTimeframe(
+          data.parsedCalendar,
+          timeframe
+        );
 
-        this.processGitLabCalendar(filteredCalendar);
+        this.processCalendar(filteredDailyDataWithContributions);
       }
     });
   }
 
-  processGitHubCalendar(gitHubUserJsonCalendar) {
-    const updatedSvg = gitHubUtils.aggregateCalendars(
+  processCalendar(dailyDataWithContributions) {
+    const aggregatedCalendars = aggregateCalendars(
       this.actualSvg,
-      gitHubUserJsonCalendar
+      dailyDataWithContributions
     );
-
-    const lastYearContributions = gitHubUtils.aggregateContributions(
-      gitHubUserJsonCalendar
+    const aggregatedContributions = aggregateContributions(
+      dailyDataWithContributions
     );
 
     this.updateSvg({
-      updatedSvg
+      updatedSvg: aggregatedCalendars
     });
 
     this.updateHeader({
-      contributions: lastYearContributions,
-      isLoading: false
-    });
-  }
-
-  processGitLabCalendar(gitLabUserJsonCalendar) {
-    const updatedSvg = gitLabUtils.aggregateCalendars(
-      this.actualSvg,
-      gitLabUserJsonCalendar
-    );
-
-    const lastYearContributions = gitLabUtils.aggregateContributions(
-      gitLabUserJsonCalendar
-    );
-
-    this.updateSvg({
-      updatedSvg
-    });
-
-    this.updateHeader({
-      contributions: lastYearContributions,
+      contributions: aggregatedContributions,
       isLoading: false
     });
   }

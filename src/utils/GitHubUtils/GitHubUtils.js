@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 
 import { parse, parseSync } from "svgson";
+import produce from "immer";
 import * as proxy from "../Proxy/Proxy";
-import * as calendarUtils from "../CalendarUtils/CalendarUtils";
 import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
 const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
@@ -28,10 +28,8 @@ const getUserSvg = async (proxyServerUrl, gitHubUsername) => {
   };
 };
 
-export const setEmptyCalendarValues = calendar => {
-  const copiedCalendar = javaScriptUtils.deepCopyObject(calendar);
-
-  copiedCalendar.attributes = {
+export const initialize = produce(draft => {
+  draft.attributes = {
     viewBox: "0 0 828 128",
     preserveAspectRatio: "xMidYMin slice",
     class: "js-calendar-graph-svg",
@@ -39,80 +37,37 @@ export const setEmptyCalendarValues = calendar => {
       "width: 100%; padding-bottom: 14.5%; height: 1px; overflow: visible; font-size: .8em"
   };
 
-  copiedCalendar.children[0].children.forEach((weeklyData, weekIndex) => {
-    weeklyData.children.forEach((dailyData, dayIndex) => {
-      copiedCalendar.children[0].children[weekIndex].children[
-        dayIndex
-      ].attributes = {
-        ...dailyData.attributes,
-        "data-count": "0",
-        fill: "#ebedf0"
-      };
+  draft.children[0].children.forEach((week, weekIndex) => {
+    if (week.name === "text") {
+      draft.children[0].children[weekIndex].fill = "#767676";
+    }
+
+    week.children.forEach((day, dayIndex) => {
+      draft.children[0].children[weekIndex].children[dayIndex].attributes[
+        "data-count"
+      ] = 0;
+      draft.children[0].children[weekIndex].children[dayIndex].attributes.fill =
+        "#ebedf0";
+    });
+  });
+});
+
+export const dailyDataWithContributionsTransformation = calendar => {
+  // Extract the weeks from the calendar.
+  const weeks = calendar.children[0].children.slice(0, 53);
+  const dailyDataWithContributions = {};
+
+  weeks.forEach(week => {
+    week.children.forEach(day => {
+      const date = day.attributes["data-date"];
+      const contributions = day.attributes["data-count"];
+
+      dailyDataWithContributions[date] = Number(contributions);
     });
   });
 
-  copiedCalendar.children[0].children.forEach(data => {
-    if (data.name === "text") {
-      // eslint-disable-next-line no-param-reassign
-      data.attributes = { ...data.attributes, fill: "#767676" };
-    }
-  });
-
-  return copiedCalendar;
+  return dailyDataWithContributions;
 };
-
-export const sanitize = calendar =>
-  calendar.children[0].children
-    .filter(item => {
-      const isDay =
-        item.attributes.class !== "wday" && item.attributes.class !== "month";
-
-      return isDay;
-    })
-    .map(week => week.children.map(day => day));
-
-export const aggregateCalendars = (actualCalendar, userCalendar) => {
-  const copiedActualCalendar = javaScriptUtils.deepCopyObject(actualCalendar);
-
-  userCalendar.forEach((week, weekIndex) =>
-    week.forEach((day, dayIndex) => {
-      if (day) {
-        const actualCalendarDailyData = calendarUtils.getCalendarDataByIndexes(
-          copiedActualCalendar,
-          weekIndex,
-          dayIndex
-        );
-
-        const totalDailyContributions =
-          Number(actualCalendarDailyData.attributes["data-count"]) +
-          Number(day.attributes["data-count"]);
-
-        copiedActualCalendar.children[0].children[weekIndex].children[
-          dayIndex
-        ].attributes = {
-          ...actualCalendarDailyData.attributes,
-          "data-count": String(totalDailyContributions),
-          fill: calendarUtils.getFillColor(totalDailyContributions)
-        };
-      }
-    })
-  );
-
-  return copiedActualCalendar;
-};
-
-export const aggregateContributions = calendar =>
-  calendar.reduce((totalContributions, week) => {
-    const weeklyContributions = week.reduce(
-      (totalWeeklyContributions, day) =>
-        day
-          ? totalWeeklyContributions + +day.attributes["data-count"]
-          : totalWeeklyContributions,
-      0
-    );
-
-    return totalContributions + weeklyContributions;
-  }, 0);
 
 export const getJsonFormattedCalendarSync = async (
   proxyServerUrl,
