@@ -45,19 +45,19 @@ export const filterByTimeframe = (dailyDataWithContributions, timeframe) => {
 
   const filtered = Object.entries(dailyDataWithContributions).filter(
     ([date]) => {
-      const converted = new Date(date);
+      const convertedDate = new Date(date);
 
       if (timeframe.start && !timeframe.end) {
-        return converted >= new Date(timeframe.start);
+        return convertedDate >= new Date(timeframe.start);
       }
 
       if (!timeframe.start && timeframe.end) {
-        return converted <= new Date(timeframe.end);
+        return convertedDate <= new Date(timeframe.end);
       }
 
       return (
-        converted >= new Date(timeframe.start) &&
-        converted <= new Date(timeframe.end)
+        convertedDate >= new Date(timeframe.start) &&
+        convertedDate <= new Date(timeframe.end)
       );
     }
   );
