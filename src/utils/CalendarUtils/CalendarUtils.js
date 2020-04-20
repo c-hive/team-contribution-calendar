@@ -65,8 +65,11 @@ export const filterByTimeframe = (dailyDataWithContributions, timeframe) => {
   return Object.fromEntries(filtered);
 };
 
-export const extractWeeks = calendar =>
-  calendar.children[0].children.slice(0, 53);
+export const extractWeeks = calendar => {
+  const lastWeekIndex = 53;
+
+  return calendar.children[0].children.slice(0, lastWeekIndex);
+};
 
 export const aggregateCalendars = produce(
   (draft, dailyDataWithContributions) => {
