@@ -2,6 +2,7 @@
 
 import { parse, parseSync } from "svgson";
 import produce from "immer";
+import { extractWeeks } from "../CalendarUtils/CalendarUtils";
 import * as proxy from "../Proxy/Proxy";
 import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
@@ -53,8 +54,7 @@ export const initialize = produce(draft => {
 });
 
 export const dailyDataWithContributionsTransformation = calendar => {
-  // Extract the weeks from the calendar.
-  const weeks = calendar.children[0].children.slice(0, 53);
+  const weeks = extractWeeks(calendar);
   const dailyDataWithContributions = {};
 
   weeks.forEach(week => {

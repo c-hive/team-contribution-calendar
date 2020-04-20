@@ -71,10 +71,12 @@ export const filterByTimeframe = (dailyDataWithContributions, timeframe) => {
   );
 };
 
+export const extractWeeks = calendar =>
+  calendar.children[0].children.slice(0, 53);
+
 export const aggregateCalendars = produce(
   (draft, dailyDataWithContributions) => {
-    // Extract the weeks from the calendar.
-    const weeks = draft.children[0].children.slice(0, 53);
+    const weeks = extractWeeks(draft);
 
     weeks.forEach((week, weekIndex) => {
       week.children.forEach((day, dayIndex) => {
