@@ -62,13 +62,7 @@ export const filterByTimeframe = (dailyDataWithContributions, timeframe) => {
     }
   );
 
-  return filtered.reduce(
-    (result, [date, contributions]) => ({
-      ...result,
-      [date]: contributions
-    }),
-    {}
-  );
+  return Object.fromEntries(filtered);
 };
 
 export const extractWeeks = calendar =>
