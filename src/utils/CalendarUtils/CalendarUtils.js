@@ -65,7 +65,7 @@ export const filterByTimeframe = (dailyDataWithContributions, timeframe) => {
   return Object.fromEntries(filtered);
 };
 
-export const extractWeeks = calendar => {
+export const extractWeeksFromGitHub = calendar => {
   const lastWeekIndex = 53;
 
   return calendar.children[0].children.slice(0, lastWeekIndex);
@@ -73,7 +73,7 @@ export const extractWeeks = calendar => {
 
 export const aggregateCalendars = produce(
   (draft, dailyDataWithContributions) => {
-    const weeks = extractWeeks(draft);
+    const weeks = extractWeeksFromGitHub(draft);
 
     weeks.forEach((week, weekIndex) => {
       week.children.forEach((day, dayIndex) => {
