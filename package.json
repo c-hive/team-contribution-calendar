@@ -87,13 +87,7 @@
     "immer": "^6.0.3",
     "svgson": "^3.1.0"
   },
-  "browserslist": {
-    "development": [
-      "last 2 Chrome versions",
-      "last 2 Firefox versions",
-      "last 2 Safari versions",
-      "last 2 Edge versions",
-      "last 2 Opera versions"
-    ]
-  }
+  "browserslist": [
+    "last 2 versions and not dead and > 0.2%"
+  ]
 }

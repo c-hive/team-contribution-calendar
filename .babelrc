@@ -10,12 +10,11 @@
       }
     ]
   ],
-  "plugins": ["add-module-exports"],
+  "plugins": ["add-module-exports", "@babel/plugin-transform-runtime"],
   "env": {
     "production": {
       "presets": ["minify"],
       "plugins": [
-        "@babel/plugin-transform-runtime",
         "inline-svg"
       ]
     }
