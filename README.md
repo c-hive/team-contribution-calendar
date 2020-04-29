@@ -11,7 +11,7 @@ Status and support
 - &#x2714; ongoing development
 
 <!--- Version information -->
-*You are viewing the README of the development version. Latest version: [v0.3.1](/../../tree/v0.3.1)*
+*You are viewing the README of the development version. Latest version: [v0.3.2](/../../tree/v0.3.2)*
 <!--- Version information end -->
 
 [![Build Status](https://github.com/c-hive/team-contribution-calendar/workflows/CI/badge.svg)](https://github.com/c-hive/team-contribution-calendar/actions)
