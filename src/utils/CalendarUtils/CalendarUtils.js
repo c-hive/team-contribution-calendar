@@ -1,4 +1,5 @@
 import $ from "elly";
+import produce from "immer";
 import * as javaScriptUtils from "../JavaScriptUtils/JavaScriptUtils";
 
 export const getFillColor = totalDailyContributions => {
@@ -37,30 +38,66 @@ export const elementExists = selector => {
   return javaScriptUtils.isDefined(element);
 };
 
-export const filterContributionDays = (dailyData, timeframe) => {
-  const isDay = dailyData.attributes.class === "day";
-
-  // Weekdays and months displayed around the calendar should be disregarded.
-  if (!isDay) {
-    return false;
-  }
-
+export const filterByTimeframe = (dailyDataWithContributions, timeframe) => {
   if (!timeframe.start && !timeframe.end) {
-    return true;
+    return dailyDataWithContributions;
   }
 
-  const contributionsDate = new Date(dailyData.attributes["data-date"]);
+  const filtered = Object.entries(dailyDataWithContributions).filter(
+    ([date]) => {
+      const convertedDate = new Date(date);
 
-  if (timeframe.start && !timeframe.end) {
-    return contributionsDate >= new Date(timeframe.start);
-  }
+      if (timeframe.start && !timeframe.end) {
+        return convertedDate >= new Date(timeframe.start);
+      }
 
-  if (!timeframe.start && timeframe.end) {
-    return contributionsDate <= new Date(timeframe.end);
-  }
+      if (!timeframe.start && timeframe.end) {
+        return convertedDate <= new Date(timeframe.end);
+      }
 
-  return (
-    contributionsDate >= new Date(timeframe.start) &&
-    contributionsDate <= new Date(timeframe.end)
+      return (
+        convertedDate >= new Date(timeframe.start) &&
+        convertedDate <= new Date(timeframe.end)
+      );
+    }
   );
+
+  return Object.fromEntries(filtered);
 };
+
+export const extractWeeksFromGitHub = calendar => {
+  const lastWeekIndex = 53;
+
+  return calendar.children[0].children.slice(0, lastWeekIndex);
+};
+
+export const aggregateCalendars = produce(
+  (draft, dailyDataWithContributions) => {
+    const weeks = extractWeeksFromGitHub(draft);
+
+    weeks.forEach((week, weekIndex) => {
+      week.children.forEach((day, dayIndex) => {
+        const date = day.attributes["data-date"];
+
+        if (date && dailyDataWithContributions[date]) {
+          const dailyTotalContributions =
+            Number(day.attributes["data-count"]) +
+            Number(dailyDataWithContributions[day.attributes["data-date"]]);
+
+          draft.children[0].children[weekIndex].children[dayIndex].attributes[
+            "data-count"
+          ] = dailyTotalContributions;
+          draft.children[0].children[weekIndex].children[
+            dayIndex
+          ].attributes.fill = getFillColor(dailyTotalContributions);
+        }
+      });
+    });
+  }
+);
+
+export const aggregateContributions = dailyDataWithContributions =>
+  Object.values(dailyDataWithContributions).reduce(
+    (totalContributions, contribution) => totalContributions + contribution,
+    0
+  );

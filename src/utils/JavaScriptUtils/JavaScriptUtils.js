@@ -3,8 +3,6 @@ import ResponseStatusCodes from "../../resources/ResponseStatusCodes/ResponseSta
 export const isDefined = value =>
   typeof value !== "undefined" && value !== null;
 
-export const deepCopyObject = object => JSON.parse(JSON.stringify(object));
-
 export const isSuccess = statusCode => {
   if (statusCode === ResponseStatusCodes.OK) {
     return true;

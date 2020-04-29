@@ -4,7 +4,12 @@ import { stringify } from "svgson";
 import * as getStyledCalendarElement from "../utils/GetStyledCalendarElement/GetStyledCalendarElement";
 import * as gitHubUtils from "../utils/GitHubUtils/GitHubUtils";
 import * as gitLabUtils from "../utils/GitLabUtils/GitLabUtils";
-import * as calendarUtils from "../utils/CalendarUtils/CalendarUtils";
+import {
+  elementExists,
+  filterByTimeframe,
+  aggregateCalendars,
+  aggregateContributions
+} from "../utils/CalendarUtils/CalendarUtils";
 import * as javaScriptUtils from "../utils/JavaScriptUtils/JavaScriptUtils";
 import * as tooltip from "../utils/Tooltip/Tooltip";
 import BasicCalendar from "../resources/BasicCalendar/BasicCalendar.json";
@@ -51,7 +56,7 @@ export default class TeamContributionCalendar {
       });
     }
 
-    const defaultUserEmptyCalendar = gitHubUtils.setEmptyCalendarValues(
+    const defaultUserEmptyCalendar = gitHubUtils.initialize(
       defaultUserData.parsedCalendar
     );
 
@@ -84,7 +89,7 @@ export default class TeamContributionCalendar {
   }
 
   renderHeader() {
-    if (!calendarUtils.elementExists(this.configs.container)) {
+    if (!elementExists(this.configs.container)) {
       throw new Error("The given container does not exist.");
     }
 
@@ -97,7 +102,7 @@ export default class TeamContributionCalendar {
       this.isLoading
     );
 
-    if (calendarUtils.elementExists(`#${elementIds.HEADER}`)) {
+    if (elementExists(`#${elementIds.HEADER}`)) {
       const previousHeader = document.getElementById(elementIds.HEADER);
 
       calendarContainer.replaceChild(newHeader, previousHeader);
@@ -107,7 +112,7 @@ export default class TeamContributionCalendar {
   }
 
   renderSvg() {
-    if (!calendarUtils.elementExists(this.configs.container)) {
+    if (!elementExists(this.configs.container)) {
       throw new Error("The given container does not exist.");
     }
 
@@ -118,7 +123,7 @@ export default class TeamContributionCalendar {
     const newSvgContainer = getStyledCalendarElement.svgContainer();
     newSvgContainer.innerHTML = stringify(this.actualSvg);
 
-    if (calendarUtils.elementExists(`#${elementIds.SVG_CONTAINER}`)) {
+    if (elementExists(`#${elementIds.SVG_CONTAINER}`)) {
       const previousSvgContainer = document.getElementById(
         elementIds.SVG_CONTAINER
       );
@@ -146,10 +151,16 @@ export default class TeamContributionCalendar {
       if (data.error) {
         console.error(data.errorMessage);
       } else {
-        this.processGitHubCalendar(data.parsedCalendar, {
-          start: user.from,
-          end: user.to
-        });
+        const timeframe = { start: user.from, end: user.to };
+        const dailyDataWithContributions = gitHubUtils.dailyDataWithContributionsTransformation(
+          data.parsedCalendar
+        );
+        const filteredDailyDataWithContributions = filterByTimeframe(
+          dailyDataWithContributions,
+          timeframe
+        );
+
+        this.processCalendar(filteredDailyDataWithContributions);
       }
     });
 
@@ -165,52 +176,32 @@ export default class TeamContributionCalendar {
       if (data.error) {
         console.error(data.errorMessage);
       } else {
-        this.processGitLabCalendar(data.parsedCalendar, {
-          start: user.from,
-          end: user.to
-        });
+        const timeframe = { start: user.from, end: user.to };
+        const filteredDailyDataWithContributions = filterByTimeframe(
+          data.parsedCalendar,
+          timeframe
+        );
+
+        this.processCalendar(filteredDailyDataWithContributions);
       }
     });
   }
 
-  processGitHubCalendar(gitHubUserJsonCalendar, timeframe) {
-    const updatedSvg = gitHubUtils.mergeCalendarsContributions(
+  processCalendar(dailyDataWithContributions) {
+    const aggregatedCalendars = aggregateCalendars(
       this.actualSvg,
-      gitHubUserJsonCalendar,
-      timeframe
+      dailyDataWithContributions
     );
-
-    const lastYearContributions = gitHubUtils.getLastYearContributions(
-      gitHubUserJsonCalendar
+    const aggregatedContributions = aggregateContributions(
+      dailyDataWithContributions
     );
 
     this.updateSvg({
-      updatedSvg
+      updatedSvg: aggregatedCalendars
     });
 
     this.updateHeader({
-      contributions: lastYearContributions,
-      isLoading: false
-    });
-  }
-
-  processGitLabCalendar(gitLabUserJsonCalendar, timeframe) {
-    const updatedSvg = gitLabUtils.mergeCalendarsContributions(
-      this.actualSvg,
-      gitLabUserJsonCalendar,
-      timeframe
-    );
-
-    const lastYearContributions = gitLabUtils.getLastYearContributions(
-      gitLabUserJsonCalendar
-    );
-
-    this.updateSvg({
-      updatedSvg
-    });
-
-    this.updateHeader({
-      contributions: lastYearContributions,
+      contributions: aggregatedContributions,
       isLoading: false
     });
   }

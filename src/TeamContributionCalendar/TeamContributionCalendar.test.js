@@ -69,7 +69,7 @@ describe("TeamContributionCalendar", () => {
     let renderHeaderStub;
     let updateHeaderStub;
     let getJsonFormattedCalendarSyncStub;
-    let setEmptyCalendarValuesStub;
+    let initializeStub;
 
     beforeEach(() => {
       getJsonFormattedCalendarSyncStub = sandbox
@@ -78,10 +78,7 @@ describe("TeamContributionCalendar", () => {
           error: false
         });
 
-      setEmptyCalendarValuesStub = sandbox.stub(
-        gitHubUtils,
-        "setEmptyCalendarValues"
-      );
+      initializeStub = sandbox.stub(gitHubUtils, "initialize");
 
       renderSvgStub = sandbox.stub(
         TeamContributionCalendar.prototype,
@@ -187,7 +184,7 @@ describe("TeamContributionCalendar", () => {
       );
 
       beforeEach(() => {
-        setEmptyCalendarValuesStub.returns(defaultUserEmptyCalendar);
+        initializeStub.returns(defaultUserEmptyCalendar);
 
         updateSvgStub = sandbox.stub(
           TeamContributionCalendar.prototype,
@@ -201,9 +198,7 @@ describe("TeamContributionCalendar", () => {
         await teamContributionCalendar.renderBasicAppearance();
 
         expect(
-          setEmptyCalendarValuesStub.calledWithExactly(
-            defaultUserData.parsedCalendar
-          )
+          initializeStub.calledWithExactly(defaultUserData.parsedCalendar)
         ).to.equal(true);
       });
 
@@ -545,95 +540,112 @@ describe("TeamContributionCalendar", () => {
   });
 
   describe("aggregateUserCalendars", () => {
-    // All the related functions should be mocked before
-    // because they're being called simultaneously within `aggregateUserCalendars`.
-    // Otherwise, it'd raise `fetch is not defined` errors.
-    // See https://github.com/c-hive/team-contribution-calendar/issues/17.
     let gitHubGetJsonFormattedCalendarAsyncStub;
     let gitLabGetJsonFormattedCalendarAsyncStub;
-    let processGitHubCalendarStub;
-    let processGitLabCalendarStub;
-    let consoleErrorSpy;
+    let processCalendarStub;
+    let consoleErrorStub;
 
     beforeEach(() => {
-      gitHubGetJsonFormattedCalendarAsyncStub = sandbox
-        .stub(gitHubUtils, "getJsonFormattedCalendarAsync")
-        .returns({ error: false });
-      gitLabGetJsonFormattedCalendarAsyncStub = sandbox
-        .stub(gitLabUtils, "getJsonFormattedCalendarAsync")
-        .returns({ error: false });
-
-      processGitHubCalendarStub = sandbox.stub(
-        TeamContributionCalendar.prototype,
-        "processGitHubCalendar"
+      gitHubGetJsonFormattedCalendarAsyncStub = sandbox.stub(
+        gitHubUtils,
+        "getJsonFormattedCalendarAsync"
       );
-      processGitLabCalendarStub = sandbox.stub(
+      gitLabGetJsonFormattedCalendarAsyncStub = sandbox.stub(
+        gitLabUtils,
+        "getJsonFormattedCalendarAsync"
+      );
+      processCalendarStub = sandbox.stub(
         TeamContributionCalendar.prototype,
-        "processGitLabCalendar"
+        "processCalendar"
       );
 
-      consoleErrorSpy = sandbox.stub(console, "error").returns({});
+      consoleErrorStub = sandbox.stub(console, "error");
     });
 
     describe("GitHub", () => {
-      it("fetches the GH user calendars asynchronously", () => {
-        const expectedCalledTimes =
-          teamContributionCalendar.users.gitHub.length;
-
+      it("initiates queries to fetch the calendars of the provided users", () => {
         teamContributionCalendar.aggregateUserCalendars();
 
         expect(gitHubGetJsonFormattedCalendarAsyncStub.callCount).to.equal(
-          expectedCalledTimes
+          teamContributionCalendar.users.gitHub.length
         );
       });
 
-      describe("when `gitHubUtils.getJsonFormattedCalendarAsync` returns an error", () => {
-        const gitHubUsername = "wrongGitHubUserName";
+      describe("when a query fails", () => {
+        it("logs an error to the console", async () => {
+          const errorMessage = "Error while fetching calendar for FOO";
+          gitHubGetJsonFormattedCalendarAsyncStub.returns({
+            error: true,
+            errorMessage
+          });
 
-        const gitHubUserData = {
-          error: true,
-          errorMessage: `Could not fetch the calendar of ${gitHubUsername}.`
-        };
-
-        beforeEach(() => {
-          teamContributionCalendar.users.gitHubUsers = [gitHubUsername];
-
-          gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserData);
-        });
-
-        it("logs the error to the console", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
-          expect(
-            consoleErrorSpy.calledWithExactly(gitHubUserData.errorMessage)
-          ).to.equal(true);
+          expect(consoleErrorStub.calledWithExactly(errorMessage)).to.equal(
+            true
+          );
         });
       });
 
-      describe("when `gitHubUtils.getJsonFormattedCalendarAsync` does not return any error", () => {
-        const gitHubUserData = {
+      describe("when a query does not fail", () => {
+        const data = {
           parsedCalendar: testUtils.getFakeContributionsObjectWithDailyCounts({
             "2019-03-19": 5,
-            "2019-03-20": 5
+            "2019-03-20": 10
           }),
-          error: false,
-          errorMessage: null
+          error: false
         };
 
+        let dailyDataWithContributionsTransformationStub;
+        let filterByTimeframeStub;
+
         beforeEach(() => {
-          gitHubGetJsonFormattedCalendarAsyncStub.returns(gitHubUserData);
+          dailyDataWithContributionsTransformationStub = sandbox.stub(
+            gitHubUtils,
+            "dailyDataWithContributionsTransformation"
+          );
+          filterByTimeframeStub = sandbox.stub(
+            calendarUtils,
+            "filterByTimeframe"
+          );
+          gitHubGetJsonFormattedCalendarAsyncStub.returns(data);
         });
 
-        it("processes the user's calendar along with the specified timeframe", async () => {
+        it("transforms the 'noisy' calendar to a 'date-contributions' object", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(
-            processGitHubCalendarStub.calledWithExactly(
-              gitHubUserData.parsedCalendar,
-              {
-                start: testParams.gitHubUsers[0].from,
-                end: testParams.gitHubUsers[0].end
-              }
+            dailyDataWithContributionsTransformationStub.calledWithExactly(
+              data.parsedCalendar
+            )
+          ).to.equal(true);
+        });
+
+        it("removes the dates falling out of the specified timeframe", async () => {
+          const dailyDataWithContributions = {
+            "2019-03-19": 5,
+            "2019-03-20": 10
+          };
+          dailyDataWithContributionsTransformationStub.returns(
+            dailyDataWithContributions
+          );
+
+          await teamContributionCalendar.aggregateUserCalendars();
+
+          expect(
+            filterByTimeframeStub.calledWith(dailyDataWithContributions)
+          ).to.equal(true);
+        });
+
+        it("processes the calendar", async () => {
+          const filteredDailyDataWithContributions = { "2019-03-20": 10 };
+          filterByTimeframeStub.returns(filteredDailyDataWithContributions);
+
+          await teamContributionCalendar.aggregateUserCalendars();
+
+          expect(
+            processCalendarStub.calledWithExactly(
+              filteredDailyDataWithContributions
             )
           ).to.equal(true);
         });
@@ -641,64 +653,67 @@ describe("TeamContributionCalendar", () => {
     });
 
     describe("GitLab", () => {
-      it("fetches the GL user calendars asynchronously", () => {
-        const expectedCalledTimes =
-          teamContributionCalendar.users.gitLab.length;
-
+      it("initiates queries to fetch the calendars of the provided users", () => {
         teamContributionCalendar.aggregateUserCalendars();
 
         expect(gitLabGetJsonFormattedCalendarAsyncStub.callCount).to.equal(
-          expectedCalledTimes
+          teamContributionCalendar.users.gitLab.length
         );
       });
 
-      describe("when `gitLabUtils.getJsonFormattedCalendarAsync` returns an error", () => {
-        const gitLabUsername = "wrongGitLabUserName";
+      describe("when a query fails", () => {
+        it("logs an error to the console", async () => {
+          const errorMessage = "Error while fetching calendar for FOO";
+          gitLabGetJsonFormattedCalendarAsyncStub.returns({
+            error: true,
+            errorMessage
+          });
 
-        const gitLabUserData = {
-          error: true,
-          errorMessage: `Could not fetch the calendar of ${gitLabUsername}.`
-        };
-
-        beforeEach(() => {
-          teamContributionCalendar.users.gitLab = [gitLabUsername];
-
-          gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserData);
-        });
-
-        it("logs the error to the console", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
-          expect(
-            consoleErrorSpy.calledWithExactly(gitLabUserData.errorMessage)
-          ).to.equal(true);
+          expect(consoleErrorStub.calledWithExactly(errorMessage)).to.equal(
+            true
+          );
         });
       });
 
-      describe("when `gitLabUtils.getJsonFormattedCalendarAsync` does not return any error", () => {
-        const gitLabUserData = {
+      describe("when a query does not fail", () => {
+        const data = {
           parsedCalendar: {
-            "2018-02-03": 7,
-            "2018-02-09": 3
+            "2019-03-19": 5,
+            "2019-03-20": 10
           },
-          error: false,
-          errorMessage: null
+          error: false
         };
 
+        let filterByTimeframeStub;
+
         beforeEach(() => {
-          gitLabGetJsonFormattedCalendarAsyncStub.returns(gitLabUserData);
+          filterByTimeframeStub = sandbox.stub(
+            calendarUtils,
+            "filterByTimeframe"
+          );
+
+          gitLabGetJsonFormattedCalendarAsyncStub.returns(data);
         });
 
-        it("processes the user's calendar along with the specified timeframe", async () => {
+        it("removes the dates falling out of the specified timeframe", async () => {
           await teamContributionCalendar.aggregateUserCalendars();
 
           expect(
-            processGitLabCalendarStub.calledWithExactly(
-              gitLabUserData.parsedCalendar,
-              {
-                start: testParams.gitLabUsers[0].from,
-                end: testParams.gitLabUsers[0].end
-              }
+            filterByTimeframeStub.calledWith(data.parsedCalendar)
+          ).to.equal(true);
+        });
+
+        it("processes the calendar", async () => {
+          const filteredDailyDataWithContributions = { "2019-03-20": 10 };
+          filterByTimeframeStub.returns(filteredDailyDataWithContributions);
+
+          await teamContributionCalendar.aggregateUserCalendars();
+
+          expect(
+            processCalendarStub.calledWithExactly(
+              filteredDailyDataWithContributions
             )
           ).to.equal(true);
         });
@@ -706,119 +721,32 @@ describe("TeamContributionCalendar", () => {
     });
   });
 
-  describe("processGitHubCalendar", () => {
-    let mergeCalendarsContributionsStub;
-    let getLastYearContributionsStub;
-    let updateSvgStub;
-    let updateHeaderStub;
-
-    const gitHubUserJsonCalendar = testUtils.getFakeContributionsObjectWithDailyCounts(
+  describe("processCalendar", () => {
+    const aggregatedCalendars = testUtils.getFakeContributionsObjectWithDailyCounts(
       {
-        "2019-03-10": 15,
-        "2019-03-12": 5
+        "2019-03-10": 18,
+        "2019-03-11": 15,
+        "2019-03-12": 7
       }
     );
-    const updatedSvg = testUtils.getFakeContributionsObjectWithDailyCounts({
+    const aggregatedContributions = 182;
+    const dailyDataWithContributions = {
       "2019-03-10": 18,
-      "2019-03-11": 15,
-      "2019-03-12": 7
-    });
-    const lastYearContributions = 1024;
-    const timeframe = {
-      start: "2020-01-31"
+      "2019-03-11": 15
     };
 
-    beforeEach(() => {
-      mergeCalendarsContributionsStub = sandbox
-        .stub(gitHubUtils, "mergeCalendarsContributions")
-        .returns(updatedSvg);
-      getLastYearContributionsStub = sandbox
-        .stub(gitHubUtils, "getLastYearContributions")
-        .returns(lastYearContributions);
-
-      updateSvgStub = sandbox.stub(
-        TeamContributionCalendar.prototype,
-        "updateSvg"
-      );
-      updateHeaderStub = sandbox.stub(
-        TeamContributionCalendar.prototype,
-        "updateHeader"
-      );
-    });
-
-    it("merges the actual calendar contributions into the GH user`s contributions", () => {
-      teamContributionCalendar.processGitHubCalendar(
-        gitHubUserJsonCalendar,
-        timeframe
-      );
-
-      expect(
-        mergeCalendarsContributionsStub.calledWithExactly(
-          teamContributionCalendar.actualSvg,
-          gitHubUserJsonCalendar,
-          timeframe
-        )
-      ).to.equal(true);
-    });
-
-    it("calculates the user`s last year contributions", () => {
-      teamContributionCalendar.processGitHubCalendar(gitHubUserJsonCalendar);
-
-      expect(
-        getLastYearContributionsStub.calledWithExactly(gitHubUserJsonCalendar)
-      ).to.equal(true);
-    });
-
-    it("updates the calendar's SVG", () => {
-      teamContributionCalendar.processGitHubCalendar(gitHubUserJsonCalendar);
-
-      expect(
-        updateSvgStub.calledWithExactly({
-          updatedSvg
-        })
-      ).to.equal(true);
-    });
-
-    it("updates the calendar's header", () => {
-      teamContributionCalendar.processGitHubCalendar(gitHubUserJsonCalendar);
-
-      expect(
-        updateHeaderStub.calledWithExactly({
-          contributions: lastYearContributions,
-          isLoading: false
-        })
-      ).to.equal(true);
-    });
-  });
-
-  describe("processGitLabCalendar", () => {
-    let mergeCalendarsContributionsStub;
-    let getLastYearContributionsStub;
+    let aggregateCalendarsStub;
+    let aggregateContributionsStub;
     let updateSvgStub;
     let updateHeaderStub;
 
-    const gitLabUserJsonCalendar = {
-      "2018-02-03": 7,
-      "2018-02-09": 3
-    };
-
-    const updatedSvg = testUtils.getFakeContributionsObjectWithDailyCounts({
-      "2018-02-03": 11,
-      "2018-02-09": 20
-    });
-    const lastYearContributions = 2048;
-    const timeframe = {
-      end: "2019-02-05"
-    };
-
     beforeEach(() => {
-      mergeCalendarsContributionsStub = sandbox
-        .stub(gitLabUtils, "mergeCalendarsContributions")
-        .returns(updatedSvg);
-      getLastYearContributionsStub = sandbox
-        .stub(gitLabUtils, "getLastYearContributions")
-        .returns(lastYearContributions);
-
+      aggregateCalendarsStub = sandbox
+        .stub(calendarUtils, "aggregateCalendars")
+        .returns(aggregatedCalendars);
+      aggregateContributionsStub = sandbox
+        .stub(calendarUtils, "aggregateContributions")
+        .returns(aggregatedContributions);
       updateSvgStub = sandbox.stub(
         TeamContributionCalendar.prototype,
         "updateSvg"
@@ -829,48 +757,37 @@ describe("TeamContributionCalendar", () => {
       );
     });
 
-    it("merges the actual SVG contributions into the GL user`s contributions", () => {
-      teamContributionCalendar.processGitLabCalendar(
-        gitLabUserJsonCalendar,
-        timeframe
-      );
+    it("aggregates the calendars", () => {
+      teamContributionCalendar.processCalendar(dailyDataWithContributions);
 
       expect(
-        mergeCalendarsContributionsStub.calledWithExactly(
+        aggregateCalendarsStub.calledWithExactly(
           teamContributionCalendar.actualSvg,
-          gitLabUserJsonCalendar,
-          timeframe
+          dailyDataWithContributions
         )
       ).to.equal(true);
     });
 
-    it("calculates the user`s last year contributions", () => {
-      teamContributionCalendar.processGitLabCalendar(
-        gitLabUserJsonCalendar,
-        timeframe
-      );
+    it("aggregates the contributions", () => {
+      teamContributionCalendar.processCalendar(dailyDataWithContributions);
 
       expect(
-        getLastYearContributionsStub.calledWithExactly(gitLabUserJsonCalendar)
+        aggregateContributionsStub.calledWithExactly(dailyDataWithContributions)
       ).to.equal(true);
     });
 
-    it("updates the calendar's SVG", () => {
-      teamContributionCalendar.processGitLabCalendar(gitLabUserJsonCalendar);
+    it("updates the SVG with the aggregated calendar", () => {
+      teamContributionCalendar.processCalendar(dailyDataWithContributions);
 
-      expect(
-        updateSvgStub.calledWithExactly({
-          updatedSvg
-        })
-      ).to.equal(true);
+      expect(updateSvgStub.calledWithExactly(aggregatedCalendars));
     });
 
-    it("updates the calendar's header", () => {
-      teamContributionCalendar.processGitLabCalendar(gitLabUserJsonCalendar);
+    it("updates the header with the aggregated contributions", () => {
+      teamContributionCalendar.processCalendar(dailyDataWithContributions);
 
       expect(
         updateHeaderStub.calledWithExactly({
-          contributions: lastYearContributions,
+          contributions: aggregatedContributions,
           isLoading: false
         })
       ).to.equal(true);

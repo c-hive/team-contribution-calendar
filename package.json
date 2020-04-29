@@ -14,9 +14,9 @@
     "build": "cross-env BABEL_ENV=production babel src --out-dir lib --copy-files",
     "clean:lib": "rimraf lib",
     "lint": "eslint src",
-    "test": "nyc --reporter=html --reporter=text mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
-    "test:only": "mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive",
-    "test:watch": "mocha src/ --require ignore-styles --require @babel/register --require @babel/polyfill --recursive --watch",
+    "test": "nyc --reporter=html --reporter=text mocha src/ --require ignore-styles --require @babel/register --recursive",
+    "test:only": "mocha src/ --require ignore-styles --require @babel/register --recursive",
+    "test:watch": "mocha src/ --require ignore-styles --require @babel/register --recursive --watch",
     "prepublishOnly": "npm run clean:lib && npm run lint && npm run test && npm run build",
     "test:coverage": "nyc report --reporter=text-lcov",
     "browserify": "browserify lib/index.js --standalone TeamContributionCalendar -o dist/team-contribution-calendar.min.js",
@@ -33,12 +33,14 @@
   "bugs": {
     "url": "https://github.com/c-hive/team-contribution-calendar/issues"
   },
+  "engines": {
+    "node": ">=12.4.0"
+  },
   "homepage": "https://github.com/c-hive/team-contribution-calendar#readme",
   "devDependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/plugin-transform-runtime": "^7.4.3",
-    "@babel/polyfill": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/register": "^7.4.0",
     "@babel/runtime": "^7.4.3",
@@ -48,6 +50,7 @@
     "babel-preset-minify": "^0.5.0",
     "browserify": "^16.2.3",
     "chai": "^4.2.0",
+    "core-js": "^3.6.5",
     "coveralls": "^3.0.3",
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
@@ -81,15 +84,10 @@
   ],
   "dependencies": {
     "elly": "^1.1.10",
+    "immer": "^6.0.3",
     "svgson": "^3.1.0"
   },
-  "browserslist": {
-    "development": [
-      "last 2 Chrome versions",
-      "last 2 Firefox versions",
-      "last 2 Safari versions",
-      "last 2 Edge versions",
-      "last 2 Opera versions"
-    ]
-  }
+  "browserslist": [
+    "last 2 versions and not dead and > 0.2%"
+  ]
 }
